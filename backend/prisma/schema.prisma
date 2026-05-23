@@ -1,0 +1,28 @@
+datasource db {
+    provider = "postgresql"
+}
+
+generator client {
+    provider = "prisma-client"
+    output   = "./generated"
+}
+
+model User {
+    id       Int       @id @default(autoincrement())
+    email    String    @unique
+    username String    @unique
+    Groups   Group[]
+    Messages Message[]
+}
+
+model Group {
+    id    Int    @id @default(autoincrement())
+    Users User[]
+}
+
+model Message {
+    id       Int    @id @default(autoincrement())
+    Sender   User   @relation(fields: [SenderId], references: [id])
+    SenderId Int
+    Content  String
+}
