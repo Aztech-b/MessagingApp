@@ -1,5 +1,4 @@
 .env
-prisma/generated
 
 # Logs
 logs
