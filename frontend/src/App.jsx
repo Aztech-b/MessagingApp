@@ -1,9 +1,10 @@
 import Register from "./components/Register";
+import { Outlet } from "react-router";
 
 function App() {
     return (
         <>
-            <Register></Register>
+            <Outlet></Outlet>
         </>
     );
 }

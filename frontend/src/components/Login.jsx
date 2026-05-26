@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-function Register() {
+function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [data, setData] = useState();
@@ -8,12 +8,13 @@ function Register() {
     const submit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username: username, password: password }),
             });
+            console.log(response);
             if (!response.ok) {
                 throw new Error("responese is not ok");
             }
@@ -26,7 +27,7 @@ function Register() {
 
     return (
         <>
-            <h1>Register</h1>
+            <h1>Login</h1>
             <form>
                 <label htmlFor="username">Username: </label>
                 <input
@@ -55,4 +56,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default Login;
