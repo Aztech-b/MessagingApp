@@ -15,9 +15,11 @@ function Register() {
                 body: JSON.stringify({ username: username, password: password }),
             });
             if (!response.ok) {
+                console.log(response);
                 throw new Error("responese is not ok");
             }
             const data = await response.json();
+            // console.log(data);
             console.log(data);
         } catch (error) {
             console.trace(error);

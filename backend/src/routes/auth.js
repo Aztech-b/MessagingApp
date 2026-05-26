@@ -2,6 +2,7 @@ import { Router } from "express";
 import prisma from "../../lib/prisma.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import bcryptjs from "bcryptjs";
 
 const authRouter = Router();
 
@@ -14,9 +15,12 @@ passport.use(
                 return done(null, false, { message: "Incorrect username" });
             }
 
-            if (user.password !== password) {
+            const match = await bcryptjs.compare(password, user.password);
+
+            if (!match) {
                 return done(null, false, { message: "Incorrect password" });
             }
+
             return done(null, user);
         } catch (err) {
             return done(err);
@@ -44,19 +48,26 @@ authRouter.post("/register", async (req, res, next) => {
             throw new Error("INVALID_INPUT");
         }
 
-        const user = await prisma.user.create({ data: { username, password } });
+        const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
+
+        const user = await prisma.user.create({
+            data: { username, password: hashedPassword },
+            select: { username: true },
+        });
         if (!user) {
-            throw new Error("USER_NOT_FOUND");
+            throw new Error("USER_CREATION_ERROR");
         }
 
-        res.status(200).json({ status: "SUCCESS" });
+        res.status(200).json({ user });
     } catch (error) {
-        res.status(403).json({ status: "FAILURE", error: error });
+        console.log(error);
+        res.json({ error });
     }
 });
 
 authRouter.post("/login", passport.authenticate("local"), (req, res, next) => {
-    res.json(req.user);
+    const { id, password, ...user } = req.user;
+    res.json(user);
 });
 
 authRouter.get("/", (req, res, next) => {
@@ -64,7 +75,8 @@ authRouter.get("/", (req, res, next) => {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
-    res.json(req.user);
+    const { id, password, ...user } = req.user;
+    res.json(user);
 });
 
 export default authRouter;
