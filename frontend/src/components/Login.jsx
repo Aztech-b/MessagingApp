@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import errorStyles from "../styles/errorPopover.module.css";
+import { UserContext, useUserContext } from "./Context";
+import { ServerRouter } from "react-router";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [data, setData] = useState();
     const [error, setError] = useState(null);
+    const { setUser } = useUserContext();
 
     const submit = async (e) => {
         e.preventDefault();
@@ -21,6 +24,7 @@ function Login() {
             }
             const data = await response.json();
             console.log(data);
+            setUser(data);
         } catch (error) {
             setError(error);
             console.trace(error);
@@ -30,14 +34,17 @@ function Login() {
     const popoverRef = useRef(null);
 
     useEffect(() => {
+        console.log(error);
         const popover = popoverRef.current;
         if (!popover) {
             return;
         }
         if (error) {
+            console.log("show");
             popover.classList.add(errorStyles.opened);
             popover.classList.remove(errorStyles.closed);
         } else {
+            console.log("hide");
             popover.classList.remove(errorStyles.opened);
             popover.classList.add(errorStyles.closed);
         }
@@ -50,7 +57,7 @@ function Login() {
      */
     function ErrorPopover({ error }) {
         return (
-            <div ref={popoverRef} className={errorStyles.popover}>
+            <div ref={popoverRef} className={`${errorStyles.popover} ${errorStyles.closed}`}>
                 <h1>Error</h1>
                 <p>{error}</p>
             </div>
@@ -59,7 +66,7 @@ function Login() {
     return (
         <>
             <h1>Login</h1>
-            <ErrorPopover error="error text" />
+            <ErrorPopover error={"error"} />
             <form>
                 <label htmlFor="username">Username: </label>
                 <input
