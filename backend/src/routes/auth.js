@@ -1,5 +1,6 @@
 import { Router } from "express";
 import prisma from "../../lib/prisma.js";
+import passport from "passport";
 
 const authRouter = Router();
 
@@ -21,7 +22,15 @@ authRouter.post("/register", async (req, res, next) => {
     }
 });
 
-authRouter.post("/login", (req, res, next) => {
+authRouter.post("/login", passport.authenticate("local"), (req, res, next) => {
+    res.json(req.user);
+});
+
+authRouter.get("/", (req, res, next) => {
+    if (!req.user) {
+        res.status(401).json({ status: "NOT_AUTHENTICATED" });
+        return;
+    }
     res.json(req.user);
 });
 

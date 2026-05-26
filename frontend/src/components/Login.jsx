@@ -34,39 +34,22 @@ function Login() {
     const popoverRef = useRef(null);
 
     useEffect(() => {
-        console.log(error);
         const popover = popoverRef.current;
         if (!popover) {
             return;
         }
         if (error) {
-            console.log("show");
             popover.classList.add(errorStyles.opened);
             popover.classList.remove(errorStyles.closed);
         } else {
-            console.log("hide");
             popover.classList.remove(errorStyles.opened);
             popover.classList.add(errorStyles.closed);
         }
     }, [error]);
 
-    /**
-     *
-     * @param {String} error Error string to render
-     * @returns html
-     */
-    function ErrorPopover({ error }) {
-        return (
-            <div ref={popoverRef} className={`${errorStyles.popover} ${errorStyles.closed}`}>
-                <h1>Error</h1>
-                <p>{error}</p>
-            </div>
-        );
-    }
     return (
         <>
             <h1>Login</h1>
-            <ErrorPopover error={"error"} />
             <form>
                 <label htmlFor="username">Username: </label>
                 <input
