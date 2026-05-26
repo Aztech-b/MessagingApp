@@ -4,7 +4,6 @@ import authRouter from "./routes/auth.js";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
-import { Strategy as LocalStrategy } from "passport-local";
 import postgreSession from "connect-pg-simple";
 import { Pool } from "pg";
 
@@ -27,38 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.use(
-    new LocalStrategy(async (username, password, done) => {
-        try {
-            const user = await prisma.user.findUnique({ where: { username: username } });
-
-            if (!user) {
-                return done(null, false, { message: "Incorrect username" });
-            }
-
-            if (user.password !== password) {
-                return done(null, false, { message: "Incorrect password" });
-            }
-            return done(null, user);
-        } catch (err) {
-            return done(err);
-        }
-    }),
-);
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await prisma.user.findUnique({ where: { id: id } });
-        done(null, user);
-    } catch (err) {
-        done(err);
-    }
-});
 
 // Routes
 app.use("/auth", authRouter);
