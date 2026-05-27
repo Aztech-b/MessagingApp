@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router";
 
 function Register() {
     const [username, setUsername] = useState("");
@@ -19,7 +20,6 @@ function Register() {
                 throw new Error("responese is not ok");
             }
             const data = await response.json();
-            // console.log(data);
             console.log(data);
         } catch (error) {
             console.trace(error);
@@ -53,6 +53,9 @@ function Register() {
                     Submit
                 </button>
             </form>
+            <p>
+                Have an existing account? Login <Link to="/register">here. </Link>
+            </p>
         </>
     );
 }

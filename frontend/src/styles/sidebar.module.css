@@ -1,0 +1,38 @@
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    width: var(--sidebar-width);
+    border: 2px solid gray;
+    padding: 16px;
+}
+
+.account,
+.account img {
+    width: 100%;
+    height: auto;
+}
+
+.account:hover {
+    cursor: pointer;
+}
+
+.menu {
+    background-color: darkgray;
+    position: absolute;
+    left: calc(100% + 20px);
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: fit-content;
+    max-width: 400px;
+    min-width: 60px;
+    border-radius: 8px;
+
+    padding: 16px;
+    cursor: default;
+}
+
+.item {
+    position: relative;
+}

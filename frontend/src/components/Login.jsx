@@ -2,6 +2,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import errorStyles from "../styles/errorPopover.module.css";
 import { UserContext, useUserContext } from "./Context";
 import { ServerRouter } from "react-router";
+import { Link } from "react-router";
+import styles from "../styles/login.module.css";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -31,24 +33,8 @@ function Login() {
         }
     };
 
-    const popoverRef = useRef(null);
-
-    useEffect(() => {
-        const popover = popoverRef.current;
-        if (!popover) {
-            return;
-        }
-        if (error) {
-            popover.classList.add(errorStyles.opened);
-            popover.classList.remove(errorStyles.closed);
-        } else {
-            popover.classList.remove(errorStyles.opened);
-            popover.classList.add(errorStyles.closed);
-        }
-    }, [error]);
-
     return (
-        <>
+        <main className={styles.main}>
             <h1>Login</h1>
             <form>
                 <label htmlFor="username">Username: </label>
@@ -69,12 +55,14 @@ function Login() {
                     name="password"
                     id="password"
                 />
-
                 <button onClick={submit} type="submit">
                     Submit
                 </button>
             </form>
-        </>
+            <p>
+                Don't have an account? Create one <Link to="/register">here. </Link>
+            </p>
+        </main>
     );
 }
 
