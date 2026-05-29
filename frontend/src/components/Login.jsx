@@ -36,6 +36,7 @@ function Login() {
     return (
         <main className={styles.main}>
             <h1>Login</h1>
+            <div className={styles.error}></div>
             <form>
                 <label htmlFor="username">Username: </label>
                 <input

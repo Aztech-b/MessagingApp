@@ -4,3 +4,8 @@
     flex-direction: column;
     justify-content: center;
 }
+
+.error {
+    background-color: red;
+    color: white;
+}

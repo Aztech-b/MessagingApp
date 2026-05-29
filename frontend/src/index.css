@@ -1,3 +1,7 @@
+html {
+    color-scheme: light dark;
+}
+
 :root {
     --text: #6b6375;
     --text-h: #08060d;
@@ -19,7 +23,7 @@
     color: var(--text);
     background: var(--bg);
 
-    --sidebar-width: 60px;
+    --sidebar-width: 76px;
 
     @media (max-width: 1024px) {
         font-size: 16px;
@@ -33,11 +37,14 @@
         --bg: #16171d;
         --border: #2e303a;
         --code-bg: #1f2028;
-        --accent: #c084fc;
-        --accent-bg: rgba(192, 132, 252, 0.15);
-        --accent-border: rgba(192, 132, 252, 0.5);
+        --accent: hsl(215, 40%, 19%);
+        --accent-bg: hsl(215, 40%, 9%);
+        --accent-border: hsl(215, 30%, 7%);
         --social-bg: rgba(47, 48, 58, 0.5);
         --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    }
+    body {
+        background-color: var(--accent-bg);
     }
 }
 
@@ -46,10 +53,14 @@ body {
 }
 
 #root {
+    overflow: hidden;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
 }
 
 h1,

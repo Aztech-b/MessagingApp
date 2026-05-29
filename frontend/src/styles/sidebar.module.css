@@ -1,10 +1,9 @@
 .sidebar {
-    position: fixed;
     height: 100vh;
-    left: 0;
     width: var(--sidebar-width);
     border: 2px solid gray;
     padding: 16px;
+    box-sizing: border-box;
 }
 
 .account,

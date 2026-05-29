@@ -1,0 +1,50 @@
+:root {
+    --chat-height: 60px;
+}
+
+.home {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    border: 2px solid var(--accent-border);
+    border-collapse: collapse;
+}
+
+.chats {
+    overflow-y: auto;
+    background-color: var(--accent);
+}
+
+.chat {
+    height: var(--chat-height);
+    min-height: var(--chat-height);
+    max-height: var(--chat-height);
+    overflow-wrap: anywhere;
+    background-color: hsl(215, 40%, 19%);
+    color: white;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.chat:hover {
+    filter: brightness(1.4);
+}
+
+.icon {
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.topBar {
+    background-color: var(--accent);
+    height: var(--chat-height);
+    box-sizing: border-box;
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.message {
+}
