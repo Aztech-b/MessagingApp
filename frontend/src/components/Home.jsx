@@ -28,7 +28,16 @@ function Home() {
                     <Message username="me" messageContent="hi, how are you" />
                     <Message username="Ali" messageContent="I am good" />
                 </div>
+                <InputField />
             </div>
+        </div>
+    );
+}
+
+function InputField() {
+    return (
+        <div className="inputField">
+            <input type="text" name="message" id="message" />
         </div>
     );
 }

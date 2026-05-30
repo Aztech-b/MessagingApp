@@ -6,6 +6,8 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import Home from "./components/Home.jsx";
+import "@mantine/core/styles.css";
+import { MantineProvider, createTheme } from "@mantine/core";
 
 const router = createBrowserRouter([
     {
@@ -19,8 +21,12 @@ const router = createBrowserRouter([
     },
 ]);
 
+// const theme = createTheme({primaryColor: });
+
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <MantineProvider defaultColorScheme="dark">
+            <RouterProvider router={router} />
+        </MantineProvider>
     </StrictMode>,
 );
