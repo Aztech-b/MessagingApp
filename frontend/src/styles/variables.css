@@ -23,6 +23,7 @@
 
     /*  */
     --navbar-height: 60px;
+    --chat-height: var(--navbar-height);
     --client-message-color: hsl(210, 47%, 32%);
     --other-message-color: hsl(211, 36%, 15%);
 

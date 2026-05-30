@@ -1,13 +1,19 @@
 import styles from "../styles/home.module.css";
 import groupIcon from "../assets/users-round.svg";
 import { TextInput } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Home() {
     let [messages, setMessages] = useState([
         { username: "Ali", content: "I am good" },
         { username: "me", content: "hi, how are you? " },
     ]);
+
+    const scrollDummy = useRef();
+
+    useEffect(() => {
+        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
+    }, [messages]);
 
     return (
         <div className={styles.home}>
@@ -17,7 +23,7 @@ function Home() {
             </div>
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
-                <div className={styles.messagesContainer}>
+                <div className={styles.messagesContainer} ref={scrollDummy}>
                     <div className={styles.chat}>
                         {messages.map((message, index) => {
                             return <Message username={message.username} messageContent={message.content} key={index} />;
@@ -25,13 +31,14 @@ function Home() {
                     </div>
                 </div>
                 <TextInput
+                    size="md"
                     radius={2}
                     placeholder="Write you message here..."
-                    styles={{ input: { backgroundColor: "var(--accent)", border: 0 } }}
-                    onSubmit={(e) => {
-                        setMessages([...messages, { username: "me", content: e.target.value }]);
-                    }}
+                    styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0 } }}
                     onKeyDown={(e) => {
+                        if (e.target.value == "") {
+                            return;
+                        }
                         if (e.key === "Enter") {
                             setMessages([...messages, { username: "me", content: e.target.value }]);
                             e.target.value = "";
