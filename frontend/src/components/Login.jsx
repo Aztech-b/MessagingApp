@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import errorStyles from "../styles/errorPopover.module.css";
-import { UserContext, useUserContext } from "./Context";
+import { useUserContext } from "./Context";
 import { ServerRouter } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";

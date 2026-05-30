@@ -6,8 +6,12 @@ import passport from "passport";
 import cors from "cors";
 import postgreSession from "connect-pg-simple";
 import { Pool } from "pg";
+import { Server } from "socket.io";
+import http from "node:http";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 const PostgreSession = postgreSession(session);
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -20,7 +24,6 @@ app.use(
         cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 },
     }),
 );
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,7 +33,14 @@ app.use(passport.session());
 // Routes
 app.use("/auth", authRouter);
 
-app.listen(3000, (error) => {
+io.on("connection", (socket) => {
+    console.log("user connected: " + socket.id);
+    socket.on("message", (data) => {
+        console.log(data);
+    });
+});
+
+server.listen(3000, (error) => {
     if (error) {
         throw error;
     }
