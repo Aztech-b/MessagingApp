@@ -8,6 +8,11 @@
     background-color: var(--accent-bg);
 }
 
+.account {
+    background-color: transparent;
+    border: 0;
+}
+
 .account,
 .account img {
     width: 100%;
@@ -19,17 +24,18 @@
 }
 
 .menu {
-    background-color: darkgray;
+    background-color: var(--accent-bg-light);
     position: absolute;
-    left: calc(100% + 20px);
-    top: 50%;
-    transform: translateY(-50%);
-
+    /* left: calc(100% + 20px); */
+    left: calc(var(--sidebar-width) - 4px);
+    /* transform: translateY(-50%); */
+    z-index: 1;
+    margin: 0;
     width: fit-content;
     max-width: 400px;
     min-width: 60px;
     border-radius: 8px;
-
+    border: 2px solid var(--accent-border);
     padding: 16px;
     cursor: default;
 }
