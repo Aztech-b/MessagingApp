@@ -1,8 +1,11 @@
+@import "./variables.css";
+
 .sidebar {
     height: 100vh;
     width: var(--sidebar-width);
     padding: 16px;
     box-sizing: border-box;
+    background-color: var(--accent-bg);
 }
 
 .account,

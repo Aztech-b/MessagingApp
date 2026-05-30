@@ -1,19 +1,11 @@
-:root {
-    --chat-height: 60px;
-    --client-message-color: hsl(210, 47%, 32%);
-    --other-message-color: hsl(211, 36%, 15%);
-
-    --message-major-border-radius: 16px;
-    --message-minor-border-radius: 8px;
-    --message-major-corner-shape: squircle;
-    --message-minor-corner-shape: circle;
-}
+@import "./variables.css";
 
 .home {
     display: grid;
     grid-template-columns: 2fr 3fr;
     border: 2px solid var(--accent-border);
     border-collapse: collapse;
+    background-color: var(--accent-bg);
 }
 
 .chats {

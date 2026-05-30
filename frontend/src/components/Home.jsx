@@ -59,7 +59,6 @@ function Message({ username, messageContent }) {
         isauthorMe = true;
     } else {
         otherUsernameColor = GenerateRandomColor();
-        console.log(otherUsernameColor);
         authorStyle = styles.otherMessage;
         isauthorMe = false;
     }
