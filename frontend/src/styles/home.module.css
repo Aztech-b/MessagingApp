@@ -3,7 +3,6 @@
 .home {
     display: grid;
     grid-template-columns: 2fr 3fr;
-    border: 2px solid var(--accent-border);
     border-collapse: collapse;
     background-color: var(--accent-bg);
 }
@@ -11,6 +10,8 @@
 .chats {
     overflow-y: auto;
     background-color: var(--accent);
+    border-left: 1px solid var(--accent-border);
+    border-right: 1px solid var(--accent-border);
 }
 
 .chats .chat {

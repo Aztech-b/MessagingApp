@@ -1,19 +1,6 @@
 import styles from "../styles/home.module.css";
 import groupIcon from "../assets/users-round.svg";
-
-/**
- *
- * @returns `hsl(${hue}, ${saturation}%, ${lightness}%)`
- * hue is completely random,
- * satutarion is from 70 to 90,
- * lightness is from 80 to 90
- */
-function GenerateRandomColor() {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.floor(Math.random() * 20) + 70;
-    const lightness = Math.floor(Math.random() * 10) + 80;
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-}
+import { TextInput } from "@mantine/core";
 
 function Home() {
     return (
@@ -28,18 +15,28 @@ function Home() {
                     <Message username="me" messageContent="hi, how are you" />
                     <Message username="Ali" messageContent="I am good" />
                 </div>
-                <InputField />
+                <TextInput
+                    radius={2}
+                    placeholder="Write you message here..."
+                    styles={{ input: { backgroundColor: "var(--accent)", border: 0, position: "fixed", bottom: 0 } }}
+                ></TextInput>
             </div>
         </div>
     );
 }
 
-function InputField() {
-    return (
-        <div className="inputField">
-            <input type="text" name="message" id="message" />
-        </div>
-    );
+/**
+ *
+ * @returns `hsl(${hue}, ${saturation}%, ${lightness}%)`
+ * hue is completely random,
+ * satutarion is from 70 to 90,
+ * lightness is from 80 to 90
+ */
+function GenerateRandomColor() {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.floor(Math.random() * 20) + 70;
+    const lightness = Math.floor(Math.random() * 10) + 80;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 function TopBar({ chatName }) {
