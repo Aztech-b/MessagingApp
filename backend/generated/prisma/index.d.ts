@@ -3349,21 +3349,21 @@ export namespace Prisma {
 
   export type MessageMinAggregateOutputType = {
     id: number | null
-    sent: string | null
+    content: string | null
     authorId: number | null
     groupId: number | null
   }
 
   export type MessageMaxAggregateOutputType = {
     id: number | null
-    sent: string | null
+    content: string | null
     authorId: number | null
     groupId: number | null
   }
 
   export type MessageCountAggregateOutputType = {
     id: number
-    sent: number
+    content: number
     authorId: number
     groupId: number
     _all: number
@@ -3384,21 +3384,21 @@ export namespace Prisma {
 
   export type MessageMinAggregateInputType = {
     id?: true
-    sent?: true
+    content?: true
     authorId?: true
     groupId?: true
   }
 
   export type MessageMaxAggregateInputType = {
     id?: true
-    sent?: true
+    content?: true
     authorId?: true
     groupId?: true
   }
 
   export type MessageCountAggregateInputType = {
     id?: true
-    sent?: true
+    content?: true
     authorId?: true
     groupId?: true
     _all?: true
@@ -3492,7 +3492,7 @@ export namespace Prisma {
 
   export type MessageGroupByOutputType = {
     id: number
-    sent: string
+    content: string
     authorId: number
     groupId: number | null
     _count: MessageCountAggregateOutputType | null
@@ -3518,7 +3518,7 @@ export namespace Prisma {
 
   export type MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sent?: boolean
+    content?: boolean
     authorId?: boolean
     groupId?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -3527,7 +3527,7 @@ export namespace Prisma {
 
   export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sent?: boolean
+    content?: boolean
     authorId?: boolean
     groupId?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -3536,7 +3536,7 @@ export namespace Prisma {
 
   export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sent?: boolean
+    content?: boolean
     authorId?: boolean
     groupId?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -3545,12 +3545,12 @@ export namespace Prisma {
 
   export type MessageSelectScalar = {
     id?: boolean
-    sent?: boolean
+    content?: boolean
     authorId?: boolean
     groupId?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sent" | "authorId" | "groupId", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "authorId" | "groupId", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | Message$groupArgs<ExtArgs>
@@ -3572,7 +3572,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      sent: string
+      content: string
       authorId: number
       groupId: number | null
     }, ExtArgs["result"]["message"]>
@@ -4001,7 +4001,7 @@ export namespace Prisma {
    */
   interface MessageFieldRefs {
     readonly id: FieldRef<"Message", 'Int'>
-    readonly sent: FieldRef<"Message", 'String'>
+    readonly content: FieldRef<"Message", 'String'>
     readonly authorId: FieldRef<"Message", 'Int'>
     readonly groupId: FieldRef<"Message", 'Int'>
   }
@@ -4474,7 +4474,7 @@ export namespace Prisma {
 
   export const MessageScalarFieldEnum: {
     id: 'id',
-    sent: 'sent',
+    content: 'content',
     authorId: 'authorId',
     groupId: 'groupId'
   };
@@ -4651,7 +4651,7 @@ export namespace Prisma {
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
     id?: IntFilter<"Message"> | number
-    sent?: StringFilter<"Message"> | string
+    content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     groupId?: IntNullableFilter<"Message"> | number | null
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -4660,7 +4660,7 @@ export namespace Prisma {
 
   export type MessageOrderByWithRelationInput = {
     id?: SortOrder
-    sent?: SortOrder
+    content?: SortOrder
     authorId?: SortOrder
     groupId?: SortOrderInput | SortOrder
     author?: UserOrderByWithRelationInput
@@ -4672,7 +4672,7 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
-    sent?: StringFilter<"Message"> | string
+    content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     groupId?: IntNullableFilter<"Message"> | number | null
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -4681,7 +4681,7 @@ export namespace Prisma {
 
   export type MessageOrderByWithAggregationInput = {
     id?: SortOrder
-    sent?: SortOrder
+    content?: SortOrder
     authorId?: SortOrder
     groupId?: SortOrderInput | SortOrder
     _count?: MessageCountOrderByAggregateInput
@@ -4696,7 +4696,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereWithAggregatesInput[]
     NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Message"> | number
-    sent?: StringWithAggregatesFilter<"Message"> | string
+    content?: StringWithAggregatesFilter<"Message"> | string
     authorId?: IntWithAggregatesFilter<"Message"> | number
     groupId?: IntNullableWithAggregatesFilter<"Message"> | number | null
   }
@@ -4783,45 +4783,45 @@ export namespace Prisma {
   }
 
   export type MessageCreateInput = {
-    sent: string
+    content: string
     author: UserCreateNestedOneWithoutMessagesInput
     group?: GroupCreateNestedOneWithoutMessagesInput
   }
 
   export type MessageUncheckedCreateInput = {
     id?: number
-    sent: string
+    content: string
     authorId: number
     groupId?: number | null
   }
 
   export type MessageUpdateInput = {
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutMessagesNestedInput
     group?: GroupUpdateOneWithoutMessagesNestedInput
   }
 
   export type MessageUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
     groupId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MessageCreateManyInput = {
     id?: number
-    sent: string
+    content: string
     authorId: number
     groupId?: number | null
   }
 
   export type MessageUpdateManyMutationInput = {
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
   }
 
   export type MessageUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
     groupId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -4990,7 +4990,7 @@ export namespace Prisma {
 
   export type MessageCountOrderByAggregateInput = {
     id?: SortOrder
-    sent?: SortOrder
+    content?: SortOrder
     authorId?: SortOrder
     groupId?: SortOrder
   }
@@ -5003,14 +5003,14 @@ export namespace Prisma {
 
   export type MessageMaxOrderByAggregateInput = {
     id?: SortOrder
-    sent?: SortOrder
+    content?: SortOrder
     authorId?: SortOrder
     groupId?: SortOrder
   }
 
   export type MessageMinOrderByAggregateInput = {
     id?: SortOrder
-    sent?: SortOrder
+    content?: SortOrder
     authorId?: SortOrder
     groupId?: SortOrder
   }
@@ -5369,13 +5369,13 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutAuthorInput = {
-    sent: string
+    content: string
     group?: GroupCreateNestedOneWithoutMessagesInput
   }
 
   export type MessageUncheckedCreateWithoutAuthorInput = {
     id?: number
-    sent: string
+    content: string
     groupId?: number | null
   }
 
@@ -5433,7 +5433,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereInput[]
     NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
     id?: IntFilter<"Message"> | number
-    sent?: StringFilter<"Message"> | string
+    content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     groupId?: IntNullableFilter<"Message"> | number | null
   }
@@ -5457,13 +5457,13 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutGroupInput = {
-    sent: string
+    content: string
     author: UserCreateNestedOneWithoutMessagesInput
   }
 
   export type MessageUncheckedCreateWithoutGroupInput = {
     id?: number
-    sent: string
+    content: string
     authorId: number
   }
 
@@ -5596,7 +5596,7 @@ export namespace Prisma {
 
   export type MessageCreateManyAuthorInput = {
     id?: number
-    sent: string
+    content: string
     groupId?: number | null
   }
 
@@ -5614,25 +5614,25 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutAuthorInput = {
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     group?: GroupUpdateOneWithoutMessagesNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutAuthorInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     groupId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MessageUncheckedUpdateManyWithoutAuthorInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     groupId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MessageCreateManyGroupInput = {
     id?: number
-    sent: string
+    content: string
     authorId: number
   }
 
@@ -5656,19 +5656,19 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutGroupInput = {
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutMessagesNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutGroupInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
   }
 
   export type MessageUncheckedUpdateManyWithoutGroupInput = {
     id?: IntFieldUpdateOperationsInput | number
-    sent?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
   }
 

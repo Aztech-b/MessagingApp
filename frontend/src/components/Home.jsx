@@ -40,7 +40,8 @@ function Home() {
                             return;
                         }
                         if (e.key === "Enter") {
-                            setMessages([...messages, { username: "me", content: e.target.value }]);
+                            const content = e.target.value;
+                            setMessages((prev) => [...prev, { username: "me", content: content }]);
                             e.target.value = "";
                         }
                     }}

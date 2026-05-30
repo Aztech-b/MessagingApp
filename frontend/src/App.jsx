@@ -20,9 +20,7 @@ function App() {
                     throw new Error("response is not ok");
                 }
                 setUser(data);
-            } catch (error) {
-                console.trace(error);
-            }
+            } catch (error) {}
         }
         GetUser();
     }, []);

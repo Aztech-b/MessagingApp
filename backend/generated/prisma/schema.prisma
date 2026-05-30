@@ -28,7 +28,7 @@ model Group {
 
 model Message {
   id       Int    @id @default(autoincrement())
-  sent     String
+  content  String
   authorId Int
   author   User   @relation(fields: [authorId], references: [id])
   group    Group? @relation(fields: [groupId], references: [id])

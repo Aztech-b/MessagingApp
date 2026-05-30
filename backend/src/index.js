@@ -1,6 +1,5 @@
 import express from "express";
 import prisma from "../lib/prisma.js";
-import authRouter from "./routes/auth.js";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
@@ -9,11 +8,14 @@ import { Pool } from "pg";
 import { Server } from "socket.io";
 import http from "node:http";
 
+import authRouter from "./routes/auth.js";
+import chatRouter from "./routes/chat.js";
+
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
 const PostgreSession = postgreSession(session);
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(
     session({
@@ -32,9 +34,9 @@ app.use(passport.session());
 
 // Routes
 app.use("/auth", authRouter);
+app.use("/chat", chatRouter);
 
 io.on("connection", (socket) => {
-    console.log("user connected: " + socket.id);
     socket.on("message", (data) => {
         console.log(data);
     });

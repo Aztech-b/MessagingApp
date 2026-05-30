@@ -132,7 +132,7 @@ exports.Prisma.GroupScalarFieldEnum = {
 
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
-  sent: 'sent',
+  content: 'content',
   authorId: 'authorId',
   groupId: 'groupId'
 };
