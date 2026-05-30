@@ -1,8 +1,14 @@
 import styles from "../styles/home.module.css";
 import groupIcon from "../assets/users-round.svg";
 import { TextInput } from "@mantine/core";
+import { useState } from "react";
 
 function Home() {
+    let [messages, setMessages] = useState([
+        { username: "Ali", content: "I am good" },
+        { username: "me", content: "hi, how are you? " },
+    ]);
+
     return (
         <div className={styles.home}>
             <div className={styles.chats}>
@@ -12,13 +18,23 @@ function Home() {
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
                 <div className={styles.chat}>
-                    <Message username="me" messageContent="hi, how are you" />
-                    <Message username="Ali" messageContent="I am good" />
+                    {messages.map((message, index) => {
+                        return <Message username={message.username} messageContent={message.content} key={index} />;
+                    })}
                 </div>
                 <TextInput
                     radius={2}
                     placeholder="Write you message here..."
                     styles={{ input: { backgroundColor: "var(--accent)", border: 0, position: "fixed", bottom: 0 } }}
+                    onSubmit={(e) => {
+                        setMessages([...messages, { username: "me", content: e.target.value }]);
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            setMessages([...messages, { username: "me", content: e.target.value }]);
+                            e.target.value = "";
+                        }
+                    }}
                 ></TextInput>
             </div>
         </div>
