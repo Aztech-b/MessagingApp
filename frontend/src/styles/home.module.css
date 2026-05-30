@@ -5,6 +5,7 @@
     grid-template-columns: 2fr 3fr;
     border-collapse: collapse;
     background-color: var(--accent-bg);
+    height: 100vh;
 }
 
 .chats {
@@ -38,7 +39,7 @@
 
 .topBar {
     background-color: var(--accent);
-    height: var(--chat-height);
+    height: var(--navbar-height);
     box-sizing: border-box;
     padding: 4px 16px;
     display: flex;
@@ -46,11 +47,24 @@
     color: white;
 }
 
+.messagesContainer {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.messages {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
 .messages * {
     color: white;
 }
 
-.messages > .chat {
+.messages .chat {
+    height: auto;
     display: flex;
     gap: 4px;
     flex-direction: column;

@@ -17,15 +17,17 @@ function Home() {
             </div>
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
-                <div className={styles.chat}>
-                    {messages.map((message, index) => {
-                        return <Message username={message.username} messageContent={message.content} key={index} />;
-                    })}
+                <div className={styles.messagesContainer}>
+                    <div className={styles.chat}>
+                        {messages.map((message, index) => {
+                            return <Message username={message.username} messageContent={message.content} key={index} />;
+                        })}
+                    </div>
                 </div>
                 <TextInput
                     radius={2}
                     placeholder="Write you message here..."
-                    styles={{ input: { backgroundColor: "var(--accent)", border: 0, position: "fixed", bottom: 0 } }}
+                    styles={{ input: { backgroundColor: "var(--accent)", border: 0 } }}
                     onSubmit={(e) => {
                         setMessages([...messages, { username: "me", content: e.target.value }]);
                     }}
