@@ -1,6 +1,20 @@
 import styles from "../styles/home.module.css";
 import groupIcon from "../assets/users-round.svg";
 
+/**
+ *
+ * @returns `hsl(${hue}, ${saturation}%, ${lightness}%)`
+ * hue is completely random,
+ * satutarion is from 70 to 90,
+ * lightness is from 80 to 90
+ */
+function GenerateRandomColor() {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.floor(Math.random() * 20) + 70;
+    const lightness = Math.floor(Math.random() * 10) + 80;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
 function Home() {
     return (
         <div className={styles.home}>
@@ -8,9 +22,9 @@ function Home() {
                 <Chat chatName="Bakdaulet" />
                 <Chat chatName="Ali" />
             </div>
-            <div className="messages">
+            <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
-                <div className="chat">
+                <div className={styles.chat}>
                     <Message username="me" messageContent="hi, how are you" />
                     <Message username="Ali" messageContent="I am good" />
                 </div>
@@ -28,9 +42,21 @@ function TopBar({ chatName }) {
 }
 
 function Message({ username, messageContent }) {
+    let authorStyle;
+    let isauthorMe;
+    let otherUsernameColor = null;
+    if (username === "me") {
+        authorStyle = styles.clientMessage;
+        isauthorMe = true;
+    } else {
+        otherUsernameColor = GenerateRandomColor();
+        console.log(otherUsernameColor);
+        authorStyle = styles.otherMessage;
+        isauthorMe = false;
+    }
     return (
-        <div className={styles.message}>
-            <p className="username">{username}</p>
+        <div className={`${styles.message} ${authorStyle}`}>
+            {isauthorMe ? null : <p style={{ color: otherUsernameColor }}>{username}</p>}
             <p className="text">{messageContent}</p>
         </div>
     );

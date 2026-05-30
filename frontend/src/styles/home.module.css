@@ -1,5 +1,12 @@
 :root {
     --chat-height: 60px;
+    --client-message-color: hsl(210, 47%, 32%);
+    --other-message-color: hsl(211, 36%, 15%);
+
+    --message-major-border-radius: 16px;
+    --message-minor-border-radius: 8px;
+    --message-major-corner-shape: squircle;
+    --message-minor-corner-shape: circle;
 }
 
 .home {
@@ -14,7 +21,7 @@
     background-color: var(--accent);
 }
 
-.chat {
+.chats .chat {
     height: var(--chat-height);
     min-height: var(--chat-height);
     max-height: var(--chat-height);
@@ -26,7 +33,7 @@
     display: flex;
 }
 
-.chat:hover {
+.chats > .chat:hover {
     filter: brightness(1.4);
 }
 
@@ -46,5 +53,33 @@
     color: white;
 }
 
+.messages * {
+    color: white;
+}
+
+.messages > .chat {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.clientMessage {
+    border-radius: var(--message-major-border-radius);
+    border-top-right-radius: var(--message-minor-border-radius);
+    corner-shape: circle;
+    align-self: flex-end;
+    background-color: var(--client-message-color);
+}
+
+.otherMessage {
+    border-radius: var(--message-major-border-radius);
+    border-top-left-radius: var(--message-minor-border-radius);
+    background-color: var(--other-message-color);
+    align-self: flex-start;
+}
+
 .message {
+    width: max-content;
+    max-width: 60%;
+    padding: 8px;
 }
