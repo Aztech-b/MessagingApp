@@ -1,11 +1,19 @@
+@import "./variables.css";
+
 .main {
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    background-color: var(--accent);
 }
 
 .error {
     background-color: red;
     color: white;
+}
+
+.form {
+    width: clamp(200px, 40%, 700px);
 }

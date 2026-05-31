@@ -16,11 +16,11 @@ model User {
     id       Int       @id @default(autoincrement())
     username String    @unique
     password String
-    groups   Group[]
+    chats    Chat[]
     messages Message[]
 }
 
-model Group {
+model Chat {
     id       Int       @id @default(autoincrement())
     members  User[]
     Messages Message[]
@@ -31,6 +31,14 @@ model Message {
     content  String
     authorId Int
     author   User   @relation(fields: [authorId], references: [id])
-    group    Group? @relation(fields: [groupId], references: [id])
+    group    Chat?  @relation(fields: [groupId], references: [id])
     groupId  Int?
+}
+
+model Session {
+    sid    String   @id
+    sess   Json
+    expire DateTime
+
+    @@map("session")
 }

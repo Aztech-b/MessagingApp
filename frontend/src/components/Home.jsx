@@ -14,6 +14,13 @@ function Home() {
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
     }, [messages]);
+    // TODO make chat buttons worke
+
+    // function handleChatClick() {
+    //     useEffect(async () => {
+    //         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`);
+    //     }, []);
+    // }
 
     return (
         <div className={styles.home}>
@@ -98,10 +105,10 @@ function Chat({ chatName, icon }) {
         icon = groupIcon;
     }
     return (
-        <div className={styles.chat}>
+        <button className={styles.chat}>
             <img src={groupIcon} className={styles.icon} />
             <p className="chatName">{chatName}</p>
-        </div>
+        </button>
     );
 }
 

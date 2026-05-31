@@ -126,7 +126,7 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password'
 };
 
-exports.Prisma.GroupScalarFieldEnum = {
+exports.Prisma.ChatScalarFieldEnum = {
   id: 'id'
 };
 
@@ -137,9 +137,19 @@ exports.Prisma.MessageScalarFieldEnum = {
   groupId: 'groupId'
 };
 
+exports.Prisma.SessionScalarFieldEnum = {
+  sid: 'sid',
+  sess: 'sess',
+  expire: 'expire'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -152,11 +162,18 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Group: 'Group',
-  Message: 'Message'
+  Chat: 'Chat',
+  Message: 'Message',
+  Session: 'Session'
 };
 
 /**

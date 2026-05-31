@@ -1,5 +1,4 @@
 import express from "express";
-import prisma from "../lib/prisma.js";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
@@ -19,7 +18,7 @@ export const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(
     session({
-        store: new PostgreSession({ pool: pool, createTableIfMissing: true }),
+        store: new PostgreSession({ pool: pool, createTableIfMissing: true, schemaName: "session" }),
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,

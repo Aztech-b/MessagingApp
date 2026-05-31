@@ -4,6 +4,7 @@ import { useUserContext } from "./Context";
 import { ServerRouter } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
+import { Fieldset, TextInput, PasswordInput, Button } from "@mantine/core";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -29,7 +30,6 @@ function Login() {
             setUser(data);
         } catch (error) {
             setError(error);
-            console.trace(error);
         }
     };
 
@@ -37,28 +37,21 @@ function Login() {
         <main className={styles.main}>
             <h1>Login</h1>
             <div className={styles.error}></div>
-            <form>
-                <label htmlFor="username">Username: </label>
-                <input
+            <form className={styles.form}>
+                <TextInput
+                    label="Username: "
                     onChange={(e) => {
                         setUsername(e.target.value);
                     }}
-                    type="username"
-                    name="username"
-                    id="username"
                 />
-                <label htmlFor="password">Password: </label>
-                <input
+                <PasswordInput
+                    label="Password: "
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
-                    type="password"
-                    name="password"
-                    id="password"
                 />
-                <button onClick={submit} type="submit">
-                    Submit
-                </button>
+
+                <Button onClick={submit}>Submit</Button>
             </form>
             <p>
                 Don't have an account? Create one <Link to="/register">here. </Link>

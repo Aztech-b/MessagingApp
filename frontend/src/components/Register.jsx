@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
+import { Button, TextInput, PasswordInput } from "@mantine/core";
+import styles from "../styles/login.module.css";
 
 function Register() {
     const [username, setUsername] = useState("");
@@ -27,36 +29,28 @@ function Register() {
     };
 
     return (
-        <>
+        <main className={styles.main}>
             <h1>Register</h1>
             <form>
-                <label htmlFor="username">Username: </label>
-                <input
+                <TextInput
+                    label="Username: "
                     onChange={(e) => {
                         setUsername(e.target.value);
                     }}
-                    type="username"
-                    name="username"
-                    id="username"
                 />
-                <label htmlFor="password">Password: </label>
-                <input
+                <TextInput
+                    label="Password: "
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
-                    type="password"
-                    name="password"
-                    id="password"
                 />
 
-                <button onClick={submit} type="submit">
-                    Submit
-                </button>
+                <Button onClick={submit}>Submit</Button>
             </form>
             <p>
                 Have an existing account? Login <Link to="/register">here. </Link>
             </p>
-        </>
+        </main>
     );
 }
 
