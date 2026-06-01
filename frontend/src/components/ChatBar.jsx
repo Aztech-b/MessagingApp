@@ -14,6 +14,9 @@ function ChatBar() {
                     method: "GET",
                     credentials: "include",
                 });
+                if (!response.ok) {
+                    throw new Error("response is not ok");
+                }
                 const data = await response.json();
                 setChats(data);
             } catch (error) {}

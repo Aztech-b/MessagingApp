@@ -13,22 +13,22 @@ function Chat() {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
     }, [messages]);
 
-    useEffect(() => {
-        async function GetChatData() {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-                const data = await response.json();
-                setMessages(data.messages);
-                if (!response.ok) {
-                    throw new Error("response is not ok");
-                }
-            } catch (error) {}
-        }
-        GetChatData();
-    }, []);
+    // useEffect(() => {
+    async function GetChatData() {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await response.json();
+            setMessages(data.messages);
+            if (!response.ok) {
+                throw new Error("response is not ok");
+            }
+        } catch (error) {}
+    }
+    GetChatData();
+    // }, [chatId]);
     return (
         <div className={styles.messages}>
             <div className={styles.messagesContainer} ref={scrollDummy}>
@@ -77,7 +77,7 @@ function Message({ username, messageContent }) {
     let isauthorMe;
     const user = useUserContext();
     let otherUsernameColor = null;
-    if (username === user.user.username) {
+    if (user && user.user && username === user.user.username) {
         authorStyle = styles.clientMessage;
         isauthorMe = true;
     } else {
