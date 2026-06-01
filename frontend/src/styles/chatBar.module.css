@@ -1,0 +1,30 @@
+.chats {
+    overflow-y: auto;
+    background-color: var(--accent);
+    border-left: 1px solid var(--accent-border);
+    border-right: 1px solid var(--accent-border);
+}
+
+.chats .chat {
+    height: var(--chat-height);
+    min-height: var(--chat-height);
+    max-height: var(--chat-height);
+    overflow-wrap: anywhere;
+    background-color: hsl(215, 40%, 19%);
+    color: white;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    border: 0;
+    width: 100%;
+}
+
+.chats > .chat:hover {
+    filter: brightness(1.4);
+}
+
+.icon {
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
