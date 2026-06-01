@@ -127,14 +127,15 @@ exports.Prisma.UserScalarFieldEnum = {
 };
 
 exports.Prisma.ChatScalarFieldEnum = {
-  id: 'id'
+  id: 'id',
+  title: 'title'
 };
 
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   content: 'content',
   authorId: 'authorId',
-  groupId: 'groupId'
+  chatId: 'chatId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -155,11 +156,6 @@ exports.Prisma.JsonNullValueInput = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
 };
 
 exports.Prisma.JsonNullValueFilter = {

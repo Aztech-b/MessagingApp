@@ -1,7 +1,8 @@
 import styles from "../styles/home.module.css";
 import groupIcon from "../assets/users-round.svg";
-import { TextInput } from "@mantine/core";
+import { TextInput, Button } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
+import { useUserContext } from "./Context";
 
 function Home() {
     let [messages, setMessages] = useState([
@@ -9,24 +10,62 @@ function Home() {
         { username: "me", content: "hi, how are you? " },
     ]);
 
+    const [chats, setChats] = useState([]);
+    const [activeChatId, setActiveChatId] = useState();
+
     const scrollDummy = useRef();
 
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
     }, [messages]);
-    // TODO make chat buttons worke
 
-    // function handleChatClick() {
-    //     useEffect(async () => {
-    //         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`);
-    //     }, []);
-    // }
-
+    // TODO make chat buttons work
+    function CreateChat() {
+        useEffect(() => {
+            async function SendData(chatName) {
+                try {
+                    const { user } = useUserContext();
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/new`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-type": "application/json" },
+                        body: JSON.stringify({ membersId: [user.id], chatName }),
+                    });
+                    const data = await response.json();
+                    console.log(data);
+                    if (!response.ok) {
+                        throw new Error("response is not ok");
+                    }
+                    setChats((prev) => [...prev, data]);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            // SendData();
+        }, []);
+    }
     return (
         <div className={styles.home}>
             <div className={styles.chats}>
-                <Chat chatName="Bakdaulet" />
-                <Chat chatName="Ali" />
+                <Button
+                    variant="filled"
+                    color="accent.3"
+                    onClick={() => {
+                        // CreateChat("New Chat");
+                        setChats((prev) => [{ id: 2, title: "new Chat" }, ...prev]);
+                    }}
+                >
+                    New Chat
+                </Button>
+                {chats.map((chat, index) => (
+                    <Chat
+                        id={chat.id}
+                        chatName={chat.title}
+                        key={index}
+                        setActiveChatId={setActiveChatId}
+                        setMessages={setMessages}
+                    />
+                ))}
             </div>
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
@@ -100,16 +139,51 @@ function Message({ username, messageContent }) {
     );
 }
 
-function Chat({ chatName, icon }) {
+function Chat({ id, chatName, icon, setActiveChatId, setMessages }) {
     if (!icon) {
         icon = groupIcon;
     }
+    function handleChatClick() {
+        useEffect(async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${id}`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error("response is not ok");
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }, []);
+    }
     return (
-        <button className={styles.chat}>
+        <button
+            className={styles.chat}
+            onClick={() => {
+                setActiveChatId(id);
+                setMessages([
+                    { username: generateRandomString(5), content: generateRandomString(50) },
+                    { username: generateRandomString(5), content: generateRandomString(51) },
+                    { username: generateRandomString(5), content: generateRandomString(52) },
+                ]);
+            }}
+        >
             <img src={groupIcon} className={styles.icon} />
             <p className="chatName">{chatName}</p>
         </button>
     );
+}
+
+function generateRandomString(length) {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
 }
 
 export default Home;
