@@ -5,7 +5,7 @@
     border-right: 1px solid var(--accent-border);
 }
 
-.chats .chat {
+.chats .chatButton {
     height: var(--chat-height);
     min-height: var(--chat-height);
     max-height: var(--chat-height);
@@ -17,9 +17,14 @@
     display: flex;
     border: 0;
     width: 100%;
+    cursor: pointer;
 }
 
-.chats > .chat:hover {
+.chatLink {
+    text-decoration: none;
+}
+
+.chats .chatButton:hover {
     filter: brightness(1.4);
 }
 

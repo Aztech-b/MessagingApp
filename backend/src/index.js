@@ -18,7 +18,7 @@ export const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(
     session({
-        store: new PostgreSession({ pool: pool, createTableIfMissing: true, schemaName: "session" }),
+        store: new PostgreSession({ pool: pool, createTableIfMissing: true }),
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,

@@ -17,16 +17,28 @@ chatRouter.post("/:id/message", async (req, res, next) => {
 
 chatRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
-    const chat = await prisma.chat.findUnique({ where: { id }, select: { Messages: true, members: true } });
+    try {
+        const chat = await prisma.chat.findUnique({ where: { id }, select: { Messages: true, members: true } });
+    } catch (error) {
+        res.status(404).json({ status: "CHAT_NOT_FOUND" });
+        return;
+    }
     res.json(chat);
 });
 
-chatRouter.post("/new", async (req, res) => {
-    const { membersId, chatName, title } = req.body;
+chatRouter.post("/", async (req, res) => {
+    const { title } = req.body;
+    if (!req.isAuthenticated()) {
+        res.status(401).json({ status: "NOT_AUTHENTICATED" });
+        return;
+    }
+    console.log(req.user);
+
     const newChat = await prisma.chat.create({
-        data: { title, members: { connect: membersId.map((id) => ({ id })) } },
+        data: { title, members: { connect: { id: req.user.id } } },
+        select: { id: true, title: true },
     });
-    res.json({ status: "SUCCSESS" });
+    res.json(newChat);
 });
 
 chatRouter;

@@ -8,7 +8,6 @@ import Chat from "./Chat";
 import { Outlet } from "react-router";
 
 function Home() {
-    const [chats, setChats] = useState([]);
     const [activeChatId, setActiveChatId] = useState();
 
     // TODO make chat buttons work
@@ -38,7 +37,7 @@ function Home() {
     }
     return (
         <div className={styles.home}>
-            <ChatBar chatsState={{ chats, setChats }}></ChatBar>
+            <ChatBar></ChatBar>
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
                 <Outlet></Outlet>

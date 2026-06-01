@@ -2,22 +2,33 @@ import styles from "../styles/chatBar.module.css";
 import { Button } from "@mantine/core";
 import { Link } from "react-router";
 import groupIcon from "../assets/users-round.svg";
+import { useEffect, useState } from "react";
+import { useUserContext } from "./Context";
 
-function ChatBar({ chatsState, activeChatIdState }) {
+function ChatBar() {
+    const [chats, setChats] = useState([]);
     return (
         <div className={styles.chats}>
             <Button
                 variant="filled"
                 color="accent.3"
-                onClick={() => {
-                    // CreateChat("New Chat");
-                    chatsState.setChats((prev) => [{ id: 2, title: "new Chat" }, ...prev]);
+                onClick={async () => {
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: "new Chat" }),
+                    });
+                    const data = await response.json();
+                    console.log(data);
+                    setChats((prev) => [{ id: data.id, title: data.title }, ...prev]);
                 }}
             >
                 New Chat
             </Button>
-            {chatsState &&
-                chatsState.chats.map((chat, index) => <Chat id={chat.id} chatName={chat.title} key={index} />)}
+            {chats.map((chat, index) => (
+                <Chat id={chat.id} chatName={chat.title} key={index} />
+            ))}
         </div>
     );
 }
@@ -45,10 +56,10 @@ function Chat({ id, chatName, icon, setActiveChatId, setMessages }) {
         }, []);
     }
     return (
-        <Link to={`/chat/${id}`}>
-            <button className={styles.chat}>
+        <Link to={`/chat/${id}`} className={styles.chatLink}>
+            <button className={styles.chatButton}>
                 <img src={groupIcon} className={styles.icon} />
-                <p className="chatName">{chatName}</p>
+                <p className={styles.chatName}>{chatName}</p>
             </button>
         </Link>
     );
