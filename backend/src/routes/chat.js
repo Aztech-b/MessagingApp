@@ -6,24 +6,34 @@ const chatRouter = Router();
 
 // TODO: validate if user is in chat and can send messages
 chatRouter.post("/:id/message", async (req, res, next) => {
-    const { username, message } = req.body.message;
+    if (!req.isAuthenticated()) {
+        res.status(401).json({ status: "NOT_AUTHENTICATED" });
+        return;
+    }
+    const { content } = req.body;
     const chatId = req.params.id;
-    const authorId = await prisma.user.findUnique({ where: { username: username }, select: { id: true } });
+    const userId = req.user.id;
     const newMessage = await prisma.message.create({
-        data: { content: message, authorId: authorId.id, groupId: chatId },
+        data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
     });
-    io.emit("message", { username, message, groupId });
+    res.json({ newMessage });
 });
 
 chatRouter.get("/:id", async (req, res) => {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
     try {
-        const chat = await prisma.chat.findUnique({ where: { id }, select: { Messages: true, members: true } });
+        const chat = await prisma.chat.findUnique({
+            where: { id },
+            select: { messages: true, members: { select: { username: true } } },
+        });
+        console.log(chat);
+        res.json(chat);
+        return;
     } catch (error) {
+        console.group(error);
         res.status(404).json({ status: "CHAT_NOT_FOUND" });
         return;
     }
-    res.json(chat);
 });
 
 chatRouter.post("/", async (req, res) => {

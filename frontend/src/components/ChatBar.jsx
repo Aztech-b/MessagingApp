@@ -26,40 +26,22 @@ function ChatBar() {
             >
                 New Chat
             </Button>
-            {chats.map((chat, index) => (
-                <Chat id={chat.id} chatName={chat.title} key={index} />
+            {chats.map((chat) => (
+                <Chat id={chat.id} title={chat.title} key={chat.id} />
             ))}
         </div>
     );
 }
 
-function Chat({ id, chatName, icon, setActiveChatId, setMessages }) {
+function Chat({ id, title, icon }) {
     if (!icon) {
         icon = groupIcon;
-    }
-    async function handleChatClick() {
-        useEffect(() => {
-            async function GetChatData() {
-                try {
-                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${id}`, {
-                        method: "GET",
-                        credentials: "include",
-                    });
-                    const data = await response.json();
-                    if (!response.ok) {
-                        throw new Error("response is not ok");
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        }, []);
     }
     return (
         <Link to={`/chat/${id}`} className={styles.chatLink}>
             <button className={styles.chatButton}>
                 <img src={groupIcon} className={styles.icon} />
-                <p className={styles.chatName}>{chatName}</p>
+                <p className={styles.chatName}>{title}</p>
             </button>
         </Link>
     );

@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { useParams } from "react-router";
 import styles from "../styles/chat.module.css";
+import { TextInput } from "@mantine/core";
 
 function Chat() {
     const [messages, setMessages] = useState([
@@ -22,7 +23,6 @@ function Chat() {
                     method: "GET",
                     credentials: "include",
                 });
-                console.log(response);
                 const data = await response.json();
                 console.log(data);
                 if (!response.ok) {
@@ -33,12 +33,42 @@ function Chat() {
         GetChatData();
     }, []);
     return (
-        <div className={styles.messagesContainer} ref={scrollDummy}>
-            <div className={styles.chat}>
-                {messages.map((message, index) => {
-                    return <Message username={message.username} messageContent={message.content} key={index} />;
-                })}
+        <div className={styles.messages}>
+            <div className={styles.messagesContainer} ref={scrollDummy}>
+                <div className={styles.chat}>
+                    {messages.map((message, index) => {
+                        return <Message username={message.username} messageContent={message.content} key={index} />;
+                    })}
+                </div>
             </div>
+            <TextInput
+                size="md"
+                radius={2}
+                placeholder="Write you message here..."
+                styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0 } }}
+                onKeyDown={async (e) => {
+                    if (e.target.value == "") {
+                        return;
+                    }
+                    if (e.key !== "Enter") {
+                        return;
+                    }
+                    const content = e.target.value;
+                    setMessages((prev) => [...prev, { username: "me", content: content }]);
+                    try {
+                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${chatId}/message`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ content }),
+                        });
+                        const data = await response.json();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    e.target.value = "";
+                }}
+            ></TextInput>
         </div>
     );
 }

@@ -33,3 +33,13 @@
     padding: 8px;
     padding-bottom: 20px;
 }
+
+.messages {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.messages * {
+    color: white;
+}

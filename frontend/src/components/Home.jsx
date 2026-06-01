@@ -41,22 +41,6 @@ function Home() {
             <div className={styles.messages}>
                 <TopBar chatName="Bakdaulet" />
                 <Outlet></Outlet>
-                <TextInput
-                    size="md"
-                    radius={2}
-                    placeholder="Write you message here..."
-                    styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0 } }}
-                    onKeyDown={(e) => {
-                        if (e.target.value == "") {
-                            return;
-                        }
-                        if (e.key === "Enter") {
-                            const content = e.target.value;
-                            setMessages((prev) => [...prev, { username: "me", content: content }]);
-                            e.target.value = "";
-                        }
-                    }}
-                ></TextInput>
             </div>
         </div>
     );

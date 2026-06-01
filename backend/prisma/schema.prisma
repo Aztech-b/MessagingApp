@@ -32,7 +32,7 @@ model Message {
     content  String
     authorId Int
     author   User   @relation(fields: [authorId], references: [id])
-    chat     Chat?  @relation(fields: [chatId], references: [id])
+    chat     Chat   @relation(fields: [chatId], references: [id])
     chatId   Int
 }
 
