@@ -3,6 +3,7 @@ import prisma from "../../lib/prisma.js";
 import { io } from "../index.js";
 
 const chatRouter = Router();
+
 chatRouter.post("/", async (req, res) => {
     const { title } = req.body;
     if (!req.isAuthenticated()) {
@@ -27,8 +28,24 @@ chatRouter.get("/", async (req, res) => {
         where: { members: { some: { id: req.user.id } } },
         select: { id: true, title: true },
     });
-    console.log(chats);
     res.json(chats);
+});
+
+chatRouter.get("/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    try {
+        const chat = await prisma.chat.findUnique({
+            where: { id: Number(req.params.id) },
+            select: { messages: { select: { content: true, author: { select: { username: true } } } } },
+        });
+        // console.dir(chat, { depth: null });
+        res.json(chat);
+        return;
+    } catch (error) {
+        console.group(error);
+        res.status(404).json({ status: "CHAT_NOT_FOUND" });
+        return;
+    }
 });
 
 // TODO: validate if user is in chat and can send messages
@@ -44,22 +61,6 @@ chatRouter.post("/:id/message", async (req, res, next) => {
         data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
     });
     res.json({ newMessage });
-});
-
-chatRouter.get("/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
-    try {
-        const chat = await prisma.chat.findUnique({
-            where: { id },
-            select: { messages: true, members: { select: { username: true } } },
-        });
-        res.json(chat);
-        return;
-    } catch (error) {
-        console.group(error);
-        res.status(404).json({ status: "CHAT_NOT_FOUND" });
-        return;
-    }
 });
 
 export default chatRouter;

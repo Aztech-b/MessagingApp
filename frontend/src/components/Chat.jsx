@@ -1,14 +1,11 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import styles from "../styles/chat.module.css";
 import { TextInput } from "@mantine/core";
+import { useUserContext } from "./Context";
 
 function Chat() {
-    const [messages, setMessages] = useState([
-        { username: "Ali", content: "I am good" },
-        { username: "me", content: "hi, how are you? " },
-    ]);
-
+    const [messages, setMessages] = useState([]);
     const chatId = useParams().id;
     const scrollDummy = useRef();
 
@@ -24,7 +21,7 @@ function Chat() {
                     credentials: "include",
                 });
                 const data = await response.json();
-                // console.log(data);
+                setMessages(data.messages);
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
@@ -37,7 +34,9 @@ function Chat() {
             <div className={styles.messagesContainer} ref={scrollDummy}>
                 <div className={styles.chat}>
                     {messages.map((message, index) => {
-                        return <Message username={message.username} messageContent={message.content} key={index} />;
+                        return (
+                            <Message username={message.author.username} messageContent={message.content} key={index} />
+                        );
                     })}
                 </div>
             </div>
@@ -56,7 +55,7 @@ function Chat() {
                     const content = e.target.value;
                     setMessages((prev) => [...prev, { username: "me", content: content }]);
                     try {
-                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${chatId}/message`, {
+                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
                             method: "POST",
                             credentials: "include",
                             headers: { "Content-Type": "application/json" },
@@ -76,8 +75,9 @@ function Chat() {
 function Message({ username, messageContent }) {
     let authorStyle;
     let isauthorMe;
+    const user = useUserContext();
     let otherUsernameColor = null;
-    if (username === "me") {
+    if (username === user.user.username) {
         authorStyle = styles.clientMessage;
         isauthorMe = true;
     } else {
