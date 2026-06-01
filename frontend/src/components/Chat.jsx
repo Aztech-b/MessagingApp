@@ -8,30 +8,30 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const chatId = useParams().id;
     const scrollDummy = useRef();
-
+    const { user } = useUserContext();
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
     }, [messages]);
 
-    // useEffect(() => {
-    async function GetChatData() {
-        try {
-            if (!useUserContext()) {
-                return;
-            }
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
-                method: "GET",
-                credentials: "include",
-            });
-            const data = await response.json();
-            setMessages(data.messages);
-            if (!response.ok) {
-                throw new Error("response is not ok");
-            }
-        } catch (error) {}
-    }
-    GetChatData();
-    // }, [chatId]);
+    useEffect(() => {
+        async function GetChatData() {
+            try {
+                if (!user) {
+                    return;
+                }
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+                const data = await response.json();
+                setMessages(data.messages);
+                if (!response.ok) {
+                    throw new Error("response is not ok");
+                }
+            } catch (error) {}
+        }
+        GetChatData();
+    }, [chatId, user]);
     return (
         <div className={styles.messages}>
             <div className={styles.messagesContainer} ref={scrollDummy}>
