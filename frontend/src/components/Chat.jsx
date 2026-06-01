@@ -56,7 +56,7 @@ function Chat() {
                         return;
                     }
                     const content = e.target.value;
-                    setMessages((prev) => [...prev, { username: "me", content: content }]);
+                    setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
                     try {
                         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
                             method: "POST",
