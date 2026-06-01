@@ -3,6 +3,33 @@ import prisma from "../../lib/prisma.js";
 import { io } from "../index.js";
 
 const chatRouter = Router();
+chatRouter.post("/", async (req, res) => {
+    const { title } = req.body;
+    if (!req.isAuthenticated()) {
+        res.status(401).json({ status: "NOT_AUTHENTICATED" });
+        return;
+    }
+    console.log(req.user);
+
+    const newChat = await prisma.chat.create({
+        data: { title, members: { connect: { id: req.user.id } } },
+        select: { id: true, title: true },
+    });
+    res.json(newChat);
+});
+
+chatRouter.get("/", async (req, res) => {
+    if (!req.isAuthenticated()) {
+        res.status(401).json({ status: "NOT_AUTHENTICATED" });
+        return;
+    }
+    const chats = await prisma.chat.findMany({
+        where: { members: { some: { id: req.user.id } } },
+        select: { id: true, title: true },
+    });
+    console.log(chats);
+    res.json(chats);
+});
 
 // TODO: validate if user is in chat and can send messages
 chatRouter.post("/:id/message", async (req, res, next) => {
@@ -26,7 +53,6 @@ chatRouter.get("/:id", async (req, res) => {
             where: { id },
             select: { messages: true, members: { select: { username: true } } },
         });
-        console.log(chat);
         res.json(chat);
         return;
     } catch (error) {
@@ -35,22 +61,5 @@ chatRouter.get("/:id", async (req, res) => {
         return;
     }
 });
-
-chatRouter.post("/", async (req, res) => {
-    const { title } = req.body;
-    if (!req.isAuthenticated()) {
-        res.status(401).json({ status: "NOT_AUTHENTICATED" });
-        return;
-    }
-    console.log(req.user);
-
-    const newChat = await prisma.chat.create({
-        data: { title, members: { connect: { id: req.user.id } } },
-        select: { id: true, title: true },
-    });
-    res.json(newChat);
-});
-
-chatRouter;
 
 export default chatRouter;

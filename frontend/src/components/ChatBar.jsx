@@ -7,6 +7,19 @@ import { useUserContext } from "./Context";
 
 function ChatBar() {
     const [chats, setChats] = useState([]);
+    useEffect(() => {
+        async function GetAllChats() {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+                const data = await response.json();
+                setChats(data);
+            } catch (error) {}
+        }
+        GetAllChats();
+    }, []);
     return (
         <div className={styles.chats}>
             <Button

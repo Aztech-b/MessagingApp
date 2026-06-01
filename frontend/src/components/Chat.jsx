@@ -24,7 +24,7 @@ function Chat() {
                     credentials: "include",
                 });
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
