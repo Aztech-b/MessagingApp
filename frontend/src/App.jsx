@@ -1,12 +1,12 @@
 import Register from "./components/Register";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { UserDataProvider } from "./components/Context";
 import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar.jsx";
 
 function App() {
     const [user, setUser] = useState();
-
+    const navigate = useNavigate();
     useEffect(() => {
         async function GetUser() {
             try {
@@ -14,13 +14,22 @@ function App() {
                     method: "GET",
                     credentials: "include",
                 });
-                const data = await response.json();
                 // console.log(data);
+
+                if (response.status === 401) {
+                    navigate("/login");
+                    return;
+                }
+
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
+                const data = await response.json();
+
                 setUser(data);
-            } catch (error) {}
+            } catch (error) {
+                console.log(error);
+            }
         }
         GetUser();
     }, []);

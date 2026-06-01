@@ -16,6 +16,9 @@ function Chat() {
     // useEffect(() => {
     async function GetChatData() {
         try {
+            if (!useUserContext()) {
+                return;
+            }
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
                 method: "GET",
                 credentials: "include",

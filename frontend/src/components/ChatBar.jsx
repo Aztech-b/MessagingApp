@@ -7,7 +7,12 @@ import { useUserContext } from "./Context";
 
 function ChatBar() {
     const [chats, setChats] = useState([]);
+    const { user } = useUserContext();
+
     useEffect(() => {
+        if (!user) {
+            return;
+        }
         async function GetAllChats() {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
@@ -22,7 +27,7 @@ function ChatBar() {
             } catch (error) {}
         }
         GetAllChats();
-    }, []);
+    }, [user]);
     return (
         <div className={styles.chats}>
             <Button
