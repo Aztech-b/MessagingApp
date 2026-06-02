@@ -22,7 +22,7 @@
     --sidebar-width: 76px;
 
     /*  */
-    --navbar-height: 60px;
+    --navbar-height: 72px;
     --chat-height: var(--navbar-height);
     --client-message-color: var(--accent-light);
     --other-message-color: hsl(211, 36%, 15%);

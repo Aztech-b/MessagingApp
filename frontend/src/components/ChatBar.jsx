@@ -32,16 +32,6 @@ function ChatBar() {
     }, [user]);
     return (
         <div className={styles.chats}>
-            <ActionIcon
-                style={{ position: "absolute", bottom: "40px", right: "10%", boxShadow: "0px 4px 4px #111111" }}
-                size={60}
-                radius="xl"
-                variant="filled"
-                color="accent.3"
-                popoverTarget="newChat"
-            >
-                <Plus size={40} strokeWidth={3} />{" "}
-            </ActionIcon>
             <div className={styles.newChat} popover="auto" id="newChat">
                 <form>
                     <TextInput
@@ -78,6 +68,22 @@ function ChatBar() {
             {chats.map((chat) => (
                 <Chat id={chat.id} title={chat.title} key={chat.id} />
             ))}
+            <ActionIcon
+                style={{
+                    position: "sticky",
+                    bottom: "12px",
+                    marginRight: "2%",
+                    marginLeft: "auto",
+                    boxShadow: "0px 4px 4px #111111",
+                    zIndex: 1,
+                }}
+                size={60}
+                radius="xl"
+                variant="filled"
+                popoverTarget="newChat"
+            >
+                <Plus size={40} strokeWidth={3} />{" "}
+            </ActionIcon>
         </div>
     );
 }

@@ -5,6 +5,8 @@
     border-left: 1px solid var(--accent-border);
     border-right: 1px solid var(--accent-border);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .chats .chatButton {

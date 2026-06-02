@@ -28,7 +28,10 @@ const theme = createTheme({
         ],
     },
     primaryColor: "accent",
-    components: { Button: { defaultProps: { color: "accent.1" } } },
+    components: {
+        Button: { defaultProps: { color: "accent.1" } },
+        ActionIcon: { defaultProps: { color: "accent.1" } },
+    },
 });
 
 export default theme;
