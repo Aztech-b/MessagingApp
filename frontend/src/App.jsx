@@ -2,7 +2,6 @@ import Register from "./components/Register";
 import { Outlet, useNavigate } from "react-router";
 import { UserDataProvider, SocketDataProvider } from "./components/Context";
 import { useEffect, useRef, useState } from "react";
-import Sidebar from "./components/Sidebar.jsx";
 import socket from "./components/socket.js";
 
 function App() {
@@ -39,7 +38,6 @@ function App() {
         <>
             <SocketDataProvider value={socket?.current}>
                 <UserDataProvider value={{ user, setUser }}>
-                    <Sidebar></Sidebar>
                     <Outlet></Outlet>
                 </UserDataProvider>
             </SocketDataProvider>

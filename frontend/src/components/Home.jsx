@@ -1,11 +1,11 @@
-import styles from "../styles/home.module.css";
-import groupIcon from "../assets/users-round.svg";
-import { TextInput, Button } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { useUserContext } from "./Context";
+import { Outlet } from "react-router";
+import { TextInput, Button } from "@mantine/core";
+import SideBar from "./Sidebar";
 import ChatBar from "./ChatBar";
 import Chat from "./Chat";
-import { Outlet } from "react-router";
+import { useUserContext } from "./Context";
+import styles from "../styles/home.module.css";
 
 function Home() {
     const [activeChatId, setActiveChatId] = useState();
@@ -36,11 +36,14 @@ function Home() {
         }, []);
     }
     return (
-        <div className={styles.home}>
-            <ChatBar></ChatBar>
-            <div className={styles.messages}>
-                <TopBar chatName="Bakdaulet" />
-                <Outlet></Outlet>
+        <div className={styles.main}>
+            <SideBar></SideBar>
+            <div className={styles.home}>
+                <ChatBar></ChatBar>
+                <div className={styles.messages}>
+                    <TopBar chatName="Bakdaulet" />
+                    <Outlet></Outlet>
+                </div>
             </div>
         </div>
     );

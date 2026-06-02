@@ -32,3 +32,8 @@
 .input {
     flex-shrink: 0;
 }
+
+.main {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+}

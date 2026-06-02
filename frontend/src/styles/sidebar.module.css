@@ -5,7 +5,7 @@
     width: var(--sidebar-width);
     padding: 16px;
     box-sizing: border-box;
-    background-color: var(--accent-dark-2xl);
+    background-color: var(--accent-dark-l);
 }
 
 .account {

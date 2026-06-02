@@ -27,9 +27,7 @@ a {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-
-    display: grid;
-    grid-template-columns: var(--sidebar-width) 1fr;
+    justify-content: center;
 }
 
 h1,
