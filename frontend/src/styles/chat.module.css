@@ -1,8 +1,11 @@
+@import "./variables.css";
+
 .messagesContainer {
     flex: 1;
     overflow-y: auto;
     min-height: 0;
 }
+
 .clientMessage {
     border-radius: var(--message-major-border-radius);
     border-top-right-radius: var(--message-minor-border-radius);
@@ -22,7 +25,7 @@
     width: max-content;
     overflow-wrap: break-word;
     max-width: 60%;
-    padding: 8px;
+    padding: 2px 8px;
 }
 
 .chat {

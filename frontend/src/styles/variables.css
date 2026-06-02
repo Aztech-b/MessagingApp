@@ -27,8 +27,8 @@
     --client-message-color: var(--accent-light);
     --other-message-color: hsl(211, 36%, 15%);
 
-    --message-major-border-radius: 16px;
-    --message-minor-border-radius: 8px;
+    --message-major-border-radius: 10px;
+    --message-minor-border-radius: 4px;
     --message-major-corner-shape: squircle;
     --message-minor-corner-shape: circle;
 

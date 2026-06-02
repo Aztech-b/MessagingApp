@@ -21,7 +21,7 @@ function Chat() {
         };
     }, []);
     useEffect(() => {
-        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
+        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
     }, [messages]);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ function Chat() {
         GetChatData();
     }, [chatId, user]);
     return (
-        <div className={styles.messages}>
+        <>
             <div className={styles.messagesContainer} ref={scrollDummy}>
                 <div className={styles.chat}>
                     {messages.map((message, index) => {
@@ -70,21 +70,10 @@ function Chat() {
                     const content = e.target.value;
                     setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
                     socket.emit("message", { content, chatId });
-                    // try {
-                    //     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
-                    //         method: "POST",
-                    //         credentials: "include",
-                    //         headers: { "Content-Type": "application/json" },
-                    //         body: JSON.stringify({ content }),
-                    //     });
-                    //     const data = await response.json();
-                    // } catch (error) {
-                    //     console.log(error);
-                    // }
                     e.target.value = "";
                 }}
             ></TextInput>
-        </div>
+        </>
     );
 }
 
