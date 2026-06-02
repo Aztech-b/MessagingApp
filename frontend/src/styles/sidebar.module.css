@@ -3,9 +3,12 @@
 .sidebar {
     height: 100vh;
     width: var(--sidebar-width);
-    padding: 16px;
     box-sizing: border-box;
+    padding: 12px 0;
     background-color: var(--accent-dark-l);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     /* background-color: var(--bg-dark); */
 }
 
@@ -43,4 +46,24 @@
 
 .item {
     position: relative;
+}
+
+.tabItem {
+    width: 100%;
+    height: calc(max-content + 20px);
+    background-image: linear-gradient(to right, var(--accent), transparent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+    position: relative;
+}
+
+.tabItem:before {
+    content: "";
+    height: calc(100% + 2px);
+    width: 4px;
+    background-color: var(--accent-light);
+    position: absolute;
+    left: 0;
 }

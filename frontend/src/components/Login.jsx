@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import styles from "../styles/login.module.css";
 import { TextInput, PasswordInput, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Dices } from "lucide-react";
+import { Icon } from "./global";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -45,7 +45,7 @@ function Login() {
             <div className={styles.formContainer}>
                 <div>
                     <div className={styles.header}>
-                        <Dices size={40} color="#e9bc61" />
+                        <Icon size={40} color="#e9bc61" />
                         <h1>Welcome</h1>
                     </div>
                     <p>

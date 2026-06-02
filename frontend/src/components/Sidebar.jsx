@@ -1,15 +1,35 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router";
 import { useUserContext } from "./Context";
 import styles from "../styles/sidebar.module.css";
 import profileLogo from "../assets/user.svg";
-import { useState } from "react";
-import { Link } from "react-router";
 import { Button } from "@mantine/core";
+import { MessageCircle } from "lucide-react";
+import { Icon } from "./global";
+import { Divider } from "@mantine/core";
+import { iconColor } from "./global";
 
 function Sidebar() {
+    const location = useLocation();
     return (
         <nav className={styles.sidebar}>
+            <div className="icon">
+                <Icon size={52} color={iconColor}></Icon>
+            </div>
+            <Divider w={"80%"} size={"xs"} my={"md"} color="gray"></Divider>
+            <Tab href={location.pathname.startsWith("/chat") ? "#" : "/chat"}>
+                <MessageCircle size={24} color="white" />
+            </Tab>
             <Account></Account>
         </nav>
+    );
+}
+
+function Tab({ href, children }) {
+    return (
+        <Link to={href} className={styles.tabItem}>
+            {children}
+        </Link>
     );
 }
 
