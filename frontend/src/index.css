@@ -16,6 +16,11 @@ body,
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+    color: var(--accent-light-2xl);
+}
+
 #root {
     overflow: hidden;
     min-height: 100svh;
@@ -32,12 +37,12 @@ h2 {
     font-family: var(--heading);
     font-weight: 500;
     color: var(--text-h);
+    margin: 0;
 }
 
 h1 {
     font-size: 56px;
     letter-spacing: -1.68px;
-    margin: 32px 0;
     @media (max-width: 1024px) {
         font-size: 36px;
         margin: 20px 0;

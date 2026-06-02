@@ -41,15 +41,28 @@
     :root {
         --text: white;
         --text-h: #f3f4f6;
-        --bg: #16171d;
-        --border: #2e303a;
-        --code-bg: #1f2028;
+
         --accent: hsl(215, 40%, 19%);
         --accent-light: hsl(210, 47%, 32%);
-        --accent-lighter: hsl(210, 47%, 40%);
+        --accent-light-l: hsl(210, 47%, 40%);
+        --accent-light-xl: hsl(210, 47%, 50%);
+        --accent-light-2xl: hsl(210, 47%, 60%);
+        --accent-dark: hsl(215, 40%, 15%);
+        --accent-dark-l: hsl(215, 40%, 10%);
+        --accent-dark-xl: hsl(215, 40%, 8%);
+        --accent-dark-2xl: hsl(215, 40%, 7%);
+
+        --bg-dark: hsl(231, 13.73%, 5%);
+        --bg: hsl(231.43, 13.73%, 10%);
+        --bg-light: hsl(231, 13.73%, 12%);
+
+        --border: #2e303a;
+        --code-bg: #1f2028;
+
         --accent-bg: hsl(215, 40%, 9%);
         --accent-bg-light: hsl(215, 40%, 15%);
         --accent-border: hsl(215, 30%, 7%);
+
         --social-bg: rgba(47, 48, 58, 0.5);
         --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
     }

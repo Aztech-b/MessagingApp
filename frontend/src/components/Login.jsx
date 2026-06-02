@@ -5,6 +5,7 @@ import { ServerRouter } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
 import { Fieldset, TextInput, PasswordInput, Button } from "@mantine/core";
+import { Dices } from "lucide-react";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -35,27 +36,35 @@ function Login() {
 
     return (
         <main className={styles.main}>
-            <h1>Login</h1>
-            <div className={styles.error}></div>
-            <form className={styles.form}>
-                <TextInput
-                    label="Username: "
-                    onChange={(e) => {
-                        setUsername(e.target.value);
-                    }}
-                />
-                <PasswordInput
-                    label="Password: "
-                    onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}
-                />
-
-                <Button onClick={submit}>Submit</Button>
-            </form>
-            <p>
-                Don't have an account? Create one <Link to="/register">here. </Link>
-            </p>
+            <div className={styles.formContainer}>
+                <div>
+                    <div className={styles.header}>
+                        <Dices size={40} color="#e9bc61" />
+                        <h1>Welcome</h1>
+                    </div>
+                    <p>
+                        Don't have an account? Create one <Link to="/register">here. </Link>
+                    </p>
+                </div>
+                <form className={styles.form}>
+                    <TextInput
+                        label="Username: "
+                        placeholder="Enter your username..."
+                        onChange={(e) => {
+                            setUsername(e.target.value);
+                        }}
+                    />
+                    <PasswordInput
+                        label="Password: "
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                    />
+                    <Button fullWidth onClick={submit}>
+                        Submit
+                    </Button>
+                </form>
+            </div>
         </main>
     );
 }
