@@ -25,6 +25,7 @@ app.use(
         cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 },
     }),
 );
+app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
