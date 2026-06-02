@@ -5,16 +5,14 @@ import { io } from "../index.js";
 const chatRouter = Router();
 
 chatRouter.post("/", async (req, res) => {
-    const { title } = req.body;
+    const { title, members } = req.body;
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
     console.log(req.user);
-
     const newChat = await prisma.chat.create({
-        data: { title, members: { connect: { id: req.user.id } } },
-        select: { id: true, title: true },
+        data: { title, members: { connect: [{ id: req.user.id }, ...members.map((username) => ({ username }))] } },
     });
     res.json(newChat);
 });

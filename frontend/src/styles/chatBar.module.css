@@ -1,3 +1,4 @@
+@import "./variables.css";
 .chats {
     overflow-y: auto;
     background-color: var(--accent);
@@ -32,4 +33,12 @@
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
+}
+
+.newChat {
+    background-color: var(--accent-bg-light);
+    border: 0;
+    box-shadow: 0 4px 4px black;
+    border-radius: 8px;
+    padding: 16px;
 }
