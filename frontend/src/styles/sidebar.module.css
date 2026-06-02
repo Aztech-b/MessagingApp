@@ -6,6 +6,7 @@
     padding: 16px;
     box-sizing: border-box;
     background-color: var(--accent-dark-l);
+    /* background-color: var(--bg-dark); */
 }
 
 .account {
