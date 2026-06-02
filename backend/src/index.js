@@ -24,7 +24,7 @@ const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 },
+    cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 * 24 },
 });
 app.use(sessionMiddleware);
 app.use(cors(corsData));

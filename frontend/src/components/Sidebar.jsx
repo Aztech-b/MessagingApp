@@ -7,9 +7,9 @@ import { Button } from "@mantine/core";
 
 function Sidebar() {
     return (
-        <div className={styles.sidebar}>
+        <nav className={styles.sidebar}>
             <Account></Account>
-        </div>
+        </nav>
     );
 }
 

@@ -4,6 +4,7 @@
     background-color: var(--accent);
     border-left: 1px solid var(--accent-border);
     border-right: 1px solid var(--accent-border);
+    position: relative;
 }
 
 .chats .chatButton {

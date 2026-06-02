@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { Button, TextInput } from "@mantine/core";
+import { Button, TextInput, ActionIcon } from "@mantine/core";
 import { useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
-import groupIcon from "../assets/users-round.svg";
+import { UsersRound, Plus } from "lucide-react";
 
 function ChatBar() {
     const [chats, setChats] = useState([]);
@@ -32,9 +32,16 @@ function ChatBar() {
     }, [user]);
     return (
         <div className={styles.chats}>
-            <Button variant="filled" color="accent.3" popoverTarget="newChat">
-                New Chat
-            </Button>
+            <ActionIcon
+                style={{ position: "absolute", bottom: "40px", right: "10%", boxShadow: "0px 4px 4px #111111" }}
+                size={60}
+                radius="xl"
+                variant="filled"
+                color="accent.3"
+                popoverTarget="newChat"
+            >
+                <Plus size={40} strokeWidth={3} />{" "}
+            </ActionIcon>
             <div className={styles.newChat} popover="auto" id="newChat">
                 <form>
                     <TextInput
@@ -76,13 +83,10 @@ function ChatBar() {
 }
 
 function Chat({ id, title, icon }) {
-    if (!icon) {
-        icon = groupIcon;
-    }
     return (
         <Link to={`/chat/${id}`} className={styles.chatLink}>
             <button className={styles.chatButton}>
-                <img src={groupIcon} className={styles.icon} />
+                {icon ?? <UsersRound />}
                 <p className={styles.chatName}>{title}</p>
             </button>
         </Link>
