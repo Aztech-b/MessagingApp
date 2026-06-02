@@ -1,34 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useUserContext } from "./Context";
 import styles from "../styles/sidebar.module.css";
 import profileLogo from "../assets/user.svg";
-import { Button } from "@mantine/core";
-import { MessageCircle } from "lucide-react";
+import { Button, Divider } from "@mantine/core";
+import { MessageCircle, Star, Archive, Ban, CircleUserRound } from "lucide-react";
 import { Icon } from "./global";
-import { Divider } from "@mantine/core";
 import { iconColor } from "./global";
 
 function Sidebar() {
-    const location = useLocation();
     return (
         <nav className={styles.sidebar}>
             <div className="icon">
                 <Icon size={52} color={iconColor}></Icon>
             </div>
             <Divider w={"80%"} size={"xs"} my={"md"} color="gray"></Divider>
-            <Tab href={location.pathname.startsWith("/chat") ? "#" : "/chat"}>
+            <Tab href={"/chat"} title={"Chats"}>
                 <MessageCircle size={24} color="white" />
             </Tab>
-            <Account></Account>
+            <Tab href={"/profile"} title={"Profile"}>
+                <CircleUserRound size={24} color="white" />
+            </Tab>
+            <Tab title={"Starred"}>
+                <Star color="#ffffff" />
+            </Tab>
+            <Tab title={"Archive"}>
+                <Archive color="#ffffff" />
+            </Tab>
+            <Tab title={"Removed"}>
+                <Ban color="#ffffff" />
+            </Tab>
         </nav>
     );
 }
 
-function Tab({ href, children }) {
+function Tab({ title, href, children }) {
+    const location = useLocation();
+    const isActiveTab = location.pathname.startsWith(href);
+    if (isActiveTab) {
+        href = "#";
+    }
     return (
-        <Link to={href} className={styles.tabItem}>
-            {children}
+        <Link className={`${styles.tabItem} ${isActiveTab ? styles.activeTab : ""}`} to={href}>
+            <abbr className={styles.abbreviation} title={title}>
+                {children}
+            </abbr>
         </Link>
     );
 }
