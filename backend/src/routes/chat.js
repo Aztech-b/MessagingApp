@@ -45,7 +45,7 @@ chatRouter.get("/:id", async (req, res) => {
     }
 });
 
-// TODO: validate if user is in chat and can send messages
+// I guess this route is no longer needed as writing to database is handeled by sockets
 chatRouter.post("/:id/message", async (req, res, next) => {
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });

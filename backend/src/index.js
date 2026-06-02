@@ -9,6 +9,7 @@ import http from "node:http";
 
 import authRouter from "./routes/auth.js";
 import chatRouter from "./routes/chat.js";
+import registerChatSockets from "./sockets/chat.js";
 
 const corsData = { origin: "http://localhost:5173", credentials: true };
 
@@ -16,7 +17,7 @@ const app = express();
 const server = http.createServer(app);
 const PostgreSession = postgreSession(session);
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const io = new Server(server, { cors: corsData });
+const io = new Server(server, { cors: corsData, connectionStateRecovery: {} });
 
 const sessionMiddleware = session({
     store: new PostgreSession({ pool: pool, createTableIfMissing: true }),
@@ -47,29 +48,7 @@ io.use((socket, next) => {
 // Routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
-
-io.on("connection", (socket) => {
-    console.log("connection " + socket.id);
-    if (!socket.request.user) {
-        socket.disconnect(true);
-        return;
-    }
-
-    socket.on("join", (data) => {
-        socket.join(`chat:${data.chatId}`);
-    });
-
-    socket.on("message", (data) => {
-        console.log(data);
-        socket
-            .to(`chat:${data.chatId}`)
-            .emit("newMessage", { content: data.content, author: { username: socket.request.user.username } });
-    });
-
-    socket.on("disconnect", () => {
-        console.log(socket.id + " disconnected");
-    });
-});
+registerChatSockets(io);
 
 server.listen(3000, (error) => {
     if (error) {
