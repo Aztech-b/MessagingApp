@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import errorStyles from "../styles/errorPopover.module.css";
 import { useUserContext } from "./Context";
-import { ServerRouter } from "react-router";
+import { ServerRouter, useNavigate } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
 import { Fieldset, TextInput, PasswordInput, Button } from "@mantine/core";
@@ -13,6 +13,7 @@ function Login() {
     const [data, setData] = useState();
     const [error, setError] = useState(null);
     const { setUser } = useUserContext();
+    const navigate = useNavigate();
 
     const submit = async (e) => {
         e.preventDefault();
@@ -27,8 +28,10 @@ function Login() {
                 throw new Error("responese is not ok");
             }
             const data = await response.json();
-            console.log(data);
             setUser(data);
+            if (data.username) {
+                navigate("/chat");
+            }
         } catch (error) {
             setError(error);
         }
