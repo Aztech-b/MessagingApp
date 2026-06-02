@@ -4,7 +4,8 @@ import { useUserContext } from "./Context";
 import { ServerRouter, useNavigate } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
-import { Fieldset, TextInput, PasswordInput, Button } from "@mantine/core";
+import { TextInput, PasswordInput, Button } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { Dices } from "lucide-react";
 
 function Login() {
@@ -14,9 +15,11 @@ function Login() {
     const [error, setError] = useState(null);
     const { setUser } = useUserContext();
     const navigate = useNavigate();
+    const [loading, { toggle }] = useDisclosure();
 
     const submit = async (e) => {
         e.preventDefault();
+        toggle();
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
                 method: "POST",
@@ -63,7 +66,7 @@ function Login() {
                             setPassword(e.target.value);
                         }}
                     />
-                    <Button fullWidth onClick={submit}>
+                    <Button fullWidth loading={loading} onClick={submit}>
                         Submit
                     </Button>
                 </form>
