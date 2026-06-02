@@ -14,6 +14,7 @@ function Chat() {
     }, [messages]);
 
     useEffect(() => {
+        setMessages([]);
         async function GetChatData() {
             try {
                 if (!user) {
