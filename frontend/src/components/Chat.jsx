@@ -7,9 +7,19 @@ import socket from "./socket";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
-    const chatId = useParams().id;
+    const chatId = Number(useParams().id);
     const scrollDummy = useRef();
     const { user } = useUserContext();
+
+    useEffect(() => {
+        socket.emit("join", { chatId });
+        socket.on("newMessage", (data) => {
+            setMessages((prev) => [...prev, data]);
+        });
+        return () => {
+            socket.off("newMessage");
+        };
+    }, []);
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "smooth" });
     }, [messages]);
@@ -59,7 +69,7 @@ function Chat() {
                     }
                     const content = e.target.value;
                     setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
-                    socket.emit("message", { content });
+                    socket.emit("message", { content, chatId });
                     // try {
                     //     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
                     //         method: "POST",

@@ -51,11 +51,19 @@ app.use("/chat", chatRouter);
 io.on("connection", (socket) => {
     console.log("connection " + socket.id);
     if (!socket.request.user) {
-        return next(new Error("NOT_AUTHENTICATED"));
+        socket.disconnect(true);
+        return;
     }
+
+    socket.on("join", (data) => {
+        socket.join(`chat:${data.chatId}`);
+    });
 
     socket.on("message", (data) => {
         console.log(data);
+        socket
+            .to(`chat:${data.chatId}`)
+            .emit("newMessage", { content: data.content, author: { username: socket.request.user.username } });
     });
 
     socket.on("disconnect", () => {
