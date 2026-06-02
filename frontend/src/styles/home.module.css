@@ -17,6 +17,7 @@
     display: flex;
     align-items: center;
     color: white;
+    border-bottom: 1px solid var(--accent-border);
 }
 
 .messages {

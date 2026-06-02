@@ -20,6 +20,7 @@
     border: 0;
     width: 100%;
     cursor: pointer;
+    border-bottom: 1px solid var(--accent-border);
 }
 
 .chatLink {
