@@ -1,6 +1,5 @@
 import { Router } from "express";
 import prisma from "../../lib/prisma.js";
-import { io } from "../index.js";
 
 const chatRouter = Router();
 

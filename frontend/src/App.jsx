@@ -1,12 +1,14 @@
 import Register from "./components/Register";
 import { Outlet, useNavigate } from "react-router";
-import { UserDataProvider } from "./components/Context";
-import { useEffect, useState } from "react";
+import { UserDataProvider, SocketDataProvider } from "./components/Context";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "./components/Sidebar.jsx";
+import socket from "./components/socket.js";
 
 function App() {
     const [user, setUser] = useState();
     const navigate = useNavigate();
+
     useEffect(() => {
         async function GetUser() {
             try {
@@ -14,7 +16,6 @@ function App() {
                     method: "GET",
                     credentials: "include",
                 });
-                // console.log(data);
 
                 if (response.status === 401) {
                     navigate("/login");
@@ -36,10 +37,12 @@ function App() {
 
     return (
         <>
-            <UserDataProvider value={{ user, setUser }}>
-                <Sidebar></Sidebar>
-                <Outlet></Outlet>
-            </UserDataProvider>
+            <SocketDataProvider value={socket?.current}>
+                <UserDataProvider value={{ user, setUser }}>
+                    <Sidebar></Sidebar>
+                    <Outlet></Outlet>
+                </UserDataProvider>
+            </SocketDataProvider>
         </>
     );
 }

@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import styles from "../styles/chat.module.css";
 import { TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
+import socket from "./socket";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -58,17 +59,18 @@ function Chat() {
                     }
                     const content = e.target.value;
                     setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
-                    try {
-                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
-                            method: "POST",
-                            credentials: "include",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ content }),
-                        });
-                        const data = await response.json();
-                    } catch (error) {
-                        console.log(error);
-                    }
+                    socket.emit("message", { content });
+                    // try {
+                    //     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}/message`, {
+                    //         method: "POST",
+                    //         credentials: "include",
+                    //         headers: { "Content-Type": "application/json" },
+                    //         body: JSON.stringify({ content }),
+                    //     });
+                    //     const data = await response.json();
+                    // } catch (error) {
+                    //     console.log(error);
+                    // }
                     e.target.value = "";
                 }}
             ></TextInput>

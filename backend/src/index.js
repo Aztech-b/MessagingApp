@@ -10,35 +10,56 @@ import http from "node:http";
 import authRouter from "./routes/auth.js";
 import chatRouter from "./routes/chat.js";
 
+const corsData = { origin: "http://localhost:5173", credentials: true };
+
 const app = express();
 const server = http.createServer(app);
 const PostgreSession = postgreSession(session);
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: corsData });
 
-app.use(
-    session({
-        store: new PostgreSession({ pool: pool, createTableIfMissing: true }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 },
-    }),
-);
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+const sessionMiddleware = session({
+    store: new PostgreSession({ pool: pool, createTableIfMissing: true }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: false, maxAge: 60 * 60 * 1000 },
+});
+app.use(sessionMiddleware);
+app.use(cors(corsData));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+io.use((socket, next) => {
+    passport.initialize()(socket.request, {}, () => {
+        passport.session()(socket.request, {}, () => {
+            next();
+        });
+    });
+});
+
 // Routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
 
 io.on("connection", (socket) => {
+    console.log("connection " + socket.id);
+    if (!socket.request.user) {
+        return next(new Error("NOT_AUTHENTICATED"));
+    }
+
     socket.on("message", (data) => {
         console.log(data);
+    });
+
+    socket.on("disconnect", () => {
+        console.log(socket.id + " disconnected");
     });
 });
 
