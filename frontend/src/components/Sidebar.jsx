@@ -3,10 +3,9 @@ import { Link, useLocation } from "react-router";
 import { useUserContext } from "./Context";
 import styles from "../styles/sidebar.module.css";
 import profileLogo from "../assets/user.svg";
-import { Button, Divider } from "@mantine/core";
+import { Button, Divider, Tooltip } from "@mantine/core";
 import { MessageCircle, Star, Archive, Ban, CircleUserRound } from "lucide-react";
-import { Icon } from "./global";
-import { iconColor } from "./global";
+import { Icon, iconColor } from "./global";
 
 function Sidebar() {
     return (
@@ -41,11 +40,13 @@ function Tab({ title, href, children }) {
         href = "#";
     }
     return (
-        <Link className={`${styles.tabItem} ${isActiveTab ? styles.activeTab : ""}`} to={href}>
-            <abbr className={styles.abbreviation} title={title}>
+        <Tooltip label={title} position="right" offset={-10}>
+            <Link className={`${styles.tabItem} ${isActiveTab ? styles.activeTab : ""}`} to={href}>
+                {/* <abbr className={styles.abbreviation} title={title}> */}
                 {children}
-            </abbr>
-        </Link>
+                {/* </abbr> */}
+            </Link>
+        </Tooltip>
     );
 }
 
