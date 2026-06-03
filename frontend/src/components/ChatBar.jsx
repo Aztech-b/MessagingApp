@@ -9,7 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 function ChatBar() {
     const [chats, setChats] = useState([]);
     const { user } = useUserContext();
-    const [chatName, setChatName] = useState("");
+    const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
 
@@ -46,7 +46,7 @@ function ChatBar() {
                         <TextInput
                             label="Chat Name: "
                             onChange={(e) => {
-                                setChatName(e.target.value);
+                                setNewChatName(e.target.value);
                             }}
                         ></TextInput>
                     </Stack>
@@ -56,7 +56,7 @@ function ChatBar() {
                                 method: "POST",
                                 credentials: "include",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ title: chatName, members: chatMembers }),
+                                body: JSON.stringify({ title: newChatName, members: chatMembers }),
                             });
                             const data = await response.json();
                             console.log(data);

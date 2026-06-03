@@ -33,7 +33,7 @@ chatRouter.get("/:id", async (req, res) => {
     try {
         const chat = await prisma.chat.findUnique({
             where: { id: Number(req.params.id) },
-            select: { messages: { select: { content: true, author: { select: { username: true } } } } },
+            select: { messages: { select: { content: true, author: { select: { username: true } } } }, title: true },
         });
         // console.dir(chat, { depth: null });
         res.json(chat);

@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router";
+import { useParams, useOutletContext } from "react-router";
 import styles from "../styles/chat.module.css";
 import { TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket";
 
 function Chat() {
+    const setActiveChatName = useOutletContext().setActiveChatName;
     const [messages, setMessages] = useState([]);
     const chatId = Number(useParams().id);
     const scrollDummy = useRef();
@@ -37,6 +38,7 @@ function Chat() {
                 });
                 const data = await response.json();
                 setMessages(data.messages);
+                setActiveChatName(data.title);
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }

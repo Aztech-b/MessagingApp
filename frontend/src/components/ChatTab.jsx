@@ -7,7 +7,7 @@ import styles from "../styles/chatTab.module.css";
 
 function ChatTab() {
     const [activeChatId, setActiveChatId] = useState();
-
+    const [activeChatName, setActiveChatName] = useState("");
     // TODO make chat buttons work
     function CreateChat() {
         useEffect(() => {
@@ -37,8 +37,8 @@ function ChatTab() {
         <>
             <ChatBar></ChatBar>
             <div className={styles.messages}>
-                <TopBar chatName="Bakdaulet" />
-                <Outlet></Outlet>
+                <TopBar chatName={activeChatName} />
+                <Outlet context={{ setActiveChatName }}></Outlet>
             </div>
         </>
     );
