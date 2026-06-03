@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { Button, TextInput, ActionIcon } from "@mantine/core";
+import { Button, TextInput, ActionIcon, Modal, Stack } from "@mantine/core";
 import { useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
+import { useDisclosure } from "@mantine/hooks";
 
 function ChatBar() {
     const [chats, setChats] = useState([]);
     const { user } = useUserContext();
     const [chatName, setChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
+    const [newChatModalOpened, { open, close }] = useDisclosure(false);
 
     useEffect(() => {
         if (!user) {
@@ -32,22 +34,22 @@ function ChatBar() {
     }, [user]);
     return (
         <div className={styles.chats}>
-            <div className={styles.newChat} popover="auto" id="newChat">
-                <form>
-                    <TextInput
-                        styles={{ input: { backgroundColor: "var(--accent)", border: 0 } }}
-                        label="member username: "
-                        onChange={(e) => {
-                            setChatMembers([e.target.value]);
-                        }}
-                    ></TextInput>
-                    <TextInput
-                        label="Chat Name: "
-                        styles={{ input: { backgroundColor: "var(--accent)", border: 0 } }}
-                        onChange={(e) => {
-                            setChatName(e.target.value);
-                        }}
-                    ></TextInput>
+            <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
+                <Stack gap={"xl"}>
+                    <Stack gap={"xs"}>
+                        <TextInput
+                            label="member username: "
+                            onChange={(e) => {
+                                setChatMembers([e.target.value]);
+                            }}
+                        ></TextInput>
+                        <TextInput
+                            label="Chat Name: "
+                            onChange={(e) => {
+                                setChatName(e.target.value);
+                            }}
+                        ></TextInput>
+                    </Stack>
                     <Button
                         onClick={async (e) => {
                             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
@@ -63,8 +65,8 @@ function ChatBar() {
                     >
                         Create New Chat
                     </Button>
-                </form>
-            </div>
+                </Stack>
+            </Modal>
             {chats.map((chat) => (
                 <Chat id={chat.id} title={chat.title} key={chat.id} />
             ))}
@@ -80,7 +82,7 @@ function ChatBar() {
                 size={60}
                 radius="xl"
                 variant="filled"
-                popoverTarget="newChat"
+                onClick={open}
             >
                 <Plus size={40} strokeWidth={3} />{" "}
             </ActionIcon>
