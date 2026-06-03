@@ -9,9 +9,14 @@ chatRouter.post("/", async (req, res) => {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
-    console.log(req.user);
+    const users = await prisma.user.findMany({ where: { username: { in: members } }, select: { id: true } });
     const newChat = await prisma.chat.create({
-        data: { title, members: { connect: [{ id: req.user.id }, ...members.map((username) => ({ username }))] } },
+        data: {
+            title,
+            members: {
+                create: [{ userId: req.user.id, lastReadMessageId: 0 }, ...users.map((user) => ({ userId: user.id }))],
+            },
+        },
     });
     res.json(newChat);
 });
@@ -22,7 +27,7 @@ chatRouter.get("/", async (req, res) => {
         return;
     }
     const chats = await prisma.chat.findMany({
-        where: { members: { some: { id: req.user.id } } },
+        where: { members: { some: { user: { id: req.user.id } } } },
         select: { id: true, title: true },
     });
     res.json(chats);

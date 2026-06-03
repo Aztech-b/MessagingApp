@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { data, Link } from "react-router";
 import { Button, TextInput, ActionIcon, Modal, Stack } from "@mantine/core";
 import { useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
+import socket from "./socket";
 
 function ChatBar() {
     const [chats, setChats] = useState([]);
@@ -14,9 +15,6 @@ function ChatBar() {
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
 
     useEffect(() => {
-        if (!user) {
-            return;
-        }
         async function GetAllChats() {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
@@ -31,7 +29,7 @@ function ChatBar() {
             } catch (error) {}
         }
         GetAllChats();
-    }, [user]);
+    }, []);
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -91,6 +89,10 @@ function ChatBar() {
 }
 
 function Chat({ id, title, icon }) {
+    useEffect(() => {
+        socket.emit("join", { chatId: id });
+        socket.on("newMessage", (data) => {});
+    }, []);
     return (
         <Link to={`/chat/${id}`} className={styles.chatLink}>
             <button className={styles.chatButton}>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SendHorizontal } from "lucide-react";
 import { TextInput, ActionIcon } from "@mantine/core";
 import { useUserContext } from "./Context";
-import socket from "./socket";
+import socket from "./socket.js";
 import { useParams } from "react-router";
 
 function ChatInput({ setMessages }) {

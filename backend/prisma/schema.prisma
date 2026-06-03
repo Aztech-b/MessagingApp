@@ -13,18 +13,29 @@ datasource db {
 }
 
 model User {
-    id       Int       @id @default(autoincrement())
-    username String    @unique
-    password String
-    chats    Chat[]
-    messages Message[]
+    id         Int          @id @default(autoincrement())
+    username   String       @unique
+    password   String
+    messages   Message[]
+    chatMember ChatMember[]
 }
 
 model Chat {
-    id       Int       @id @default(autoincrement())
+    id       Int          @id @default(autoincrement())
     title    String
-    members  User[]
+    members  ChatMember[]
     messages Message[]
+}
+
+model ChatMember {
+    userId            Int
+    chatId            Int
+    lastReadMessageId Int @default(0)
+
+    chat Chat @relation(fields: [chatId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+
+    @@id([userId, chatId])
 }
 
 model Message {

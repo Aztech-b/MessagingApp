@@ -29,6 +29,14 @@
     text-decoration: none;
 }
 
+.chatLink::before {
+    content: "";
+    background-color: black;
+    top: 0;
+    right: 0;
+    width: 100%;
+}
+
 .chats .chatButton:hover {
     filter: brightness(1.4);
 }

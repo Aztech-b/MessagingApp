@@ -131,6 +131,12 @@ exports.Prisma.ChatScalarFieldEnum = {
   title: 'title'
 };
 
+exports.Prisma.ChatMemberScalarFieldEnum = {
+  userId: 'userId',
+  chatId: 'chatId',
+  lastReadMessageId: 'lastReadMessageId'
+};
+
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   content: 'content',
@@ -168,6 +174,7 @@ exports.Prisma.JsonNullValueFilter = {
 exports.Prisma.ModelName = {
   User: 'User',
   Chat: 'Chat',
+  ChatMember: 'ChatMember',
   Message: 'Message',
   Session: 'Session'
 };

@@ -3,7 +3,7 @@ import { useParams, useOutletContext } from "react-router";
 import styles from "../styles/chat.module.css";
 import { Button, TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
-import socket from "./socket";
+import socket from "./socket.js";
 import ChatInput from "./ChatInput";
 
 function Chat() {
@@ -14,7 +14,6 @@ function Chat() {
     const chatId = Number(useParams().id);
 
     useEffect(() => {
-        socket.emit("join", { chatId });
         socket.on("newMessage", (data) => {
             setMessages((prev) => [...prev, data]);
         });
@@ -22,6 +21,7 @@ function Chat() {
             socket.off("newMessage");
         };
     }, []);
+
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
     }, [messages]);
