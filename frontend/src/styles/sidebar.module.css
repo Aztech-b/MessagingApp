@@ -59,6 +59,8 @@
     margin: 4px 0;
     position: relative;
     padding: 12px 0;
+    background-color: transparent;
+    border: 0;
 }
 
 .abbreviation {
@@ -81,4 +83,25 @@
 
 .activeTab {
     background-color: var(--accent-light-l);
+}
+
+.root {
+    background-color: var(--notification-color, var(--mantine-primary-color-filled));
+
+    &::before {
+        background-color: var(--mantine-color-white);
+    }
+}
+
+.description,
+.title {
+    color: var(--mantine-color-white);
+}
+
+.closeButton {
+    color: var(--mantine-color-white);
+
+    @mixin hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 }

@@ -3,9 +3,11 @@ import { Link, useLocation } from "react-router";
 import { useUserContext } from "./Context";
 import styles from "../styles/sidebar.module.css";
 import profileLogo from "../assets/user.svg";
-import { Button, Divider, Tooltip } from "@mantine/core";
+import { Button, Divider, Tooltip, Dialog } from "@mantine/core";
 import { MessageCircle, Star, Archive, Ban, CircleUserRound } from "lucide-react";
 import { Icon, iconColor } from "./global";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 
 function Sidebar() {
     return (
@@ -17,19 +19,47 @@ function Sidebar() {
             <Tab href={"/chat"} title={"Chats"}>
                 <MessageCircle size={24} color="white" />
             </Tab>
-            <Tab href={"/profile"} title={"Profile"}>
+            <NotReadyTab href={"/profile"} title={"Profile"}>
                 <CircleUserRound size={24} color="white" />
-            </Tab>
-            <Tab title={"Starred"}>
+            </NotReadyTab>
+            <NotReadyTab title={"Starred"} href={"/starred"}>
                 <Star color="#ffffff" />
-            </Tab>
-            <Tab title={"Archive"}>
+            </NotReadyTab>
+            <NotReadyTab title={"Archive"} href={"/archive"}>
                 <Archive color="#ffffff" />
-            </Tab>
-            <Tab title={"Removed"}>
+            </NotReadyTab>
+            <NotReadyTab title={"Removed"} href={"/removed"}>
                 <Ban color="#ffffff" />
-            </Tab>
+            </NotReadyTab>
         </nav>
+    );
+}
+
+function NotReadyTab({ title, children }) {
+    const [opened, { toggle, close }] = useDisclosure(false);
+    return (
+        <>
+            <Tooltip label={title} position="right" offset={-10}>
+                <button
+                    onClick={() => {
+                        notifications.show({
+                            title: "Not implemented yet",
+                            message: "This tab is not implemented yet, right now it is only for beauty.",
+                            autoClose: 4000,
+                            color: "red",
+                            classNames: styles,
+                            position: "bottom-center",
+                        });
+                    }}
+                    className={`${styles.tabItem}`}
+                >
+                    {/* <abbr className={styles.abbreviation} title={title}> */}
+                    {children}
+                    {/* </abbr> */}
+                </button>
+            </Tooltip>
+            <Dialog withCloseButton opened={opened} onClose={close}></Dialog>
+        </>
     );
 }
 
