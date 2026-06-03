@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useOutletContext } from "react-router";
 import styles from "../styles/chat.module.css";
-import { TextInput } from "@mantine/core";
+import { Button, TextInput, ActionIcon } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket";
+import { Send, SendHorizontal } from "lucide-react";
 
 function Chat() {
     const setActiveChatName = useOutletContext().setActiveChatName;
@@ -11,6 +12,8 @@ function Chat() {
     const chatId = Number(useParams().id);
     const scrollDummy = useRef();
     const { user } = useUserContext();
+    const [canSend, setCanSend] = useState(false);
+    const [typedMessage, setTypedMessage] = useState("");
 
     useEffect(() => {
         socket.emit("join", { chatId });
@@ -46,6 +49,18 @@ function Chat() {
         }
         GetChatData();
     }, [chatId, user]);
+
+    async function SendMessage() {
+        if (typedMessage === "") {
+            return;
+        }
+        const content = typedMessage;
+        setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
+        socket.emit("message", { content, chatId });
+        setTypedMessage("");
+        setCanSend(false);
+    }
+
     return (
         <>
             <div className={styles.messagesContainer} ref={scrollDummy}>
@@ -58,21 +73,29 @@ function Chat() {
                 </div>
             </div>
             <TextInput
+                value={typedMessage}
                 size="md"
                 radius={2}
                 placeholder="Write you message here..."
                 styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0 } }}
-                onKeyDown={async (e) => {
-                    if (e.target.value == "") {
-                        return;
-                    }
+                rightSection={
+                    <SendButton
+                        isActive={canSend}
+                        onClick={(e) => {
+                            SendMessage();
+                        }}
+                    />
+                }
+                rightSectionPointerEvents="all"
+                onChange={(e) => {
+                    setTypedMessage(e.target.value);
+                    setCanSend(e.target.value !== "");
+                }}
+                onKeyDown={(e) => {
                     if (e.key !== "Enter") {
                         return;
                     }
-                    const content = e.target.value;
-                    setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
-                    socket.emit("message", { content, chatId });
-                    e.target.value = "";
+                    SendMessage();
                 }}
             ></TextInput>
         </>
@@ -97,6 +120,16 @@ function Message({ username, messageContent }) {
             {isauthorMe ? null : <p style={{ color: otherUsernameColor }}>{username}</p>}
             <p className="text">{messageContent}</p>
         </div>
+    );
+}
+
+function SendButton({ isActive, onClick }) {
+    const inactiveColor = "#6b6375";
+    const activeColor = "var(--accent-light-2xl)";
+    return (
+        <ActionIcon variant="transparent" onClick={onClick}>
+            <SendHorizontal color={isActive ? activeColor : inactiveColor} />
+        </ActionIcon>
     );
 }
 

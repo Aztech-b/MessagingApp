@@ -46,3 +46,7 @@
 .messages * {
     color: white;
 }
+
+svg {
+    transition: stroke ease 0.1s;
+}
