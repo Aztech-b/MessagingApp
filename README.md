@@ -1,12 +1,11 @@
-
 # Simple Messaging App
 
-Simple messaging app as a homework from Odin Project. 
-
+Simple messaging app as a homework from Odin Project.
+!!! The app is not finished yet.
 
 ## Frameworks used
 
-- Frontend: 
+- Frontend:
     - React
     - React Router
     - Mantine Components
