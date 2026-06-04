@@ -20,7 +20,11 @@ function registerChatSockets(io) {
             });
             socket
                 .to(`chat:${data.chatId}`)
-                .emit("newMessage", { content: data.content, author: { username: socket.request.user.username } });
+                .emit("newMessage", {
+                    content: data.content,
+                    author: { username: socket.request.user.username },
+                    chatId,
+                });
         });
     });
 }

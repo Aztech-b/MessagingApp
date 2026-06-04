@@ -27,6 +27,7 @@
 
 .chatLink {
     text-decoration: none;
+    font-weight: normal; /* this needs to be here because of Mantine Indicator component */
 }
 
 .chatLink::before {

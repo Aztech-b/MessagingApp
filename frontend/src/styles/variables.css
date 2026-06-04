@@ -42,6 +42,8 @@
         --text: white;
         --text-h: #f3f4f6;
 
+        --accent-saturated: hsl(215, 80%, 60%);
+
         --accent: hsl(215, 40%, 19%);
         --accent-light: hsl(210, 47%, 32%);
         --accent-light-l: hsl(210, 47%, 40%);

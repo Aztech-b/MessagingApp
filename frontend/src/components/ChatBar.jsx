@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { data, Link } from "react-router";
-import { Button, TextInput, ActionIcon, Modal, Stack } from "@mantine/core";
+import { Button, TextInput, ActionIcon, Modal, Stack, Indicator } from "@mantine/core";
 import { useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
@@ -89,17 +89,30 @@ function ChatBar() {
 }
 
 function Chat({ id, title, icon }) {
+    const [unreadMessagesNumber, setUnreadMessagesNumber] = useState(0);
+
     useEffect(() => {
         socket.emit("join", { chatId: id });
-        socket.on("newMessage", (data) => {});
     }, []);
+
     return (
-        <Link to={`/chat/${id}`} className={styles.chatLink}>
-            <button className={styles.chatButton}>
-                {icon ?? <UsersRound />}
-                <p className={styles.chatName}>{title}</p>
-            </button>
-        </Link>
+        <Indicator
+            showZero={false}
+            label={7}
+            color="var(--accent-saturated)"
+            autoContrast
+            position="middle-end"
+            offset={{ x: 20 }}
+            size={24}
+            style={{ fontWeight: "bold" }}
+        >
+            <Link to={`/chat/${id}`} className={styles.chatLink}>
+                <button className={styles.chatButton}>
+                    {icon ?? <UsersRound />}
+                    <p className={styles.chatName}>{title}</p>
+                </button>
+            </Link>
+        </Indicator>
     );
 }
 

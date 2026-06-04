@@ -15,12 +15,15 @@ function Chat() {
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
+            if (data.chatId !== chatId) {
+                return;
+            }
             setMessages((prev) => [...prev, data]);
         });
         return () => {
             socket.off("newMessage");
         };
-    }, []);
+    }, [chatId]);
 
     useEffect(() => {
         scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
