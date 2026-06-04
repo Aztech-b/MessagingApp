@@ -28,12 +28,23 @@
     padding: 2px 8px;
 }
 
+.delivaringMessages,
 .chat {
-    height: auto;
     display: flex;
     gap: 4px;
+    height: auto;
     flex-direction: column;
+}
+
+/* TODO: styling delivering messages */
+
+.chat {
     padding: 8px;
+    padding-bottom: 0;
+}
+
+.delivaringMessages {
+    padding: 8px 0;
     padding-bottom: 20px;
 }
 

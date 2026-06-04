@@ -5,6 +5,7 @@ import { Button, TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import ChatInput from "./ChatInput";
+import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 
 function Chat() {
     const setActiveChatName = useOutletContext().setActiveChatName;
@@ -12,7 +13,7 @@ function Chat() {
     const scrollContainer = useRef();
     const { user } = useUserContext();
     const chatId = Number(useParams().id);
-    const shouldScrollRef = useRef(false);
+    const shouldScrollRef = useRef(true);
     const newestMessageRef = useRef(null);
     const [sendingMessages, setSendingMessages] = useState([]);
 
@@ -41,11 +42,12 @@ function Chat() {
 
     useEffect(() => {
         if (!shouldScrollRef.current) {
+            console.log("should not scroll");
             return;
         }
         scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
         shouldScrollRef.current = false;
-    }, [messages]);
+    }, [messages, sendingMessages]);
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
@@ -91,11 +93,14 @@ function Chat() {
                                 messageContent={message.content}
                                 key={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
-                                ref={index === array.length - 1 ? newestMessageRef : null}
+                                ref={
+                                    index === array.length - 1 && sendingMessages.length === 0 ? newestMessageRef : null
+                                }
+                                state={"delivered"}
                             />
                         );
                     })}
-                    <div className={styles.chat}>
+                    <div className={`${styles.chat} ${styles.delivaringMessages}`}>
                         {sendingMessages.map((message, index, array) => {
                             return (
                                 <Message
@@ -103,6 +108,12 @@ function Chat() {
                                     messageContent={message.content}
                                     key={message.tempId}
                                     extended={array[index - 1]?.author.username !== message.author.username}
+                                    state={"delivering"}
+                                    ref={
+                                        index === array.length - 1 && sendingMessages.length !== 0
+                                            ? newestMessageRef
+                                            : null
+                                    }
                                 />
                             );
                         })}
@@ -118,7 +129,15 @@ function Chat() {
     );
 }
 
-function Message({ username, messageContent, extended }) {
+function Message({ username, messageContent, extended, state }) {
+    let icon;
+    if (state === "delivering") {
+        icon = <LoaderCircle size={16} />;
+    } else if (state === "delivered") {
+        icon = <Check size={16} />;
+    } else if (state === "read") {
+        icon = <CheckCheck size={16} />;
+    }
     let authorStyle;
     const user = useUserContext();
     let otherUsernameColor = null;
@@ -133,6 +152,7 @@ function Message({ username, messageContent, extended }) {
         <div className={`${styles.message} ${authorStyle}`}>
             {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
             <p className="text">{messageContent}</p>
+            {icon}
         </div>
     );
 }
