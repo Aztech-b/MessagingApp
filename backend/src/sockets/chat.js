@@ -12,7 +12,7 @@ function registerChatSockets(io) {
             socket.join(`chat:${data.chatId}`);
         });
 
-        socket.on("message", async (data, callback) => {
+        socket.on("message", async (data, tempId, callback) => {
             const { content, chatId } = data;
             const userId = socket.request.user.id;
             const newMessage = await prisma.message.create({
@@ -26,7 +26,7 @@ function registerChatSockets(io) {
                 id: newMessage.id,
             };
             socket.to(`chat:${data.chatId}`).emit("newMessage", sendData);
-            callback(sendData);
+            callback(sendData, tempId);
         });
     });
 }

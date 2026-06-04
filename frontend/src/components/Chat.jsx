@@ -101,7 +101,7 @@ function Chat() {
                                 <Message
                                     username={message.author.username}
                                     messageContent={message.content}
-                                    key={index}
+                                    key={message.tempId}
                                     extended={array[index - 1]?.author.username !== message.author.username}
                                 />
                             );
@@ -110,7 +110,7 @@ function Chat() {
                 </div>
             </div>
             <ChatInput
-                sendingMessagesState={{ sendingMessages, setSendingMessages }}
+                setSendingMessages={setSendingMessages}
                 setMessages={setMessages}
                 shouldScrollRef={shouldScrollRef}
             ></ChatInput>
