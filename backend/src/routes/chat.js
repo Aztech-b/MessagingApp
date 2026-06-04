@@ -43,7 +43,6 @@ chatRouter.get("/:id", async (req, res) => {
                 title: true,
             },
         });
-        // console.dir(chat, { depth: null });
         res.json(chat);
         return;
     } catch (error) {

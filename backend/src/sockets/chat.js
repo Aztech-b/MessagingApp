@@ -12,19 +12,21 @@ function registerChatSockets(io) {
             socket.join(`chat:${data.chatId}`);
         });
 
-        socket.on("message", async (data) => {
+        socket.on("message", async (data, callback) => {
             const { content, chatId } = data;
             const userId = socket.request.user.id;
             const newMessage = await prisma.message.create({
                 data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
+                select: { id: true, content: true },
             });
-            socket
-                .to(`chat:${data.chatId}`)
-                .emit("newMessage", {
-                    content: data.content,
-                    author: { username: socket.request.user.username },
-                    chatId,
-                });
+            const sendData = {
+                content: newMessage.content,
+                author: { username: socket.request.user.username },
+                chatId,
+                id: newMessage.id,
+            };
+            socket.to(`chat:${data.chatId}`).emit("newMessage", sendData);
+            callback(sendData);
         });
     });
 }

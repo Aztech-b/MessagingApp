@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 import { TextInput, ActionIcon } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import { useParams } from "react-router";
 
-function ChatInput({ setMessages, shouldScrollRef }) {
+function ChatInput({ setMessages, sendingMessagesState, shouldScrollRef }) {
     const [typedMessage, setTypedMessage] = useState("");
     const { user } = useUserContext();
     const [canSend, setCanSend] = useState(false);
@@ -17,11 +17,14 @@ function ChatInput({ setMessages, shouldScrollRef }) {
         }
         shouldScrollRef.current = true;
         const content = typedMessage;
-        setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
-        socket.emit("message", { content, chatId });
+        socket.emit("message", { content, chatId }, (data) => {
+            setMessages((prev) => [...prev, data]);
+        });
         setTypedMessage("");
+        sendingMessagesState.setSendingMessages((prev) => [...prev, { content, author: { username: user.username } }]);
         setCanSend(false);
     }
+
     return (
         <TextInput
             value={typedMessage}

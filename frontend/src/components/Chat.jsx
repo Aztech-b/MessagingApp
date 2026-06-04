@@ -9,23 +9,41 @@ import ChatInput from "./ChatInput";
 function Chat() {
     const setActiveChatName = useOutletContext().setActiveChatName;
     const [messages, setMessages] = useState([]);
-    const scrollDummy = useRef();
+    const scrollContainer = useRef();
     const { user } = useUserContext();
     const chatId = Number(useParams().id);
     const shouldScrollRef = useRef(false);
+    const newestMessageRef = useRef(null);
+    const [sendingMessages, setSendingMessages] = useState([]);
 
-    // TODO: to mark read messages when scroll all the way to the bottom.
     function IsNearBottom() {
-        const container = scrollDummy.current;
+        const container = scrollContainer.current;
 
         return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
     }
+
+    // useEffect(() => {
+    //     if (!newestMessageRef.current) return;
+
+    //     const observer = new IntersectionObserver(
+    //         ([entry]) => {
+    //             if (entry.isIntersecting) {
+    //                 console.log("user has seen newest message");
+    //             }
+    //         },
+    //         { root: scrollContainer.current, threshold: 1 },
+    //     );
+
+    //     observer.observe(newestMessageRef.current);
+
+    //     return () => observer.disconnect();
+    // }, [messages]);
 
     useEffect(() => {
         if (!shouldScrollRef.current) {
             return;
         }
-        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
+        scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
         shouldScrollRef.current = false;
     }, [messages]);
 
@@ -64,7 +82,7 @@ function Chat() {
 
     return (
         <>
-            <div className={styles.messagesContainer} ref={scrollDummy}>
+            <div className={styles.messagesContainer} ref={scrollContainer}>
                 <div className={styles.chat}>
                     {messages.map((message, index, array) => {
                         return (
@@ -73,12 +91,29 @@ function Chat() {
                                 messageContent={message.content}
                                 key={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
+                                ref={index === array.length - 1 ? newestMessageRef : null}
                             />
                         );
                     })}
+                    <div className={styles.chat}>
+                        {sendingMessages.map((message, index, array) => {
+                            return (
+                                <Message
+                                    username={message.author.username}
+                                    messageContent={message.content}
+                                    key={index}
+                                    extended={array[index - 1]?.author.username !== message.author.username}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
-            <ChatInput setMessages={setMessages} shouldScrollRef={shouldScrollRef}></ChatInput>
+            <ChatInput
+                sendingMessagesState={{ sendingMessages, setSendingMessages }}
+                setMessages={setMessages}
+                shouldScrollRef={shouldScrollRef}
+            ></ChatInput>
         </>
     );
 }
