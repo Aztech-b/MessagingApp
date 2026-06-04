@@ -66,7 +66,7 @@ function ChatBar() {
                 </Stack>
             </Modal>
             {chats.map((chat) => (
-                <Chat id={chat.id} title={chat.title} key={chat.id} />
+                <ChatBarItem id={chat.id} title={chat.title} key={chat.id} />
             ))}
             <ActionIcon
                 style={{
@@ -88,11 +88,14 @@ function ChatBar() {
     );
 }
 
-function Chat({ id, title, icon }) {
+function ChatBarItem({ id, title, icon }) {
     const [unreadMessagesNumber, setUnreadMessagesNumber] = useState(0);
 
     useEffect(() => {
         socket.emit("join", { chatId: id });
+        socket.on("newMessage", (data) => {
+            setUnreadMessagesNumber((prev) => prev + 1);
+        });
     }, []);
 
     return (

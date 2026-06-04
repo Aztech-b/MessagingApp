@@ -5,7 +5,7 @@ import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import { useParams } from "react-router";
 
-function ChatInput({ setMessages }) {
+function ChatInput({ setMessages, shouldScrollRef }) {
     const [typedMessage, setTypedMessage] = useState("");
     const { user } = useUserContext();
     const [canSend, setCanSend] = useState(false);
@@ -15,6 +15,7 @@ function ChatInput({ setMessages }) {
         if (typedMessage === "") {
             return;
         }
+        shouldScrollRef.current = true;
         const content = typedMessage;
         setMessages((prev) => [...prev, { content: content, author: { username: user.username } }]);
         socket.emit("message", { content, chatId });

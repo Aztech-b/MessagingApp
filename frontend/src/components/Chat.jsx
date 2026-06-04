@@ -12,22 +12,36 @@ function Chat() {
     const scrollDummy = useRef();
     const { user } = useUserContext();
     const chatId = Number(useParams().id);
+    const shouldScrollRef = useRef(false);
+
+    // TODO: to mark read messages when scroll all the way to the bottom.
+    function IsNearBottom() {
+        const container = scrollDummy.current;
+
+        return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+    }
+
+    useEffect(() => {
+        if (!shouldScrollRef.current) {
+            return;
+        }
+        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
+        shouldScrollRef.current = false;
+    }, [messages]);
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
             if (data.chatId !== chatId) {
                 return;
             }
+            const shouldScroll = IsNearBottom();
+            shouldScrollRef.current = shouldScroll;
             setMessages((prev) => [...prev, data]);
         });
         return () => {
             socket.off("newMessage");
         };
     }, [chatId]);
-
-    useEffect(() => {
-        scrollDummy.current.scrollTo({ top: scrollDummy.current.scrollHeight, behavior: "auto" });
-    }, [messages]);
 
     useEffect(() => {
         setMessages([]);
@@ -57,14 +71,14 @@ function Chat() {
                             <Message
                                 username={message.author.username}
                                 messageContent={message.content}
-                                key={index}
+                                key={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
                             />
                         );
                     })}
                 </div>
             </div>
-            <ChatInput setMessages={setMessages}></ChatInput>
+            <ChatInput setMessages={setMessages} shouldScrollRef={shouldScrollRef}></ChatInput>
         </>
     );
 }
