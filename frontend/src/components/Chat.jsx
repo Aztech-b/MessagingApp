@@ -42,7 +42,6 @@ function Chat() {
 
     useEffect(() => {
         if (!shouldScrollRef.current) {
-            console.log("should not scroll");
             return;
         }
         scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
@@ -80,6 +79,9 @@ function Chat() {
             } catch (error) {}
         }
         GetChatData();
+        scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
+        console.log("scroll");
+        shouldScrollRef.current = false;
     }, [chatId]);
 
     return (
@@ -96,7 +98,7 @@ function Chat() {
                                 ref={
                                     index === array.length - 1 && sendingMessages.length === 0 ? newestMessageRef : null
                                 }
-                                state={"delivered"}
+                                state={"sent"}
                             />
                         );
                     })}
@@ -108,7 +110,7 @@ function Chat() {
                                     messageContent={message.content}
                                     key={message.tempId}
                                     extended={array[index - 1]?.author.username !== message.author.username}
-                                    state={"delivering"}
+                                    state={"sending"}
                                     ref={
                                         index === array.length - 1 && sendingMessages.length !== 0
                                             ? newestMessageRef
@@ -131,9 +133,9 @@ function Chat() {
 
 function Message({ username, messageContent, extended, state }) {
     let icon;
-    if (state === "delivering") {
+    if (state === "sending") {
         icon = <LoaderCircle size={16} />;
-    } else if (state === "delivered") {
+    } else if (state === "sent") {
         icon = <Check size={16} />;
     } else if (state === "read") {
         icon = <CheckCheck size={16} />;
