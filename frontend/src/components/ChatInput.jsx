@@ -19,15 +19,14 @@ function ChatInput({ setMessages, setSendingMessages, shouldScrollRef }) {
         const content = typedMessage;
         const tempId = crypto.randomUUID();
         socket.emit("message", { content, chatId }, tempId, (data, tempId) => {
-            setMessages((prev) => [...prev, data]);
-            setSendingMessages((prev) =>
-                prev.filter((message) => {
-                    message.tempId === tempId;
+            setMessages((prev) =>
+                prev.map((message, index) => {
+                    return message.id === data.id ? data : message;
                 }),
             );
         });
         setTypedMessage("");
-        setSendingMessages((prev) => [...prev, { content, author: { username: user.username }, tempId }]);
+        setMessages((prev) => [...prev, { content, author: { username: user.username }, id: tempId }]);
         setCanSend(false);
     }
 

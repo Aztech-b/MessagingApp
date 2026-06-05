@@ -16,29 +16,20 @@ function Chat() {
     const shouldScrollRef = useRef(true);
     const newestMessageRef = useRef(null);
     const [sendingMessages, setSendingMessages] = useState([]);
-
+    const [isBottom, setIsBottom] = useState(false);
+    const lastReadMessageId = 0;
     function IsNearBottom() {
         const container = scrollContainer.current;
 
         return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
     }
 
-    // useEffect(() => {
-    //     if (!newestMessageRef.current) return;
-
-    //     const observer = new IntersectionObserver(
-    //         ([entry]) => {
-    //             if (entry.isIntersecting) {
-    //                 console.log("user has seen newest message");
-    //             }
-    //         },
-    //         { root: scrollContainer.current, threshold: 1 },
-    //     );
-
-    //     observer.observe(newestMessageRef.current);
-
-    //     return () => observer.disconnect();
-    // }, [messages]);
+    useEffect(() => {
+        if (!isBottom) {
+            return;
+        }
+        console.log("bottom");
+    }, [isBottom]);
 
     useEffect(() => {
         if (!shouldScrollRef.current) {
@@ -46,7 +37,7 @@ function Chat() {
         }
         scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
         shouldScrollRef.current = false;
-    }, [messages, sendingMessages]);
+    }, [messages, sendingMessages, chatId]);
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
@@ -79,14 +70,22 @@ function Chat() {
             } catch (error) {}
         }
         GetChatData();
-        scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
-        console.log("scroll");
-        shouldScrollRef.current = false;
     }, [chatId]);
 
     return (
         <>
-            <div className={styles.messagesContainer} ref={scrollContainer}>
+            <div
+                className={styles.messagesContainer}
+                ref={scrollContainer}
+                onScroll={() => {
+                    if (!newestMessageRef.current) return;
+
+                    setIsBottom(
+                        newestMessageRef.current.getBoundingClientRect().top <=
+                            scrollContainer.current.getBoundingClientRect().bottom,
+                    );
+                }}
+            >
                 <div className={styles.chat}>
                     {messages.map((message, index, array) => {
                         return (
@@ -94,11 +93,11 @@ function Chat() {
                                 username={message.author.username}
                                 messageContent={message.content}
                                 key={message.id}
+                                id={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
-                                ref={
-                                    index === array.length - 1 && sendingMessages.length === 0 ? newestMessageRef : null
-                                }
+                                ref={index === array.length - 1 ? newestMessageRef : null}
                                 state={"sent"}
+                                shouldScrollRef={shouldScrollRef}
                             />
                         );
                     })}
@@ -111,11 +110,11 @@ function Chat() {
                                     key={message.tempId}
                                     extended={array[index - 1]?.author.username !== message.author.username}
                                     state={"sending"}
-                                    ref={
-                                        index === array.length - 1 && sendingMessages.length !== 0
-                                            ? newestMessageRef
-                                            : null
-                                    }
+                                    // ref={
+                                    //     index === array.length - 1 && sendingMessages.length !== 0
+                                    //         ? newestMessageRef
+                                    //         : null
+                                    // }
                                 />
                             );
                         })}
@@ -131,7 +130,7 @@ function Chat() {
     );
 }
 
-function Message({ username, messageContent, extended, state }) {
+function Message({ username, messageContent, extended, state, ref, id }) {
     let icon;
     if (state === "sending") {
         icon = <LoaderCircle size={16} />;
@@ -151,7 +150,7 @@ function Message({ username, messageContent, extended, state }) {
         authorStyle = styles.otherMessage;
     }
     return (
-        <div className={`${styles.message} ${authorStyle}`}>
+        <div className={`${styles.message} ${authorStyle}`} ref={ref}>
             {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
             <p className="text">{messageContent}</p>
             {icon}
