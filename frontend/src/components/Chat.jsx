@@ -8,16 +8,21 @@ import ChatInput from "./ChatInput";
 import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 
 function Chat() {
-    const setActiveChatName = useOutletContext().setActiveChatName;
-    const [messages, setMessages] = useState([]);
-    const scrollContainer = useRef();
-    const { user } = useUserContext();
     const chatId = Number(useParams().id);
-    const shouldScrollRef = useRef(true);
-    const newestMessageRef = useRef(null);
+    const { user } = useUserContext();
+
+    const setActiveChatName = useOutletContext().setActiveChatName;
     const [sendingMessages, setSendingMessages] = useState([]);
+    const [messages, setMessages] = useState([]);
+
     const [isBottom, setIsBottom] = useState(false);
-    const lastReadMessageId = 0;
+    const shouldScrollRef = useRef(true);
+    const scrollContainer = useRef();
+
+    const lastMessageRef = useRef(null);
+    const lastMessageId = useRef(0);
+    const lastReadMessageId = useRef(-1);
+
     function IsNearBottom() {
         const container = scrollContainer.current;
 
@@ -28,6 +33,15 @@ function Chat() {
         if (!isBottom) {
             return;
         }
+        if (lastReadMessageId.current === lastMessageId.current) {
+            return;
+        }
+
+        socket.emit("readMessage", { lastMessageId: lastMessageId.current, chatId, username: user.username }, () => {
+            console.log(lastMessageId.current);
+            lastReadMessageId.current = lastMessageId.current;
+        });
+
         console.log("bottom");
     }, [isBottom]);
 
@@ -64,6 +78,7 @@ function Chat() {
                 const data = await response.json();
                 setMessages(data.messages);
                 setActiveChatName(data.title);
+                lastReadMessageId.current = data.lastReadMessageId;
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
@@ -78,16 +93,18 @@ function Chat() {
                 className={styles.messagesContainer}
                 ref={scrollContainer}
                 onScroll={() => {
-                    if (!newestMessageRef.current) return;
-
+                    if (!lastMessageRef.current) return;
                     setIsBottom(
-                        newestMessageRef.current.getBoundingClientRect().top <=
+                        lastMessageRef.current.getBoundingClientRect().top <=
                             scrollContainer.current.getBoundingClientRect().bottom,
                     );
                 }}
             >
                 <div className={styles.chat}>
                     {messages.map((message, index, array) => {
+                        if (index === array.length - 1) {
+                            lastMessageId.current = message.id;
+                        }
                         return (
                             <Message
                                 username={message.author.username}
@@ -95,9 +112,8 @@ function Chat() {
                                 key={message.id}
                                 id={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
-                                ref={index === array.length - 1 ? newestMessageRef : null}
+                                ref={index === array.length - 1 ? lastMessageRef : null}
                                 state={"sent"}
-                                shouldScrollRef={shouldScrollRef}
                             />
                         );
                     })}
@@ -108,13 +124,8 @@ function Chat() {
                                     username={message.author.username}
                                     messageContent={message.content}
                                     key={message.tempId}
-                                    extended={array[index - 1]?.author.username !== message.author.username}
+                                    extended={array[index - 1]?.author.username !== message.author.username} // removes username if the previous message is from the same user
                                     state={"sending"}
-                                    // ref={
-                                    //     index === array.length - 1 && sendingMessages.length !== 0
-                                    //         ? newestMessageRef
-                                    //         : null
-                                    // }
                                 />
                             );
                         })}
@@ -130,7 +141,14 @@ function Chat() {
     );
 }
 
-function Message({ username, messageContent, extended, state, ref, id }) {
+/**
+ *
+ * @param {String} username username to display
+ * @param {String} messageContent content to dispay
+ * @param {Boolean} extended true to show the username, false to hise the username.
+ * @param {"sending" | "sent" | "read"} state state of the message, changes the icon in the bottom
+ */
+function Message({ username, messageContent, state, ref, id, extended }) {
     let icon;
     if (state === "sending") {
         icon = <LoaderCircle size={16} />;

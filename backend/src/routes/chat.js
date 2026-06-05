@@ -34,20 +34,25 @@ chatRouter.get("/", async (req, res) => {
 });
 
 chatRouter.get("/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const userId = Number(req.user.id);
+    const chatId = Number(req.params.id);
     try {
+        const chatMember = await prisma.chatMember.findUnique({
+            where: { userId_chatId: { userId, chatId } },
+            select: { lastReadMessageId: true },
+        });
         const chat = await prisma.chat.findUnique({
-            where: { id: Number(req.params.id) },
+            where: { id: chatId },
             select: {
                 messages: { select: { id: true, content: true, author: { select: { username: true } } } },
                 title: true,
             },
         });
-        res.json(chat);
+        res.json({ ...chat, lastReadMessageId: chatMember.lastReadMessageId });
         return;
     } catch (error) {
         console.group(error);
-        res.status(404).json({ status: "CHAT_NOT_FOUND" });
+        res.status(404).json({ status: "CHAT_NOT_FOUND", chatId: req.params.id });
         return;
     }
 });

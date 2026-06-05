@@ -12,6 +12,15 @@ function registerChatSockets(io) {
             socket.join(`chat:${data.chatId}`);
         });
 
+        socket.on("readMessage", async (data, callback) => {
+            console.log(data);
+            // const userId = await prisma.user.findUnique({ where: { username: data.username }, select: { id: true } });
+            // await prisma.chatMember.update({
+            //     where: { userId_chatId: { userId, chatId: data.chatId } },
+            //     data: { lastReadMessageId: data.lastMessageId },
+            // });
+        });
+
         socket.on("message", async (data, tempId, callback) => {
             const { content, chatId } = data;
             const userId = socket.request.user.id;
