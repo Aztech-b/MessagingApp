@@ -30,17 +30,21 @@ function Chat() {
     }
 
     useEffect(() => {
+        if (messages.length > 0) {
+            lastMessageId.current = messages[messages.length - 1].id;
+        }
+    }, [messages]);
+
+    useEffect(() => {
         if (!isBottom) {
             return;
         }
         if (lastReadMessageId.current === lastMessageId.current) {
             return;
         }
-        if (messages[messages.length - 1].status === "sending") {
+        if (messages[messages.length - 1].author.username === user.username) {
             return;
         }
-
-        console.log("read event");
 
         socket.emit(
             "readMessage",
@@ -50,9 +54,7 @@ function Chat() {
                 lastReadMessageId.current = lastMessageId.current;
             },
         );
-
-        console.log("bottom");
-    }, [isBottom]);
+    }, [isBottom, messages]);
 
     useEffect(() => {
         if (!shouldScrollRef.current) {
@@ -89,12 +91,9 @@ function Chat() {
                     let status = "";
                     if (message.author.username === user?.username) {
                         status = "sent";
-                        // console.log(status);
                     }
-                    // console.log({ ...message, status });
                     return { ...message, status };
                 });
-                console.log(messagesFromDatabase);
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
@@ -109,10 +108,19 @@ function Chat() {
     }, [chatId, user]);
 
     useEffect(() => {
-        if (messages.length > 0) {
-            lastMessageId.current = messages[messages.length - 1].id;
-        }
-    }, [messages]);
+        socket.on("readMessage", (data) => {
+            console.log("event");
+            if (messages.find((message) => message.id === data.messageId).author.username === user.username) {
+                setMessages((prev) => {
+                    return prev.map((message) => {
+                        console.log(message.id <= data.messageId ? { ...message, status: "read" } : "");
+                        return;
+                        message.id <= data.messageId ? { ...message, status: "read" } : message;
+                    });
+                });
+            }
+        });
+    }, []);
 
     return (
         <>

@@ -21,7 +21,13 @@ function ChatInput({ setMessages, shouldScrollRef }) {
         socket.emit("message", { content, chatId }, (data) => {
             setMessages((prev) =>
                 prev.map((message, index) => {
-                    return message.id === tempId ? { ...message, status: "sent" } : message;
+                    if (message.id === tempId) {
+                        socket.emit("readMessage", { username: user.username, chatId, messageId: data.id });
+
+                        return { ...message, status: "sent", id: data.id };
+                    }
+                    return message;
+                    return message.id === tempId ? { ...message, status: "sent", id: data.id } : message;
                 }),
             );
         });

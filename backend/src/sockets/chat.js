@@ -13,15 +13,25 @@ function registerChatSockets(io) {
         });
 
         socket.on("readMessage", async (data, callback) => {
-            callback();
+            if (callback) {
+                callback();
+            }
             const userId = await prisma.user.findUnique({ where: { username: data.username }, select: { id: true } });
             await prisma.chatMember.update({
                 where: { userId_chatId: { userId: userId.id, chatId: data.chatId } },
                 data: { lastReadMessageId: data.messageId },
             });
-            socket
-                .to(`chat:${data.chatId}`)
-                .emit("readMessage", { messageId: data.messageId, username: data.username });
+            // console.log(data);
+
+            const lastReadMessages = await prisma.chatMember.findMany({
+                where: { chatId: data.chatId },
+                select: { lastReadMessageId: true },
+            });
+            // console.log(lastReadMessages);
+            lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
+            if (lastReadMessages[0] >= data.messageId) {
+                socket.to(`chat:${data.chatId}`).emit("readMessage", { messageId: data.messageId });
+            }
         });
 
         socket.on("message", async (data, callback) => {
