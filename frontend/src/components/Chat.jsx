@@ -82,10 +82,8 @@ function Chat() {
         if (!socket || !user) {
             return;
         }
-        function handleRead(data, callback) {
-            console.log("event");
+        function handleRead(data) {
             setMessages((prev) => {
-                console.log(prev);
                 return prev.map((message) => {
                     return message.id <= data.messageId && message.author.username === user.username
                         ? { ...message, status: "read" }
@@ -119,7 +117,14 @@ function Chat() {
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
-                setMessages(messagesFromDatabase);
+                setMessages(
+                    messagesFromDatabase.map((message) => {
+                        if (data.allReadMessageId >= message.id && message.author.username === user.username) {
+                            return { ...message, status: "read" };
+                        }
+                        return message;
+                    }),
+                );
                 setActiveChatName(data.title);
                 lastReadMessageId.current = data.lastReadMessageId;
             } catch (error) {

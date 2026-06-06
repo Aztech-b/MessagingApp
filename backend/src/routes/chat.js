@@ -1,5 +1,6 @@
 import { Router } from "express";
 import prisma from "../../lib/prisma.js";
+import { GetLatestAllReadMessageId } from "../controllers/chat.controller.js";
 
 const chatRouter = Router();
 
@@ -48,7 +49,8 @@ chatRouter.get("/:id", async (req, res) => {
                 title: true,
             },
         });
-        res.json({ ...chat, lastReadMessageId: chatMember.lastReadMessageId });
+        const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId: chatId });
+        res.json({ ...chat, allReadMessageId });
         return;
     } catch (error) {
         console.group(error);
