@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, forwardRef } from "react";
 import { useParams, useOutletContext } from "react-router";
 import styles from "../styles/chat.module.css";
 import { Button, TextInput } from "@mantine/core";
@@ -12,7 +12,6 @@ function Chat() {
     const { user } = useUserContext();
 
     const setActiveChatName = useOutletContext().setActiveChatName;
-    const [sendingMessages, setSendingMessages] = useState([]);
     const [messages, setMessages] = useState([]);
 
     const [isBottom, setIsBottom] = useState(false);
@@ -36,6 +35,11 @@ function Chat() {
         if (lastReadMessageId.current === lastMessageId.current) {
             return;
         }
+        if (messages[messages.length - 1].status === "sending") {
+            return;
+        }
+
+        console.log("read event");
 
         socket.emit("readMessage", { lastMessageId: lastMessageId.current, chatId, username: user.username }, () => {
             console.log(lastMessageId.current);
@@ -51,7 +55,7 @@ function Chat() {
         }
         scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
         shouldScrollRef.current = false;
-    }, [messages, sendingMessages, chatId]);
+    }, [messages, chatId]);
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
@@ -60,7 +64,7 @@ function Chat() {
             }
             const shouldScroll = IsNearBottom();
             shouldScrollRef.current = shouldScroll;
-            setMessages((prev) => [...prev, data]);
+            setMessages((prev) => [...prev, { ...data, status: "other" }]);
         });
         return () => {
             socket.off("newMessage");
@@ -75,8 +79,18 @@ function Chat() {
                     method: "GET",
                     credentials: "include",
                 });
-                const data = await response.json();
-                setMessages(data.messages);
+                let data = await response.json();
+                const messagesFromDatabase = data.messages.map((message) => {
+                    if (message.status) {
+                        return;
+                    }
+                    let status = "";
+                    if (message.author.username === user.username) {
+                        status = "sent";
+                    }
+                    return { ...message, status };
+                });
+                setMessages(messagesFromDatabase);
                 setActiveChatName(data.title);
                 lastReadMessageId.current = data.lastReadMessageId;
                 if (!response.ok) {
@@ -86,6 +100,12 @@ function Chat() {
         }
         GetChatData();
     }, [chatId]);
+
+    useEffect(() => {
+        if (messages.length > 0) {
+            lastMessageId.current = messages[messages.length - 1].id;
+        }
+    }, [messages]);
 
     return (
         <>
@@ -102,9 +122,6 @@ function Chat() {
             >
                 <div className={styles.chat}>
                     {messages.map((message, index, array) => {
-                        if (index === array.length - 1) {
-                            lastMessageId.current = message.id;
-                        }
                         return (
                             <Message
                                 username={message.author.username}
@@ -113,30 +130,13 @@ function Chat() {
                                 id={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
                                 ref={index === array.length - 1 ? lastMessageRef : null}
-                                state={"sent"}
+                                state={message.status}
                             />
                         );
                     })}
-                    <div className={`${styles.chat} ${styles.delivaringMessages}`}>
-                        {sendingMessages.map((message, index, array) => {
-                            return (
-                                <Message
-                                    username={message.author.username}
-                                    messageContent={message.content}
-                                    key={message.tempId}
-                                    extended={array[index - 1]?.author.username !== message.author.username} // removes username if the previous message is from the same user
-                                    state={"sending"}
-                                />
-                            );
-                        })}
-                    </div>
                 </div>
             </div>
-            <ChatInput
-                setSendingMessages={setSendingMessages}
-                setMessages={setMessages}
-                shouldScrollRef={shouldScrollRef}
-            ></ChatInput>
+            <ChatInput setMessages={setMessages} shouldScrollRef={shouldScrollRef}></ChatInput>
         </>
     );
 }
@@ -148,7 +148,7 @@ function Chat() {
  * @param {Boolean} extended true to show the username, false to hise the username.
  * @param {"sending" | "sent" | "read"} state state of the message, changes the icon in the bottom
  */
-function Message({ username, messageContent, state, ref, id, extended }) {
+const Message = forwardRef(function Message({ username, messageContent, state, id, extended }, ref) {
     let icon;
     if (state === "sending") {
         icon = <LoaderCircle size={16} />;
@@ -174,7 +174,7 @@ function Message({ username, messageContent, state, ref, id, extended }) {
             {icon}
         </div>
     );
-}
+});
 
 /**
  *

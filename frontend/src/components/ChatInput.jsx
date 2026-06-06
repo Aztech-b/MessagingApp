@@ -5,7 +5,7 @@ import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import { useParams } from "react-router";
 
-function ChatInput({ setMessages, setSendingMessages, shouldScrollRef }) {
+function ChatInput({ setMessages, shouldScrollRef }) {
     const [typedMessage, setTypedMessage] = useState("");
     const { user } = useUserContext();
     const [canSend, setCanSend] = useState(false);
@@ -21,12 +21,15 @@ function ChatInput({ setMessages, setSendingMessages, shouldScrollRef }) {
         socket.emit("message", { content, chatId }, tempId, (data, tempId) => {
             setMessages((prev) =>
                 prev.map((message, index) => {
-                    return message.id === data.id ? data : message;
+                    return message.id === tempId ? { ...message, status: "sent" } : message;
                 }),
             );
         });
         setTypedMessage("");
-        setMessages((prev) => [...prev, { content, author: { username: user.username }, id: tempId }]);
+        setMessages((prev) => [
+            ...prev,
+            { content, author: { username: user.username }, id: tempId, status: "sending" },
+        ]);
         setCanSend(false);
     }
 
