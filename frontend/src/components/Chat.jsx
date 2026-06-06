@@ -6,6 +6,7 @@ import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import ChatInput from "./ChatInput";
 import { LoaderCircle, Check, CheckCheck, Type } from "lucide-react";
+import Message from "./Message.jsx";
 
 function Chat() {
     const chatId = Number(useParams().id);
@@ -41,10 +42,14 @@ function Chat() {
 
         console.log("read event");
 
-        socket.emit("readMessage", { lastMessageId: lastMessageId.current, chatId, username: user.username }, () => {
-            console.log(lastMessageId.current);
-            lastReadMessageId.current = lastMessageId.current;
-        });
+        socket.emit(
+            "readMessage",
+            { messageId: messages[messages.length - 1].id, chatId, username: user.username },
+            () => {
+                console.log(messages[messages.length - 1].id);
+                lastReadMessageId.current = lastMessageId.current;
+            },
+        );
 
         console.log("bottom");
     }, [isBottom]);
@@ -84,9 +89,12 @@ function Chat() {
                     let status = "";
                     if (message.author.username === user?.username) {
                         status = "sent";
+                        // console.log(status);
                     }
+                    // console.log({ ...message, status });
                     return { ...message, status };
                 });
+                console.log(messagesFromDatabase);
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
@@ -135,59 +143,6 @@ function Chat() {
             <ChatInput setMessages={setMessages} shouldScrollRef={shouldScrollRef}></ChatInput>
         </>
     );
-}
-
-const Message = forwardRef(function Message({ data, extended }, ref) {
-    let icon = useRef(null);
-    const { content, id } = data;
-    const username = data.author.username;
-    const [status, setStatus] = useState(data.status);
-    useEffect(() => {
-        if (status === "sending") {
-            icon.currrent = <LoaderCircle color="var(--accent-light-2xl)" size={16} />;
-        } else if (status === "sent") {
-            icon.currrent = <Check color="var(--accent-light-2xl)" size={16} />;
-        } else if (status === "read") {
-            icon.currrent = <CheckCheck color="var(--accent-light-2xl)" size={16} />;
-        }
-    }, [status]);
-    let authorStyle;
-    const user = useUserContext();
-    let otherUsernameColor = null;
-    if (user && user.user && username === user.user.username) {
-        authorStyle = styles.clientMessage;
-        extended = false;
-    } else {
-        otherUsernameColor = GenerateRandomColor();
-        authorStyle = styles.otherMessage;
-    }
-    const sent = new Date(data.sent).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true });
-    return (
-        <div className={`${styles.message} ${authorStyle}`} ref={ref}>
-            {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
-            <div className={styles.messageContent}>
-                <p className={styles.content}>{content}</p>
-                <div className={styles.info}>
-                    <p className={styles.date}>{sent || null}</p>
-                    {icon.currrent}
-                </div>
-            </div>
-        </div>
-    );
-});
-
-/**
- *
- * @returns `hsl(${hue}, ${saturation}%, ${lightness}%)`
- * hue is completely random,
- * satutarion is from 70 to 90,
- * lightness is from 80 to 90
- */
-function GenerateRandomColor() {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.floor(Math.random() * 20) + 70;
-    const lightness = Math.floor(Math.random() * 10) + 80;
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 export default Chat;

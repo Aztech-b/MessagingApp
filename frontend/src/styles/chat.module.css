@@ -73,6 +73,7 @@ p.date {
 .info {
     display: flex;
     gap: 12px;
+    user-select: none;
     align-items: center;
     justify-content: space-between;
 }

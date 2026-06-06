@@ -18,7 +18,7 @@ function ChatInput({ setMessages, shouldScrollRef }) {
         shouldScrollRef.current = true;
         const content = typedMessage;
         const tempId = crypto.randomUUID();
-        socket.emit("message", { content, chatId }, tempId, (data, tempId) => {
+        socket.emit("message", { content, chatId }, (data) => {
             setMessages((prev) =>
                 prev.map((message, index) => {
                     return message.id === tempId ? { ...message, status: "sent" } : message;
@@ -28,7 +28,7 @@ function ChatInput({ setMessages, shouldScrollRef }) {
         setTypedMessage("");
         setMessages((prev) => [
             ...prev,
-            { content, author: { username: user.username }, id: tempId, status: "sending" },
+            { content, author: { username: user.username }, id: tempId, status: "sending", sent: Date.now() },
         ]);
         setCanSend(false);
     }
