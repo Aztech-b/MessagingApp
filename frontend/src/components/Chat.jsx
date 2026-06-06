@@ -71,8 +71,8 @@ function Chat() {
         };
     }, [chatId]);
 
+    // fetch
     useEffect(() => {
-        setMessages([]);
         async function GetChatData() {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
@@ -81,25 +81,24 @@ function Chat() {
                 });
                 let data = await response.json();
                 const messagesFromDatabase = data.messages.map((message) => {
-                    if (message.status) {
-                        return;
-                    }
                     let status = "";
-                    if (message.author.username === user.username) {
+                    if (message.author.username === user?.username) {
                         status = "sent";
                     }
                     return { ...message, status };
                 });
-                setMessages(messagesFromDatabase);
-                setActiveChatName(data.title);
-                lastReadMessageId.current = data.lastReadMessageId;
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
-            } catch (error) {}
+                setMessages(messagesFromDatabase);
+                setActiveChatName(data.title);
+                lastReadMessageId.current = data.lastReadMessageId;
+            } catch (error) {
+                console.error(error);
+            }
         }
         GetChatData();
-    }, [chatId]);
+    }, [chatId, user]);
 
     useEffect(() => {
         if (messages.length > 0) {

@@ -37,6 +37,11 @@
     min-width: 0;
 }
 
+.content {
+    overflow-wrap: break-word;
+    min-width: 0;
+}
+
 .chat {
     display: flex;
     gap: 4px;
