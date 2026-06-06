@@ -50,3 +50,15 @@
 svg {
     transition: stroke ease 0.1s;
 }
+
+p.date {
+    font-size: small;
+    color: var(--text-description);
+}
+
+.info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}

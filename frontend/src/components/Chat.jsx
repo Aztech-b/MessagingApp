@@ -5,7 +5,7 @@ import { Button, TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import ChatInput from "./ChatInput";
-import { LoaderCircle, Check, CheckCheck } from "lucide-react";
+import { LoaderCircle, Check, CheckCheck, Type } from "lucide-react";
 
 function Chat() {
     const chatId = Number(useParams().id);
@@ -143,11 +143,11 @@ const Message = forwardRef(function Message({ data, extended }, ref) {
     const { content, id, status } = data;
     const username = data.author.username;
     if (status === "sending") {
-        icon = <LoaderCircle size={16} />;
+        icon = <LoaderCircle color="var(--accent-light-2xl)" size={16} />;
     } else if (status === "sent") {
-        icon = <Check size={16} />;
+        icon = <Check color="var(--accent-light-2xl)" size={16} />;
     } else if (status === "read") {
-        icon = <CheckCheck size={16} />;
+        icon = <CheckCheck color="var(--accent-light-2xl)" size={16} />;
     }
     let authorStyle;
     const user = useUserContext();
@@ -159,12 +159,15 @@ const Message = forwardRef(function Message({ data, extended }, ref) {
         otherUsernameColor = GenerateRandomColor();
         authorStyle = styles.otherMessage;
     }
+    const sent = new Date(data.sent).toLocaleTimeString();
     return (
         <div className={`${styles.message} ${authorStyle}`} ref={ref}>
             {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
-            <p className="text">{content}</p>
-            {icon}
-            {data.sent || null}
+            <p>{content}</p>
+            <div className={styles.info}>
+                <p className={styles.date}>{sent || null}</p>
+                {icon}
+            </div>
         </div>
     );
 });
