@@ -92,6 +92,7 @@ function ChatBarItem({ id, title, icon }) {
     const [unreadMessagesNumber, setUnreadMessagesNumber] = useState(0);
 
     useEffect(() => {
+        console.log("socket.id is " + socket.id);
         socket.emit("join", { chatId: id });
         socket.on("newMessage", (data) => {
             setUnreadMessagesNumber((prev) => prev + 1);

@@ -27,7 +27,6 @@ function ChatInput({ setMessages, shouldScrollRef }) {
                         return { ...message, status: "sent", id: data.id };
                     }
                     return message;
-                    return message.id === tempId ? { ...message, status: "sent", id: data.id } : message;
                 }),
             );
         });

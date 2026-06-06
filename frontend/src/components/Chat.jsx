@@ -78,6 +78,28 @@ function Chat() {
         };
     }, [chatId]);
 
+    useEffect(() => {
+        if (!socket || !user) {
+            return;
+        }
+        function handleRead(data, callback) {
+            console.log("event");
+            setMessages((prev) => {
+                console.log(prev);
+                return prev.map((message) => {
+                    return message.id <= data.messageId && message.author.username === user.username
+                        ? { ...message, status: "read" }
+                        : message;
+                });
+            });
+        }
+
+        socket.on("everyoneReadMessage", handleRead);
+        return () => {
+            socket.off("everyoneReadMessage", handleRead);
+        };
+    }, [socket, user]);
+
     // fetch
     useEffect(() => {
         async function GetChatData() {
@@ -106,21 +128,6 @@ function Chat() {
         }
         GetChatData();
     }, [chatId, user]);
-
-    useEffect(() => {
-        socket.on("readMessage", (data) => {
-            console.log("event");
-            if (messages.find((message) => message.id === data.messageId).author.username === user.username) {
-                setMessages((prev) => {
-                    return prev.map((message) => {
-                        console.log(message.id <= data.messageId ? { ...message, status: "read" } : "");
-                        return;
-                        message.id <= data.messageId ? { ...message, status: "read" } : message;
-                    });
-                });
-            }
-        });
-    }, []);
 
     return (
         <>

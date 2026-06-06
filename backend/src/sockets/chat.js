@@ -9,7 +9,7 @@ function registerChatSockets(io) {
         }
 
         socket.on("join", (data) => {
-            socket.join(`chat:${data.chatId}`);
+            socket.join(`chat:${Number(data.chatId)}`);
         });
 
         socket.on("readMessage", async (data, callback) => {
@@ -21,16 +21,14 @@ function registerChatSockets(io) {
                 where: { userId_chatId: { userId: userId.id, chatId: data.chatId } },
                 data: { lastReadMessageId: data.messageId },
             });
-            // console.log(data);
 
             const lastReadMessages = await prisma.chatMember.findMany({
                 where: { chatId: data.chatId },
                 select: { lastReadMessageId: true },
             });
-            // console.log(lastReadMessages);
             lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
-            if (lastReadMessages[0] >= data.messageId) {
-                socket.to(`chat:${data.chatId}`).emit("readMessage", { messageId: data.messageId });
+            if (lastReadMessages[0].lastReadMessageId >= data.messageId) {
+                socket.to(`chat:${Number(data.chatId)}`).emit("everyoneReadMessage", { messageId: data.messageId });
             }
         });
 
@@ -42,7 +40,7 @@ function registerChatSockets(io) {
                 omit: { authorId: true },
             });
             const sendData = { ...newMessage, author: { username: socket.request.user.username } };
-            socket.to(`chat:${data.chatId}`).emit("newMessage", sendData);
+            socket.to(`chat:${Number(data.chatId)}`).emit("newMessage", sendData);
             callback(sendData);
         });
     });
