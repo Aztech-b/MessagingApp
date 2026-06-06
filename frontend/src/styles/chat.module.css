@@ -22,10 +22,19 @@
 }
 
 .message {
-    width: max-content;
-    overflow-wrap: break-word;
-    max-width: 60%;
+    display: inline-flex;
+    flex-direction: column;
     padding: 2px 8px;
+    max-width: 60%;
+    width: fit-content;
+}
+
+.messageContent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 6px;
+    min-width: 0;
 }
 
 .chat {

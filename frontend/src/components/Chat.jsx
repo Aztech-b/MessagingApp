@@ -139,16 +139,19 @@ function Chat() {
 }
 
 const Message = forwardRef(function Message({ data, extended }, ref) {
-    let icon;
-    const { content, id, status } = data;
+    let icon = useRef(null);
+    const { content, id } = data;
     const username = data.author.username;
-    if (status === "sending") {
-        icon = <LoaderCircle color="var(--accent-light-2xl)" size={16} />;
-    } else if (status === "sent") {
-        icon = <Check color="var(--accent-light-2xl)" size={16} />;
-    } else if (status === "read") {
-        icon = <CheckCheck color="var(--accent-light-2xl)" size={16} />;
-    }
+    const [status, setStatus] = useState(data.status);
+    useEffect(() => {
+        if (status === "sending") {
+            icon.currrent = <LoaderCircle color="var(--accent-light-2xl)" size={16} />;
+        } else if (status === "sent") {
+            icon.currrent = <Check color="var(--accent-light-2xl)" size={16} />;
+        } else if (status === "read") {
+            icon.currrent = <CheckCheck color="var(--accent-light-2xl)" size={16} />;
+        }
+    }, [status]);
     let authorStyle;
     const user = useUserContext();
     let otherUsernameColor = null;
@@ -159,14 +162,16 @@ const Message = forwardRef(function Message({ data, extended }, ref) {
         otherUsernameColor = GenerateRandomColor();
         authorStyle = styles.otherMessage;
     }
-    const sent = new Date(data.sent).toLocaleTimeString();
+    const sent = new Date(data.sent).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true });
     return (
         <div className={`${styles.message} ${authorStyle}`} ref={ref}>
             {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
-            <p>{content}</p>
-            <div className={styles.info}>
-                <p className={styles.date}>{sent || null}</p>
-                {icon}
+            <div className={styles.messageContent}>
+                <p className={styles.content}>{content}</p>
+                <div className={styles.info}>
+                    <p className={styles.date}>{sent || null}</p>
+                    {icon.currrent}
+                </div>
             </div>
         </div>
     );
