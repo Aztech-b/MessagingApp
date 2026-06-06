@@ -124,13 +124,10 @@ function Chat() {
                     {messages.map((message, index, array) => {
                         return (
                             <Message
-                                username={message.author.username}
-                                messageContent={message.content}
+                                data={message}
                                 key={message.id}
-                                id={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}
                                 ref={index === array.length - 1 ? lastMessageRef : null}
-                                state={message.status}
                             />
                         );
                     })}
@@ -141,20 +138,15 @@ function Chat() {
     );
 }
 
-/**
- *
- * @param {String} username username to display
- * @param {String} messageContent content to dispay
- * @param {Boolean} extended true to show the username, false to hise the username.
- * @param {"sending" | "sent" | "read"} state state of the message, changes the icon in the bottom
- */
-const Message = forwardRef(function Message({ username, messageContent, state, id, extended }, ref) {
+const Message = forwardRef(function Message({ data, extended }, ref) {
     let icon;
-    if (state === "sending") {
+    const { content, id, status } = data;
+    const username = data.author.username;
+    if (status === "sending") {
         icon = <LoaderCircle size={16} />;
-    } else if (state === "sent") {
+    } else if (status === "sent") {
         icon = <Check size={16} />;
-    } else if (state === "read") {
+    } else if (status === "read") {
         icon = <CheckCheck size={16} />;
     }
     let authorStyle;
@@ -170,8 +162,9 @@ const Message = forwardRef(function Message({ username, messageContent, state, i
     return (
         <div className={`${styles.message} ${authorStyle}`} ref={ref}>
             {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
-            <p className="text">{messageContent}</p>
+            <p className="text">{content}</p>
             {icon}
+            {data.sent || null}
         </div>
     );
 });

@@ -141,7 +141,8 @@ exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   content: 'content',
   authorId: 'authorId',
-  chatId: 'chatId'
+  chatId: 'chatId',
+  sent: 'sent'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {

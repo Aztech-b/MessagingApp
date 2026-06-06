@@ -4634,6 +4634,7 @@ export namespace Prisma {
     content: string | null
     authorId: number | null
     chatId: number | null
+    sent: Date | null
   }
 
   export type MessageMaxAggregateOutputType = {
@@ -4641,6 +4642,7 @@ export namespace Prisma {
     content: string | null
     authorId: number | null
     chatId: number | null
+    sent: Date | null
   }
 
   export type MessageCountAggregateOutputType = {
@@ -4648,6 +4650,7 @@ export namespace Prisma {
     content: number
     authorId: number
     chatId: number
+    sent: number
     _all: number
   }
 
@@ -4669,6 +4672,7 @@ export namespace Prisma {
     content?: true
     authorId?: true
     chatId?: true
+    sent?: true
   }
 
   export type MessageMaxAggregateInputType = {
@@ -4676,6 +4680,7 @@ export namespace Prisma {
     content?: true
     authorId?: true
     chatId?: true
+    sent?: true
   }
 
   export type MessageCountAggregateInputType = {
@@ -4683,6 +4688,7 @@ export namespace Prisma {
     content?: true
     authorId?: true
     chatId?: true
+    sent?: true
     _all?: true
   }
 
@@ -4777,6 +4783,7 @@ export namespace Prisma {
     content: string
     authorId: number
     chatId: number
+    sent: Date
     _count: MessageCountAggregateOutputType | null
     _avg: MessageAvgAggregateOutputType | null
     _sum: MessageSumAggregateOutputType | null
@@ -4803,6 +4810,7 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     chatId?: boolean
+    sent?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     chat?: boolean | ChatDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4812,6 +4820,7 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     chatId?: boolean
+    sent?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     chat?: boolean | ChatDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4821,6 +4830,7 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     chatId?: boolean
+    sent?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     chat?: boolean | ChatDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4830,9 +4840,10 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     chatId?: boolean
+    sent?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "authorId" | "chatId", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "authorId" | "chatId" | "sent", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     chat?: boolean | ChatDefaultArgs<ExtArgs>
@@ -4857,6 +4868,7 @@ export namespace Prisma {
       content: string
       authorId: number
       chatId: number
+      sent: Date
     }, ExtArgs["result"]["message"]>
     composites: {}
   }
@@ -5286,6 +5298,7 @@ export namespace Prisma {
     readonly content: FieldRef<"Message", 'String'>
     readonly authorId: FieldRef<"Message", 'Int'>
     readonly chatId: FieldRef<"Message", 'Int'>
+    readonly sent: FieldRef<"Message", 'DateTime'>
   }
     
 
@@ -6719,7 +6732,8 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     authorId: 'authorId',
-    chatId: 'chatId'
+    chatId: 'chatId',
+    sent: 'sent'
   };
 
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -6800,20 +6814,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -6824,6 +6824,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -6998,6 +7012,7 @@ export namespace Prisma {
     content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     chatId?: IntFilter<"Message"> | number
+    sent?: DateTimeFilter<"Message"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
   }
@@ -7007,6 +7022,7 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+    sent?: SortOrder
     author?: UserOrderByWithRelationInput
     chat?: ChatOrderByWithRelationInput
   }
@@ -7019,6 +7035,7 @@ export namespace Prisma {
     content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     chatId?: IntFilter<"Message"> | number
+    sent?: DateTimeFilter<"Message"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
   }, "id">
@@ -7028,6 +7045,7 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+    sent?: SortOrder
     _count?: MessageCountOrderByAggregateInput
     _avg?: MessageAvgOrderByAggregateInput
     _max?: MessageMaxOrderByAggregateInput
@@ -7043,6 +7061,7 @@ export namespace Prisma {
     content?: StringWithAggregatesFilter<"Message"> | string
     authorId?: IntWithAggregatesFilter<"Message"> | number
     chatId?: IntWithAggregatesFilter<"Message"> | number
+    sent?: DateTimeWithAggregatesFilter<"Message"> | Date | string
   }
 
   export type SessionWhereInput = {
@@ -7216,6 +7235,7 @@ export namespace Prisma {
 
   export type MessageCreateInput = {
     content: string
+    sent?: Date | string
     author: UserCreateNestedOneWithoutMessagesInput
     chat: ChatCreateNestedOneWithoutMessagesInput
   }
@@ -7225,10 +7245,12 @@ export namespace Prisma {
     content: string
     authorId: number
     chatId: number
+    sent?: Date | string
   }
 
   export type MessageUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutMessagesNestedInput
     chat?: ChatUpdateOneRequiredWithoutMessagesNestedInput
   }
@@ -7238,6 +7260,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
     chatId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageCreateManyInput = {
@@ -7245,10 +7268,12 @@ export namespace Prisma {
     content: string
     authorId: number
     chatId: number
+    sent?: Date | string
   }
 
   export type MessageUpdateManyMutationInput = {
     content?: StringFieldUpdateOperationsInput | string
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateManyInput = {
@@ -7256,6 +7281,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
     chatId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionCreateInput = {
@@ -7474,11 +7500,23 @@ export namespace Prisma {
     lastReadMessageId?: SortOrder
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type MessageCountOrderByAggregateInput = {
     id?: SortOrder
     content?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+    sent?: SortOrder
   }
 
   export type MessageAvgOrderByAggregateInput = {
@@ -7492,6 +7530,7 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+    sent?: SortOrder
   }
 
   export type MessageMinOrderByAggregateInput = {
@@ -7499,12 +7538,27 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+    sent?: SortOrder
   }
 
   export type MessageSumOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
     chatId?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -7528,17 +7582,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -7581,20 +7624,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type MessageCreateNestedManyWithoutAuthorInput = {
@@ -7817,6 +7846,10 @@ export namespace Prisma {
     connect?: ChatWhereUniqueInput
   }
 
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
   export type UserUpdateOneRequiredWithoutMessagesNestedInput = {
     create?: XOR<UserCreateWithoutMessagesInput, UserUncheckedCreateWithoutMessagesInput>
     connectOrCreate?: UserCreateOrConnectWithoutMessagesInput
@@ -7831,10 +7864,6 @@ export namespace Prisma {
     upsert?: ChatUpsertWithoutMessagesInput
     connect?: ChatWhereUniqueInput
     update?: XOR<XOR<ChatUpdateToOneWithWhereWithoutMessagesInput, ChatUpdateWithoutMessagesInput>, ChatUncheckedUpdateWithoutMessagesInput>
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -7916,6 +7945,20 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -7940,22 +7983,9 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type MessageCreateWithoutAuthorInput = {
     content: string
+    sent?: Date | string
     chat: ChatCreateNestedOneWithoutMessagesInput
   }
 
@@ -7963,6 +7993,7 @@ export namespace Prisma {
     id?: number
     content: string
     chatId: number
+    sent?: Date | string
   }
 
   export type MessageCreateOrConnectWithoutAuthorInput = {
@@ -8019,6 +8050,7 @@ export namespace Prisma {
     content?: StringFilter<"Message"> | string
     authorId?: IntFilter<"Message"> | number
     chatId?: IntFilter<"Message"> | number
+    sent?: DateTimeFilter<"Message"> | Date | string
   }
 
   export type ChatMemberUpsertWithWhereUniqueWithoutUserInput = {
@@ -8068,6 +8100,7 @@ export namespace Prisma {
 
   export type MessageCreateWithoutChatInput = {
     content: string
+    sent?: Date | string
     author: UserCreateNestedOneWithoutMessagesInput
   }
 
@@ -8075,6 +8108,7 @@ export namespace Prisma {
     id?: number
     content: string
     authorId: number
+    sent?: Date | string
   }
 
   export type MessageCreateOrConnectWithoutChatInput = {
@@ -8283,6 +8317,7 @@ export namespace Prisma {
     id?: number
     content: string
     chatId: number
+    sent?: Date | string
   }
 
   export type ChatMemberCreateManyUserInput = {
@@ -8292,6 +8327,7 @@ export namespace Prisma {
 
   export type MessageUpdateWithoutAuthorInput = {
     content?: StringFieldUpdateOperationsInput | string
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
     chat?: ChatUpdateOneRequiredWithoutMessagesNestedInput
   }
 
@@ -8299,12 +8335,14 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     chatId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateManyWithoutAuthorInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     chatId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChatMemberUpdateWithoutUserInput = {
@@ -8331,6 +8369,7 @@ export namespace Prisma {
     id?: number
     content: string
     authorId: number
+    sent?: Date | string
   }
 
   export type ChatMemberUpdateWithoutChatInput = {
@@ -8350,6 +8389,7 @@ export namespace Prisma {
 
   export type MessageUpdateWithoutChatInput = {
     content?: StringFieldUpdateOperationsInput | string
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutMessagesNestedInput
   }
 
@@ -8357,12 +8397,14 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateManyWithoutChatInput = {
     id?: IntFieldUpdateOperationsInput | number
     content?: StringFieldUpdateOperationsInput | string
     authorId?: IntFieldUpdateOperationsInput | number
+    sent?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

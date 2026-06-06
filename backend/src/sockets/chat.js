@@ -26,14 +26,10 @@ function registerChatSockets(io) {
             const userId = socket.request.user.id;
             const newMessage = await prisma.message.create({
                 data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
-                select: { id: true, content: true },
+                omit: { authorId: true },
             });
-            const sendData = {
-                content: newMessage.content,
-                author: { username: socket.request.user.username },
-                chatId,
-                id: newMessage.id,
-            };
+            console.log(newMessage);
+            const sendData = { ...newMessage, author: { username: socket.request.user.username } };
             socket.to(`chat:${data.chatId}`).emit("newMessage", sendData);
             callback(sendData, tempId);
         });

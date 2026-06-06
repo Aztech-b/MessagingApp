@@ -39,12 +39,13 @@ model ChatMember {
 }
 
 model Message {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   content  String
   authorId Int
-  author   User   @relation(fields: [authorId], references: [id])
-  chat     Chat   @relation(fields: [chatId], references: [id])
+  author   User     @relation(fields: [authorId], references: [id])
   chatId   Int
+  chat     Chat     @relation(fields: [chatId], references: [id])
+  sent     DateTime @default(now())
 }
 
 model Session {
