@@ -38,18 +38,23 @@ function Login() {
                 body: JSON.stringify(values),
             });
             let data;
+            console.log(response);
             if (response.status === 401) {
                 data = await response.json();
                 setError(data.message);
                 closeLoading();
                 toggleError();
                 return;
+            } else if (response.ok) {
+                data = await response.json();
             }
             setUser(data);
             if (data.username) {
                 navigate("/chat");
             }
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

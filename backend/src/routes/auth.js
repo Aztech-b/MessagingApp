@@ -11,18 +11,16 @@ const authRouter = Router();
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try {
-            const user = await prisma.user.findUnique({ where: { username: username } });
+            const user = await prisma.user.findUnique({ where: { username } });
 
             if (!user) {
                 return done(null, false, { message: "Incorrect username" });
             }
-
             const match = await bcryptjs.compare(password, user.password);
 
             if (!match) {
                 return done(null, false, { message: "Incorrect password" });
             }
-
             return done(null, user);
         } catch (err) {
             return done(err);
@@ -36,7 +34,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await prisma.user.findUnique({ where: { id: id }, select: { username: true, id: true } });
+        const user = await prisma.user.findUnique({ where: { id } });
         done(null, user);
     } catch (err) {
         done(err);
@@ -45,19 +43,20 @@ passport.deserializeUser(async (id, done) => {
 
 authRouter.post("/register", async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const parsed = loginSchema.safeParse({ username, password });
+        const parsed = loginSchema.safeParse(req.body);
         if (!parsed.success) {
             res.status(401).json({ message: parsed.error.issues[0].message });
             return;
         }
+        const { username, password } = parsed.data;
 
-        const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
         const existingUser = await prisma.user.findUnique({ where: { username } });
         if (existingUser) {
             res.status(401).json({ message: "User already exists, pick another username or go login" });
             return;
         }
+
+        const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
         const user = await prisma.user.create({
             data: { username, password: hashedPassword },
             select: { username: true },
@@ -68,8 +67,7 @@ authRouter.post("/register", async (req, res, next) => {
 
         res.status(200).json(user);
     } catch (error) {
-        console.log(error);
-        res.json({ error });
+        res.json(error);
     }
 });
 
@@ -83,33 +81,14 @@ authRouter.post("/login", (req, res, next) => {
 
     passport.authenticate("local", (error, user, info) => {
         if (user) {
-            const { id, password, ...user } = req.user;
-            res.json(user);
+            req.logIn(user, (error) => {
+                const { id, password, ...safeUser } = user;
+                res.json(safeUser);
+                return;
+            });
             return;
         }
         res.status(401).json(info);
-    })(req, res, next);
-});
-
-authRouter.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-
-        if (!user) {
-            return res.status(401).json({ error: info?.message || "Login failed" });
-        }
-
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-
-            const { password, ...safeUser } = user;
-
-            return res.json(safeUser);
-        });
     })(req, res, next);
 });
 
