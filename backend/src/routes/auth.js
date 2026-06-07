@@ -65,9 +65,37 @@ authRouter.post("/register", async (req, res, next) => {
     }
 });
 
-authRouter.post("/login", passport.authenticate("local"), (req, res, next) => {
-    const { id, password, ...user } = req.user;
-    res.json(user);
+authRouter.post("/login", (req, res, next) => {
+    passport.authenticate("local", (error, user, info) => {
+        if (user) {
+            const { id, password, ...user } = req.user;
+            res.json(user);
+            return;
+        }
+        res.status(401).json(info);
+    })(req, res, next);
+});
+
+authRouter.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+
+        if (!user) {
+            return res.status(401).json({ error: info?.message || "Login failed" });
+        }
+
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+
+            const { password, ...safeUser } = user;
+
+            return res.json(safeUser);
+        });
+    })(req, res, next);
 });
 
 authRouter.get("/", (req, res, next) => {

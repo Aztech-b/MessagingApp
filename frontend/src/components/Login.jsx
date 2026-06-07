@@ -4,40 +4,52 @@ import { useUserContext } from "./Context";
 import { ServerRouter, useNavigate } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
-import { TextInput, PasswordInput, Button } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Icon } from "./global";
+import { TextInput, PasswordInput, Button, Alert } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { CircleX } from "lucide-react";
 
 function Login() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [data, setData] = useState();
-    const [error, setError] = useState(null);
     const { setUser } = useUserContext();
     const navigate = useNavigate();
-    const [loading, { toggle }] = useDisclosure();
+    const [isLoading, { close: closeLoading, open: openLoading }] = useDisclosure(false);
+    const [error, setError] = useState(null);
+    const form = useForm({
+        initialValues: { username: "", password: "" },
+        validate: {
+            username: (value) => (value.trim().length < 1 ? "Username must be at least 1 character long" : null),
+            password: (value) => (value.trim().length < 8 ? "Password must be at least 8 character long" : null),
+        },
+    });
 
-    const submit = async (e) => {
-        e.preventDefault();
-        toggle();
+    /**
+     *
+     * @param {{username: string, password: string}} values
+     */
+    const submit = async (values) => {
+        openLoading();
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: username, password: password }),
+                body: JSON.stringify(values),
             });
-            if (!response.ok) {
-                throw new Error("responese is not ok");
+            let data;
+            if (response.status === 401) {
+                data = await response.json();
+                setError(data.message);
+                closeLoading();
+                toggleError();
+                return;
             }
-            const data = await response.json();
             setUser(data);
             if (data.username) {
                 navigate("/chat");
             }
-        } catch (error) {
-            setError(error);
-        }
+        } catch (error) {}
     };
 
     return (
@@ -52,23 +64,30 @@ function Login() {
                         Don't have an account? Create one <Link to="/register">here. </Link>
                     </p>
                 </div>
-                <form className={styles.form}>
+
+                <form className={styles.form} onSubmit={form.onSubmit(submit)}>
                     <TextInput
                         label="Username: "
                         placeholder="Enter your username..."
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                        }}
+                        {...form.getInputProps("username")}
                     />
-                    <PasswordInput
-                        label="Password: "
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                        }}
-                    />
-                    <Button fullWidth loading={loading} onClick={submit}>
+                    <PasswordInput label="Password: " {...form.getInputProps("password")} />
+                    <Button fullWidth loading={isLoading} type="submit">
                         Submit
                     </Button>
+                    {error && (
+                        <Alert
+                            onClose={() => {
+                                setError(null);
+                            }}
+                            withCloseButton={true}
+                            color="red"
+                            icon={<CircleX />}
+                            title="ERROR"
+                        >
+                            {error}
+                        </Alert>
+                    )}
                 </form>
             </div>
         </main>
