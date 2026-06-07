@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SendHorizontal } from "lucide-react";
-import { TextInput, ActionIcon } from "@mantine/core";
+import { TextInput, ActionIcon, Textarea } from "@mantine/core";
 import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import { useParams } from "react-router";
@@ -39,12 +39,15 @@ function ChatInput({ setMessages, shouldScrollRef }) {
     }
 
     return (
-        <TextInput
+        <Textarea
+            minRows={1}
             value={typedMessage}
             size="md"
             radius={2}
             placeholder="Write you message here..."
-            styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0 } }}
+            styles={{ input: { backgroundColor: "var(--accent)", border: 0, flexShrink: 0, zIndex: 2 } }}
+            autosize={true}
+            maxRows={6}
             rightSection={
                 <SendButton
                     isActive={canSend}
@@ -64,7 +67,7 @@ function ChatInput({ setMessages, shouldScrollRef }) {
                 }
                 SendMessage();
             }}
-        ></TextInput>
+        ></Textarea>
     );
 }
 
