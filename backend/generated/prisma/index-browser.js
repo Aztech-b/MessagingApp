@@ -134,7 +134,8 @@ exports.Prisma.ChatScalarFieldEnum = {
 exports.Prisma.ChatMemberScalarFieldEnum = {
   userId: 'userId',
   chatId: 'chatId',
-  lastReadMessageId: 'lastReadMessageId'
+  lastReadMessageId: 'lastReadMessageId',
+  color: 'color'
 };
 
 exports.Prisma.MessageScalarFieldEnum = {

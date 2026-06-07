@@ -30,7 +30,8 @@ model Chat {
 model ChatMember {
     userId            Int
     chatId            Int
-    lastReadMessageId Int @default(0)
+    lastReadMessageId Int    @default(0)
+    color             String @default("white")
 
     chat Chat @relation(fields: [chatId], references: [id])
     user User @relation(fields: [userId], references: [id])

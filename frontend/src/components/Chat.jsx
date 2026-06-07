@@ -7,6 +7,7 @@ import socket from "./socket.js";
 import ChatInput from "./ChatInput";
 import { LoaderCircle, Check, CheckCheck, Type } from "lucide-react";
 import Message from "./Message.jsx";
+import { useStateHistory } from "@mantine/hooks";
 
 function Chat() {
     const chatId = Number(useParams().id);
@@ -14,6 +15,10 @@ function Chat() {
 
     const setActiveChatName = useOutletContext().setActiveChatName;
     const [messages, setMessages] = useState([]);
+    /**
+     * @type {[{ color: string, user: { username: string } }[]]}
+     */
+    const [members, setMembers] = useState(null);
 
     const [isBottom, setIsBottom] = useState(false);
     const shouldScrollRef = useRef(true);
@@ -100,12 +105,19 @@ function Chat() {
 
     // fetch
     useEffect(() => {
+        if (!user) {
+            return;
+        }
         async function GetChatData() {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
                     method: "GET",
                     credentials: "include",
                 });
+
+                /**
+                 * @type {{messages: {id: number, author: {user: {username: string} } }[], allReadMessageId: number, members: {color: string, user: {username: string}}[]}}
+                 */
                 let data = await response.json();
                 const messagesFromDatabase = data.messages.map((message) => {
                     let status = "";
@@ -125,6 +137,9 @@ function Chat() {
                         return message;
                     }),
                 );
+                const { members } = data;
+                console.log(members);
+                setMembers(members);
                 setActiveChatName(data.title);
                 lastReadMessageId.current = data.lastReadMessageId;
             } catch (error) {
@@ -151,6 +166,7 @@ function Chat() {
                     {messages.map((message, index, array) => {
                         return (
                             <Message
+                                colors={members}
                                 data={message}
                                 key={message.id}
                                 extended={array[index - 1]?.author.username !== message.author.username}

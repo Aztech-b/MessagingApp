@@ -5,13 +5,20 @@ import styles from "../styles/chat.module.css";
 import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 import { useParams } from "react-router";
 
-function Message({ data, extended, ref }) {
+/**
+ *
+ * @param {{colors: {color: string, user: {username: string}}[], data: string}} colors
+ * @returns
+ */
+function Message({ data, colors, extended, ref }) {
     let [icon, setIcon] = useState(null);
     const { content } = data;
     const id = useRef(data.id);
     const username = data.author.username;
     const status = data.status;
     const chatId = useParams();
+    const member = colors.find((member) => member.user.username === username);
+    const color = member.color;
 
     useEffect(() => {
         if (status === "sending") {
@@ -40,13 +47,13 @@ function Message({ data, extended, ref }) {
         authorStyle = styles.clientMessage;
         extended = false;
     } else {
-        otherUsernameColor = GenerateRandomColor();
+        // otherUsernameColor = GenerateRandomColor();
         authorStyle = styles.otherMessage;
     }
     const sent = new Date(data.sent).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true });
     return (
         <div className={`${styles.message} ${authorStyle}`} ref={ref}>
-            {extended ? <p style={{ color: otherUsernameColor }}>{username}</p> : null}
+            {extended ? <p style={{ color: color }}>{username}</p> : null}
             <div className={styles.messageContent}>
                 <p className={styles.content}>{content}</p>
                 <div className={styles.info}>
@@ -56,20 +63,6 @@ function Message({ data, extended, ref }) {
             </div>
         </div>
     );
-}
-
-/**
- *
- * @returns `hsl(${hue}, ${saturation}%, ${lightness}%)`
- * hue is completely random,
- * satutarion is from 70 to 90,
- * lightness is from 80 to 90
- */
-function GenerateRandomColor() {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.floor(Math.random() * 20) + 70;
-    const lightness = Math.floor(Math.random() * 10) + 80;
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 export default Message;

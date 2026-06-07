@@ -3546,18 +3546,21 @@ export namespace Prisma {
     userId: number | null
     chatId: number | null
     lastReadMessageId: number | null
+    color: string | null
   }
 
   export type ChatMemberMaxAggregateOutputType = {
     userId: number | null
     chatId: number | null
     lastReadMessageId: number | null
+    color: string | null
   }
 
   export type ChatMemberCountAggregateOutputType = {
     userId: number
     chatId: number
     lastReadMessageId: number
+    color: number
     _all: number
   }
 
@@ -3578,18 +3581,21 @@ export namespace Prisma {
     userId?: true
     chatId?: true
     lastReadMessageId?: true
+    color?: true
   }
 
   export type ChatMemberMaxAggregateInputType = {
     userId?: true
     chatId?: true
     lastReadMessageId?: true
+    color?: true
   }
 
   export type ChatMemberCountAggregateInputType = {
     userId?: true
     chatId?: true
     lastReadMessageId?: true
+    color?: true
     _all?: true
   }
 
@@ -3683,6 +3689,7 @@ export namespace Prisma {
     userId: number
     chatId: number
     lastReadMessageId: number
+    color: string
     _count: ChatMemberCountAggregateOutputType | null
     _avg: ChatMemberAvgAggregateOutputType | null
     _sum: ChatMemberSumAggregateOutputType | null
@@ -3708,6 +3715,7 @@ export namespace Prisma {
     userId?: boolean
     chatId?: boolean
     lastReadMessageId?: boolean
+    color?: boolean
     chat?: boolean | ChatDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chatMember"]>
@@ -3716,6 +3724,7 @@ export namespace Prisma {
     userId?: boolean
     chatId?: boolean
     lastReadMessageId?: boolean
+    color?: boolean
     chat?: boolean | ChatDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chatMember"]>
@@ -3724,6 +3733,7 @@ export namespace Prisma {
     userId?: boolean
     chatId?: boolean
     lastReadMessageId?: boolean
+    color?: boolean
     chat?: boolean | ChatDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chatMember"]>
@@ -3732,9 +3742,10 @@ export namespace Prisma {
     userId?: boolean
     chatId?: boolean
     lastReadMessageId?: boolean
+    color?: boolean
   }
 
-  export type ChatMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "chatId" | "lastReadMessageId", ExtArgs["result"]["chatMember"]>
+  export type ChatMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "chatId" | "lastReadMessageId" | "color", ExtArgs["result"]["chatMember"]>
   export type ChatMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chat?: boolean | ChatDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3758,6 +3769,7 @@ export namespace Prisma {
       userId: number
       chatId: number
       lastReadMessageId: number
+      color: string
     }, ExtArgs["result"]["chatMember"]>
     composites: {}
   }
@@ -4186,6 +4198,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"ChatMember", 'Int'>
     readonly chatId: FieldRef<"ChatMember", 'Int'>
     readonly lastReadMessageId: FieldRef<"ChatMember", 'Int'>
+    readonly color: FieldRef<"ChatMember", 'String'>
   }
     
 
@@ -6722,7 +6735,8 @@ export namespace Prisma {
   export const ChatMemberScalarFieldEnum: {
     userId: 'userId',
     chatId: 'chatId',
-    lastReadMessageId: 'lastReadMessageId'
+    lastReadMessageId: 'lastReadMessageId',
+    color: 'color'
   };
 
   export type ChatMemberScalarFieldEnum = (typeof ChatMemberScalarFieldEnum)[keyof typeof ChatMemberScalarFieldEnum]
@@ -6960,6 +6974,7 @@ export namespace Prisma {
     userId?: IntFilter<"ChatMember"> | number
     chatId?: IntFilter<"ChatMember"> | number
     lastReadMessageId?: IntFilter<"ChatMember"> | number
+    color?: StringFilter<"ChatMember"> | string
     chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -6968,6 +6983,7 @@ export namespace Prisma {
     userId?: SortOrder
     chatId?: SortOrder
     lastReadMessageId?: SortOrder
+    color?: SortOrder
     chat?: ChatOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -6980,6 +6996,7 @@ export namespace Prisma {
     userId?: IntFilter<"ChatMember"> | number
     chatId?: IntFilter<"ChatMember"> | number
     lastReadMessageId?: IntFilter<"ChatMember"> | number
+    color?: StringFilter<"ChatMember"> | string
     chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "userId_chatId">
@@ -6988,6 +7005,7 @@ export namespace Prisma {
     userId?: SortOrder
     chatId?: SortOrder
     lastReadMessageId?: SortOrder
+    color?: SortOrder
     _count?: ChatMemberCountOrderByAggregateInput
     _avg?: ChatMemberAvgOrderByAggregateInput
     _max?: ChatMemberMaxOrderByAggregateInput
@@ -7002,6 +7020,7 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"ChatMember"> | number
     chatId?: IntWithAggregatesFilter<"ChatMember"> | number
     lastReadMessageId?: IntWithAggregatesFilter<"ChatMember"> | number
+    color?: StringWithAggregatesFilter<"ChatMember"> | string
   }
 
   export type MessageWhereInput = {
@@ -7195,6 +7214,7 @@ export namespace Prisma {
 
   export type ChatMemberCreateInput = {
     lastReadMessageId?: number
+    color?: string
     chat: ChatCreateNestedOneWithoutMembersInput
     user: UserCreateNestedOneWithoutChatMemberInput
   }
@@ -7203,10 +7223,12 @@ export namespace Prisma {
     userId: number
     chatId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type ChatMemberUpdateInput = {
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
     chat?: ChatUpdateOneRequiredWithoutMembersNestedInput
     user?: UserUpdateOneRequiredWithoutChatMemberNestedInput
   }
@@ -7215,22 +7237,26 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     chatId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChatMemberCreateManyInput = {
     userId: number
     chatId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type ChatMemberUpdateManyMutationInput = {
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChatMemberUncheckedUpdateManyInput = {
     userId?: IntFieldUpdateOperationsInput | number
     chatId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type MessageCreateInput = {
@@ -7474,6 +7500,7 @@ export namespace Prisma {
     userId?: SortOrder
     chatId?: SortOrder
     lastReadMessageId?: SortOrder
+    color?: SortOrder
   }
 
   export type ChatMemberAvgOrderByAggregateInput = {
@@ -7486,12 +7513,14 @@ export namespace Prisma {
     userId?: SortOrder
     chatId?: SortOrder
     lastReadMessageId?: SortOrder
+    color?: SortOrder
   }
 
   export type ChatMemberMinOrderByAggregateInput = {
     userId?: SortOrder
     chatId?: SortOrder
     lastReadMessageId?: SortOrder
+    color?: SortOrder
   }
 
   export type ChatMemberSumOrderByAggregateInput = {
@@ -8008,12 +8037,14 @@ export namespace Prisma {
 
   export type ChatMemberCreateWithoutUserInput = {
     lastReadMessageId?: number
+    color?: string
     chat: ChatCreateNestedOneWithoutMembersInput
   }
 
   export type ChatMemberUncheckedCreateWithoutUserInput = {
     chatId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type ChatMemberCreateOrConnectWithoutUserInput = {
@@ -8076,16 +8107,19 @@ export namespace Prisma {
     userId?: IntFilter<"ChatMember"> | number
     chatId?: IntFilter<"ChatMember"> | number
     lastReadMessageId?: IntFilter<"ChatMember"> | number
+    color?: StringFilter<"ChatMember"> | string
   }
 
   export type ChatMemberCreateWithoutChatInput = {
     lastReadMessageId?: number
+    color?: string
     user: UserCreateNestedOneWithoutChatMemberInput
   }
 
   export type ChatMemberUncheckedCreateWithoutChatInput = {
     userId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type ChatMemberCreateOrConnectWithoutChatInput = {
@@ -8323,6 +8357,7 @@ export namespace Prisma {
   export type ChatMemberCreateManyUserInput = {
     chatId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type MessageUpdateWithoutAuthorInput = {
@@ -8347,22 +8382,26 @@ export namespace Prisma {
 
   export type ChatMemberUpdateWithoutUserInput = {
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
     chat?: ChatUpdateOneRequiredWithoutMembersNestedInput
   }
 
   export type ChatMemberUncheckedUpdateWithoutUserInput = {
     chatId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChatMemberUncheckedUpdateManyWithoutUserInput = {
     chatId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChatMemberCreateManyChatInput = {
     userId: number
     lastReadMessageId?: number
+    color?: string
   }
 
   export type MessageCreateManyChatInput = {
@@ -8374,17 +8413,20 @@ export namespace Prisma {
 
   export type ChatMemberUpdateWithoutChatInput = {
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutChatMemberNestedInput
   }
 
   export type ChatMemberUncheckedUpdateWithoutChatInput = {
     userId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChatMemberUncheckedUpdateManyWithoutChatInput = {
     userId?: IntFieldUpdateOperationsInput | number
     lastReadMessageId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type MessageUpdateWithoutChatInput = {

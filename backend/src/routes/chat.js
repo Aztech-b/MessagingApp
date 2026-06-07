@@ -40,13 +40,14 @@ chatRouter.get("/:id", async (req, res) => {
     try {
         const chatMember = await prisma.chatMember.findUnique({
             where: { userId_chatId: { userId, chatId } },
-            select: { lastReadMessageId: true },
+            select: { lastReadMessageId: true, color: true },
         });
         const chat = await prisma.chat.findUnique({
             where: { id: chatId },
             select: {
                 messages: { select: { id: true, content: true, author: { select: { username: true } }, sent: true } },
                 title: true,
+                members: { select: { color: true, user: { select: { username: true } } } },
             },
         });
         const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId: chatId });
