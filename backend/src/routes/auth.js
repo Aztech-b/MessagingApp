@@ -3,6 +3,8 @@ import prisma from "../../lib/prisma.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcryptjs from "bcryptjs";
+import { z } from "zod";
+import { loginSchema } from "../../lib/zod.js";
 
 const authRouter = Router();
 
@@ -44,8 +46,10 @@ passport.deserializeUser(async (id, done) => {
 authRouter.post("/register", async (req, res, next) => {
     try {
         const { username, password } = req.body;
-        if (!username || !password) {
-            throw new Error("INVALID_INPUT");
+        const parsed = loginSchema.safeParse({ username, password });
+        if (!parsed.success) {
+            res.status(401).json({ message: parsed.error.issues[0].message });
+            return;
         }
 
         const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
@@ -66,6 +70,13 @@ authRouter.post("/register", async (req, res, next) => {
 });
 
 authRouter.post("/login", (req, res, next) => {
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
+        res.json({ message: parsed.error.issues[0].message });
+        return;
+    }
+    const { username, password } = parsed.data;
+
     passport.authenticate("local", (error, user, info) => {
         if (user) {
             const { id, password, ...user } = req.user;

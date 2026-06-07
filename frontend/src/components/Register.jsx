@@ -1,55 +1,89 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
-import { Button, TextInput, PasswordInput } from "@mantine/core";
+import { Link, useNavigate } from "react-router";
+import { Button, TextInput, PasswordInput, Alert } from "@mantine/core";
 import styles from "../styles/login.module.css";
+import { useForm } from "@mantine/form";
+import { Icon } from "./global";
+import { useDisclosure } from "@mantine/hooks";
+import { CircleX } from "lucide-react";
 
 function Register() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [data, setData] = useState();
+    const [isLoading, { open: openLoading, close: closeLoading }] = useDisclosure(false);
+    const form = useForm({
+        initialValues: { username: "", password: "" },
+        validate: {
+            username: (value) => (value.trim().length < 1 ? "Username must be at least 1 character long" : null),
+            password: (value) => (value.trim().length < 8 ? "Password must be at least 8 character long" : null),
+        },
+    });
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    const submit = async (e) => {
-        e.preventDefault();
+    const submit = async (values) => {
+        openLoading();
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: username, password: password }),
+                body: JSON.stringify(values),
             });
-            if (!response.ok) {
-                console.log(response);
-                throw new Error("responese is not ok");
+            let data;
+            if (response.status === 401) {
+                data = await response.json();
+                console.log(data);
+                setError(data.message);
+                closeLoading();
+                toggleError();
+                return;
             }
-            const data = await response.json();
+            data = await response.json();
             console.log(data);
-        } catch (error) {
-            console.trace(error);
-        }
+            setUser(data);
+            if (data.username) {
+                navigate("/chat");
+            }
+        } catch (error) {}
     };
 
     return (
         <main className={styles.main}>
-            <h1>Register</h1>
-            <form>
-                <TextInput
-                    label="Username: "
-                    onChange={(e) => {
-                        setUsername(e.target.value);
-                    }}
-                />
-                <TextInput
-                    label="Password: "
-                    onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}
-                />
+            <div className={styles.formContainer}>
+                <div>
+                    <div className={styles.header}>
+                        <Icon size={40} color="#e9bc61" />
+                        <h1>Register</h1>
+                    </div>
+                    <p>
+                        Have an account? Login <Link to="/register">here. </Link>
+                    </p>
+                </div>
 
-                <Button onClick={submit}>Submit</Button>
-            </form>
-            <p>
-                Have an existing account? Login <Link to="/register">here. </Link>
-            </p>
+                <form className={styles.form} onSubmit={form.onSubmit(submit)}>
+                    <TextInput
+                        label="Username: "
+                        placeholder="Enter your username..."
+                        {...form.getInputProps("username")}
+                    />
+                    <PasswordInput label="Password: " {...form.getInputProps("password")} />
+                    <Button fullWidth loading={isLoading} type="submit">
+                        Submit
+                    </Button>
+                    {error && (
+                        <Alert
+                            onClose={() => {
+                                setError(null);
+                            }}
+                            withCloseButton={true}
+                            color="red"
+                            icon={<CircleX />}
+                            title="ERROR"
+                        >
+                            {error}
+                        </Alert>
+                    )}
+                </form>
+            </div>
         </main>
     );
 }
