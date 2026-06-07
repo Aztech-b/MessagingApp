@@ -53,7 +53,11 @@ authRouter.post("/register", async (req, res, next) => {
         }
 
         const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
-
+        const existingUser = await prisma.user.findUnique({ where: { username } });
+        if (existingUser) {
+            res.status(401).json({ message: "User already exists, pick another username or go login" });
+            return;
+        }
         const user = await prisma.user.create({
             data: { username, password: hashedPassword },
             select: { username: true },
