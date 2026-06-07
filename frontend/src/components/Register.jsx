@@ -6,9 +6,11 @@ import { useForm } from "@mantine/form";
 import { Icon } from "./global";
 import { useDisclosure } from "@mantine/hooks";
 import { CircleX } from "lucide-react";
+import { useUserContext } from "./Context";
 
 function Register() {
     const [isLoading, { open: openLoading, close: closeLoading }] = useDisclosure(false);
+    const { setUser } = useUserContext();
     const form = useForm({
         initialValues: { username: "", password: "" },
         validate: {
@@ -38,9 +40,8 @@ function Register() {
                 return;
             }
             data = await response.json();
-            console.log(data);
-            setUser(data);
-            if (data.username) {
+            if (response.status === 200) {
+                setUser(data);
                 navigate("/chat");
             }
         } catch (error) {}

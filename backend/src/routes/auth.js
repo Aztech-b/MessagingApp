@@ -66,7 +66,7 @@ authRouter.post("/register", async (req, res, next) => {
             throw new Error("USER_CREATION_ERROR");
         }
 
-        res.status(200).json({ user });
+        res.status(200).json(user);
     } catch (error) {
         console.log(error);
         res.json({ error });
