@@ -15,6 +15,7 @@ function ChatInput({ setMessages, shouldScrollRef }) {
         if (typedMessage === "") {
             return;
         }
+        setTypedMessage("");
         shouldScrollRef.current = true;
         const content = typedMessage;
         const tempId = crypto.randomUUID();
@@ -30,7 +31,6 @@ function ChatInput({ setMessages, shouldScrollRef }) {
                 }),
             );
         });
-        setTypedMessage("");
         setMessages((prev) => [
             ...prev,
             { content, author: { username: user.username }, id: tempId, status: "sending", sent: Date.now() },
@@ -62,10 +62,10 @@ function ChatInput({ setMessages, shouldScrollRef }) {
                 setCanSend(e.target.value !== "");
             }}
             onKeyDown={(e) => {
-                if (e.key !== "Enter") {
-                    return;
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    SendMessage();
                 }
-                SendMessage();
             }}
         ></Textarea>
     );
