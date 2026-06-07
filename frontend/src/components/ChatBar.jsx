@@ -71,7 +71,8 @@ function ChatBar() {
             <ActionIcon
                 style={{
                     position: "sticky",
-                    bottom: "12px",
+                    bottom: "20px",
+                    marginTop: "auto",
                     marginRight: "2%",
                     marginLeft: "auto",
                     boxShadow: "0px 4px 4px #111111",
