@@ -39,6 +39,10 @@ function registerChatSockets(io) {
                 data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
                 omit: { authorId: true },
             });
+            await prisma.chatMember.update({
+                where: { userId_chatId: { chatId, userId } },
+                data: { lastReadMessageId: newMessage.id },
+            });
             const sendData = { ...newMessage, author: { username: socket.request.user.username } };
             socket.to(`chat:${Number(data.chatId)}`).emit("newMessage", sendData);
             callback(sendData);

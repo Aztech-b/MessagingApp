@@ -43,7 +43,7 @@ chatRouter.get("/:id/unreadCount", async (req, res) => {
         select: { lastReadMessageId: true },
     });
     const lastReadMessage = await prisma.message.findFirst({
-        where: { id: lastReadMessageId.id },
+        where: { id: lastReadMessageId.lastReadMessageId },
         select: { sent: true },
     });
     const unreadCount = await prisma.message.count({ where: { chatId, sent: { gt: lastReadMessage.sent } } });

@@ -82,7 +82,7 @@ function ChatBarItemSkeleton() {
 }
 
 function ChatBarItem({ id, title, icon }) {
-    const [unreadCount, setUnreadCount] = useState(null);
+    const [unreadCount, setUnreadCount] = useState(0);
     useEffect(() => {
         async function GetUnreadMessagesNumber() {
             try {
@@ -99,7 +99,7 @@ function ChatBarItem({ id, title, icon }) {
     return (
         <Indicator
             showZero={false}
-            label={unreadCount || 7}
+            label={unreadCount}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"
@@ -109,7 +109,11 @@ function ChatBarItem({ id, title, icon }) {
         >
             <Link to={`/chat/${id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
-                    {icon ?? <UsersRound height={"100%"} width={"auto"} />}
+                    {icon ?? (
+                        <div style={{ height: "100%", width: "auto" }}>
+                            <UsersRound height={"100%"} width={"100%"} />
+                        </div>
+                    )}
                     <p className={styles.chatName}>{title}</p>
                 </button>
             </Link>
