@@ -11,5 +11,7 @@
  * @property {number} unreadCount
  * @property {Message[]} messages
  */
-
+/**
+ * @typedef {{id: number, content: string, chatId: number, sent: string, author: {username: string}}} newMessageData
+ */
 export {};

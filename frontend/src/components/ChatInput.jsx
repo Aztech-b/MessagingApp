@@ -31,7 +31,6 @@ function ChatInput({ setMessages, shouldScrollRef }) {
                 }),
             );
         });
-        console.log("emit message");
         setMessages((prev) => [
             ...prev,
             { content, author: { username: user.username }, id: tempId, status: "sending", sent: Date.now() },

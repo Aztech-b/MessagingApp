@@ -6,7 +6,10 @@ import { Outlet } from "react-router";
 import styles from "../styles/chatTab.module.css";
 import { ChatContextProvider } from "./Context";
 import socket from "./socket.js";
-/** @typedef {import("./types.js").Chat} Chat */
+/**
+ * @typedef {import("./types.js").Chat} Chat
+ * @typedef {import("./types.js").newMessageData} newMessageData
+ */
 
 const UnreadMessageContext = createContext(null);
 
@@ -25,8 +28,6 @@ function ChatTab() {
         acc[chat.id] = chat.unreadCount;
         return acc;
     }, {});
-    console.log(chats);
-    console.log(unreadMessages);
 
     useEffect(() => {
         async function GetAllChats() {
@@ -39,7 +40,6 @@ function ChatTab() {
                     throw new Error("response is not ok");
                 }
                 const data = await response.json();
-                // console.log(data);
                 setChats(data);
             } catch (error) {}
         }
@@ -54,6 +54,17 @@ function ChatTab() {
             const id = chats[i].id;
             socket.emit("join", { chatId: id });
         }
+    }, [chats]);
+
+    useEffect(() => {
+        /** @param {newMessageData} data */
+        function handleNewMessage(data) {
+            setChats((prev) =>
+                prev.map((chat) => (chat.id === data.chatId ? { ...chat, unreadCount: chat.unreadCount + 1 } : chat)),
+            );
+        }
+        socket.on("newMessage", handleNewMessage);
+        return () => socket.off("newMessage", handleNewMessage);
     }, [chats]);
 
     return (

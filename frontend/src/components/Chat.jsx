@@ -9,6 +9,8 @@ import { LoaderCircle, Check, CheckCheck, Type } from "lucide-react";
 import Message from "./Message.jsx";
 import { useStateHistory } from "@mantine/hooks";
 
+/** @typedef {import("./types.js").newMessageData} newMessageData */
+
 function Chat() {
     const chatId = Number(useParams().id);
     const { user } = useUserContext();
@@ -70,16 +72,19 @@ function Chat() {
     }, [messages, chatId]);
 
     useEffect(() => {
-        socket.on("newMessage", (data) => {
+        /** @param {newMessageData} data */
+        function handleNewMessage(data) {
             if (data.chatId !== chatId || data.author.username === user.username) {
                 return;
             }
             const shouldScroll = IsNearBottom();
             shouldScrollRef.current = shouldScroll;
             setMessages((prev) => [...prev, { ...data, status: "other" }]);
-        });
+        }
+
+        socket.on("newMessage", handleNewMessage);
         return () => {
-            socket.off("newMessage");
+            socket.off("newMessage", handleNewMessage);
         };
     }, [chatId]);
 

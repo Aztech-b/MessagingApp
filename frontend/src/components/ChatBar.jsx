@@ -85,8 +85,7 @@ function ChatBarItemSkeleton() {
 
 function ChatBarItem({ data, icon }) {
     const unreadMessages = useUnreadMessagesContext();
-    console.log(typeof unreadMessages[29]);
-    console.dir(unreadMessages);
+
     return (
         <Indicator
             showZero={false}
