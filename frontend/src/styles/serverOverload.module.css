@@ -1,0 +1,45 @@
+@import "./variables.css";
+
+.main {
+    background-color: var(--accent-light-xl);
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    z-index: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main::before {
+    content: attr(errorcode);
+    color: var(--accent-light);
+    font-size: 35rem;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translateX(50%) translateY(-50%);
+    z-index: -1;
+}
+
+.description {
+    margin-bottom: 12px;
+}
+
+.main * {
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    overflow-wrap: anywhere;
+}
+
+h1 {
+    margin-bottom: 40px;
+}

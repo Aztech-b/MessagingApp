@@ -5,6 +5,7 @@ import Home from "./Home.jsx";
 import App from "../App.jsx";
 import Chat from "./Chat.jsx";
 import ProfilePage from "./ProfilePage.jsx";
+import ServerOverload from "./ServerOverload.jsx";
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
             { path: "/profile", element: <ProfilePage /> },
         ],
     },
+    { path: "/error/:errorcode?", element: <ServerOverload /> },
 ]);
 
 export default router;

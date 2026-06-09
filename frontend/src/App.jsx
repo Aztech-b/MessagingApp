@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 import { UserDataProvider, ChatContextProvider } from "./components/Context";
 import { useEffect, useRef, useState } from "react";
 import socket from "./components/socket.js";
+import { ReceiptPoundSterlingIcon } from "lucide-react";
 
 function App() {
     const [user, setUser] = useState();
@@ -30,20 +31,25 @@ function App() {
                     return;
                 }
 
+                if (response.status === 503) {
+                    navigate("/error/503");
+                }
+
                 if (!response.ok) {
                     throw new Error("response is not ok");
                 }
                 const data = await response.json();
 
                 setUser(data);
+                navigate("/chat");
             } catch (error) {
-                console.log(error);
+                navigate("/error");
             }
         }
         GetUser();
     }, []);
 
-    // cfhats
+    // chats
     useEffect(() => {
         async function GetAllChats() {
             try {
