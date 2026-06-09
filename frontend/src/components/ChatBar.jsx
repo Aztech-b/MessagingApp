@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { data, Link } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { data, Link, useParams } from "react-router";
 import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
@@ -13,6 +13,7 @@ function ChatBar() {
     const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
+    const { id } = useParams();
 
     return (
         <div className={styles.chats}>
@@ -82,38 +83,11 @@ function ChatBarItemSkeleton() {
 }
 
 function ChatBarItem({ id, title, icon }) {
-    const [unreadCount, setUnreadCount] = useState(0);
-    function handleUnreadCount(data) {
-        if (data.chatId !== id) {
-            return;
-        }
-        setUnreadCount((prev) => prev + 1);
-    }
-
-    useEffect(() => {
-        socket.on("newMessage", handleUnreadCount);
-        return () => {
-            socket.off("newMessage", handleUnreadCount);
-        };
-    }, []);
-
-    useEffect(() => {
-        async function GetUnreadMessagesNumber() {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${id}/unreadCount`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-                const data = await response.json();
-                setUnreadCount(data.unreadCount);
-            } catch (error) {}
-        }
-        GetUnreadMessagesNumber();
-    }, []);
+    const chatId = Number(useParams().id);
     return (
         <Indicator
             showZero={false}
-            label={unreadCount}
+            label={0}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"

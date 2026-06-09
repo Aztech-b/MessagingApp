@@ -61,6 +61,7 @@ function App() {
                     throw new Error("response is not ok");
                 }
                 const data = await response.json();
+                console.log(data);
                 setChats(data);
             } catch (error) {}
         }

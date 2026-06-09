@@ -27,27 +27,23 @@ chatRouter.get("/", async (req, res) => {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
-    const chats = await prisma.chat.findMany({
-        where: { members: { some: { user: { id: req.user.id } } } },
-        select: { id: true, title: true },
-    });
-    res.json(chats);
-});
 
-chatRouter.get("/:id/unreadCount", async (req, res) => {
-    const userId = req.user.id;
-    const chatId = Number(req.params.id);
+    const memberships = await prisma.chatMember.findMany({
+        where: { userId: req.user.id },
+        select: { chatId: true, lastReadMessageId: true, chat: { select: { id: true, title: true } } },
+    });
 
-    const lastReadMessageId = await prisma.chatMember.findFirst({
-        where: { chatId, userId },
-        select: { lastReadMessageId: true },
-    });
-    const lastReadMessage = await prisma.message.findFirst({
-        where: { id: lastReadMessageId.lastReadMessageId },
-        select: { sent: true },
-    });
-    const unreadCount = await prisma.message.count({ where: { chatId, sent: { gt: lastReadMessage.sent } } });
-    res.json({ unreadCount });
+    const result = await Promise.all(
+        memberships.map(async (message) => {
+            const unreadCount = await prisma.message.count({
+                where: { chatId: message.chatId, id: { gt: message.lastReadMessageId } },
+            });
+
+            return { id: message.chat.id, title: message.chat.title, unreadCount };
+        }),
+    );
+
+    res.json(result);
 });
 
 chatRouter.get("/:id", async (req, res) => {
