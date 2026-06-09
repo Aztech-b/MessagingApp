@@ -47,7 +47,7 @@ function Chat() {
         if (lastReadMessageId.current === lastMessageId.current) {
             return;
         }
-        if (messages[messages.length - 1].author.username === user.username) {
+        if (messages[messages.length - 1]?.author?.username === user?.username) {
             return;
         }
 

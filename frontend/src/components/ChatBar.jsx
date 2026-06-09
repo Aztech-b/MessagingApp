@@ -6,6 +6,7 @@ import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
+import { useUnreadMessagesContext } from "./ChatTab";
 
 function ChatBar() {
     const { chats, setChats } = useChatContext();
@@ -50,7 +51,7 @@ function ChatBar() {
                 </Stack>
             </Modal>
             {chats?.length !== 0
-                ? chats.map((chat) => <ChatBarItem id={chat.id} title={chat.title} key={chat.id} />)
+                ? chats.map((chat) => <ChatBarItem data={chat} key={chat.id} />)
                 : Array.from({ length: 5 }).map((_, index) => <ChatBarItemSkeleton key={index} />)}
             <ActionIcon
                 style={{
@@ -82,12 +83,14 @@ function ChatBarItemSkeleton() {
     );
 }
 
-function ChatBarItem({ id, title, icon }) {
-    const chatId = Number(useParams().id);
+function ChatBarItem({ data, icon }) {
+    const unreadMessages = useUnreadMessagesContext();
+    console.log(typeof unreadMessages[29]);
+    console.dir(unreadMessages);
     return (
         <Indicator
             showZero={false}
-            label={0}
+            label={unreadMessages[data.id]}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"
@@ -95,14 +98,14 @@ function ChatBarItem({ id, title, icon }) {
             size={24}
             style={{ fontWeight: "bold" }}
         >
-            <Link to={`/chat/${id}`} className={styles.chatLink}>
+            <Link to={`/chat/${data.id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
                     {icon ?? (
                         <div style={{ height: "100%", width: "auto" }}>
                             <UsersRound height={"100%"} width={"100%"} />
                         </div>
                     )}
-                    <p className={styles.chatName}>{title}</p>
+                    <p className={styles.chatName}>{data.title}</p>
                 </button>
             </Link>
         </Indicator>
