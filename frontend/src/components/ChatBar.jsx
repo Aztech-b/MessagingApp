@@ -83,6 +83,20 @@ function ChatBarItemSkeleton() {
 
 function ChatBarItem({ id, title, icon }) {
     const [unreadCount, setUnreadCount] = useState(0);
+    function handleUnreadCount(data) {
+        if (data.chatId !== id) {
+            return;
+        }
+        setUnreadCount((prev) => prev + 1);
+    }
+
+    useEffect(() => {
+        socket.on("newMessage", handleUnreadCount);
+        return () => {
+            socket.off("newMessage", handleUnreadCount);
+        };
+    }, []);
+
     useEffect(() => {
         async function GetUnreadMessagesNumber() {
             try {

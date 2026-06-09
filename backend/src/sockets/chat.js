@@ -43,8 +43,12 @@ function registerChatSockets(io) {
                 where: { userId_chatId: { chatId, userId } },
                 data: { lastReadMessageId: newMessage.id },
             });
+
+            /**
+             * @type {{id: number, content: string, chatId: number, sent: string, author: {username: string}}}
+             */
             const sendData = { ...newMessage, author: { username: socket.request.user.username } };
-            socket.to(`chat:${Number(data.chatId)}`).emit("newMessage", sendData);
+            io.to(`chat:${Number(data.chatId)}`).emit("newMessage", sendData);
             callback(sendData);
         });
     });

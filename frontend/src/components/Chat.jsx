@@ -71,7 +71,7 @@ function Chat() {
 
     useEffect(() => {
         socket.on("newMessage", (data) => {
-            if (data.chatId !== chatId) {
+            if (data.chatId !== chatId || data.author.username === user.username) {
                 return;
             }
             const shouldScroll = IsNearBottom();
