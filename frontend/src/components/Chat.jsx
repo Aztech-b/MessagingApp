@@ -138,7 +138,6 @@ function Chat() {
                     }),
                 );
                 const { members } = data;
-                console.log(members);
                 setMembers(members);
                 setActiveChatName(data.title);
                 lastReadMessageId.current = data.lastReadMessageId;

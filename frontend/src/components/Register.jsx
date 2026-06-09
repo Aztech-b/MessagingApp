@@ -56,7 +56,7 @@ function Register() {
                         <h1>Register</h1>
                     </div>
                     <p>
-                        Have an account? Login <Link to="/register">here. </Link>
+                        Have an account? Login <Link to="/login">here. </Link>
                     </p>
                 </div>
 

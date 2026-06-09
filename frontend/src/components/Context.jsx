@@ -1,12 +1,9 @@
 import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext({});
-const SocketContext = createContext(null);
+const ChatContext = createContext(null);
 
-/**
- *
- * @returns State: {user, setUser}
- */
+// USER INFO
 export function useUserContext() {
     return useContext(UserContext);
 }
@@ -15,10 +12,10 @@ export function UserDataProvider({ value, children }) {
     return <UserContext value={value}>{children}</UserContext>;
 }
 
-export function useSocketContext() {
-    return useContext(SocketContext);
+export function useChatContext() {
+    return useContext(ChatContext);
 }
 
-export function SocketDataProvider({ value, children }) {
-    return <SocketContext value={value}>{children}</SocketContext>;
+export function ChatContextProvider({ value, children }) {
+    return <ChatContext value={value}>{children}</ChatContext>;
 }

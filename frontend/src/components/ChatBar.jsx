@@ -1,35 +1,19 @@
 import { useEffect, useState } from "react";
 import { data, Link } from "react-router";
 import { Button, TextInput, ActionIcon, Modal, Stack, Indicator } from "@mantine/core";
-import { useUserContext } from "./Context";
+import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
 
 function ChatBar() {
-    const [chats, setChats] = useState([]);
+    const { chats, setChats } = useChatContext();
     const { user } = useUserContext();
     const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
 
-    useEffect(() => {
-        async function GetAllChats() {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-                if (!response.ok) {
-                    throw new Error("response is not ok");
-                }
-                const data = await response.json();
-                setChats(data);
-            } catch (error) {}
-        }
-        GetAllChats();
-    }, []);
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -57,7 +41,6 @@ function ChatBar() {
                                 body: JSON.stringify({ title: newChatName, members: chatMembers }),
                             });
                             const data = await response.json();
-                            console.log(data);
                             setChats((prev) => [{ id: data.id, title: data.title }, ...prev]);
                         }}
                     >
@@ -102,7 +85,7 @@ function ChatBarItem({ id, title, icon }) {
     return (
         <Indicator
             showZero={false}
-            label={7}
+            label={unreadMessagesNumber}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"

@@ -50,11 +50,11 @@ chatRouter.get("/:id", async (req, res) => {
                 members: { select: { color: true, user: { select: { username: true } } } },
             },
         });
-        const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId: chatId });
+        const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId });
         res.json({ ...chat, allReadMessageId });
         return;
     } catch (error) {
-        console.group(error);
+        console.log(error);
         res.status(404).json({ status: "CHAT_NOT_FOUND", chatId: req.params.id });
         return;
     }
