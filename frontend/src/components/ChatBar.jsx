@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { data, Link } from "react-router";
-import { Button, TextInput, ActionIcon, Modal, Stack, Indicator } from "@mantine/core";
+import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
@@ -13,7 +13,7 @@ function ChatBar() {
     const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
-
+    console.log(chats);
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -48,9 +48,9 @@ function ChatBar() {
                     </Button>
                 </Stack>
             </Modal>
-            {chats.map((chat) => (
-                <ChatBarItem id={chat.id} title={chat.title} key={chat.id} />
-            ))}
+            {chats?.length !== 0
+                ? chats.map((chat) => <ChatBarItem id={chat.id} title={chat.title} key={chat.id} />)
+                : Array.from({ length: 5 }).map((_, index) => <ChatBarItemSkeleton key={index} />)}
             <ActionIcon
                 style={{
                     position: "sticky",
@@ -72,9 +72,17 @@ function ChatBar() {
     );
 }
 
+function ChatBarItemSkeleton() {
+    return (
+        <div className={styles.chatButton}>
+            <Skeleton circle style={{ height: "100%", width: "auto", aspectRatio: "1 / 1", flexShrink: 0 }}></Skeleton>
+            <Skeleton height={16}></Skeleton>
+        </div>
+    );
+}
+
 function ChatBarItem({ id, title, icon }) {
     const [unreadMessagesNumber, setUnreadMessagesNumber] = useState(0);
-
     useEffect(() => {
         socket.emit("join", { chatId: id });
         socket.on("newMessage", (data) => {
@@ -95,7 +103,7 @@ function ChatBarItem({ id, title, icon }) {
         >
             <Link to={`/chat/${id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
-                    {icon ?? <UsersRound />}
+                    {icon ?? <UsersRound height={"100%"} width={"auto"} />}
                     <p className={styles.chatName}>{title}</p>
                 </button>
             </Link>
