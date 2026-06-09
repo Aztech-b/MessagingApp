@@ -34,6 +34,22 @@ chatRouter.get("/", async (req, res) => {
     res.json(chats);
 });
 
+chatRouter.get("/:id/unreadCount", async (req, res) => {
+    const userId = req.user.id;
+    const chatId = Number(req.params.id);
+
+    const lastReadMessageId = await prisma.chatMember.findFirst({
+        where: { chatId, userId },
+        select: { lastReadMessageId: true },
+    });
+    const lastReadMessage = await prisma.message.findFirst({
+        where: { id: lastReadMessageId.id },
+        select: { sent: true },
+    });
+    const unreadCount = await prisma.message.count({ where: { chatId, sent: { gt: lastReadMessage.sent } } });
+    res.json({ unreadCount });
+});
+
 chatRouter.get("/:id", async (req, res) => {
     const userId = Number(req.user.id);
     const chatId = Number(req.params.id);

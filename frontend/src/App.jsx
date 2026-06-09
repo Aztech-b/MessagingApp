@@ -68,15 +68,22 @@ function App() {
     }, []);
 
     useEffect(() => {
+        if (!chats || chats.length === 0) {
+            return;
+        }
+        for (let i = 0; i < chats.length; i++) {
+            const id = chats[i].id;
+            socket.emit("join", { chatId: id });
+        }
+    }, [chats]);
+
+    useEffect(() => {
         if (!chats) {
             return;
         }
         for (let i = 0; i < chats.length; i++) {
             const chat = chats[i];
             socket.emit("join", { chatId: chat.id });
-            socket.on("newMessage", (data) => {
-                setUnreadMessagesNumber((prev) => prev + 1);
-            });
         }
     }, [chats]);
 

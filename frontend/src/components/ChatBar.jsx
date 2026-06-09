@@ -13,7 +13,7 @@ function ChatBar() {
     const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
-    console.log(chats);
+
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -82,18 +82,24 @@ function ChatBarItemSkeleton() {
 }
 
 function ChatBarItem({ id, title, icon }) {
-    const [unreadMessagesNumber, setUnreadMessagesNumber] = useState(0);
+    const [unreadCount, setUnreadCount] = useState(null);
     useEffect(() => {
-        socket.emit("join", { chatId: id });
-        socket.on("newMessage", (data) => {
-            setUnreadMessagesNumber((prev) => prev + 1);
-        });
+        async function GetUnreadMessagesNumber() {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${id}/unreadCount`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+                const data = await response.json();
+                setUnreadCount(data.unreadCount);
+            } catch (error) {}
+        }
+        GetUnreadMessagesNumber();
     }, []);
-
     return (
         <Indicator
             showZero={false}
-            label={unreadMessagesNumber}
+            label={unreadCount || 7}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"

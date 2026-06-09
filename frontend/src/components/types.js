@@ -8,7 +8,7 @@
  * @typedef {Object} Chat
  * @property {string} title
  * @property {number} id
- * @property {number} myLastReadMessageId
+ * @property {number} unreadCount
  * @property {Message[]} messages
  */
 
