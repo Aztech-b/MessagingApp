@@ -21,7 +21,7 @@ function ChatTab() {
     const [activeChatName, setActiveChatName] = useState("");
 
     /**@type {{[id]: number}[]} */
-    const unreadMessages = chats?.reduce((accumulator, chat) => {
+    const unreadCount = chats?.reduce((accumulator, chat) => {
         accumulator[chat.id] = chat.unreadCount;
         return accumulator;
     }, {});
@@ -84,7 +84,9 @@ function ChatTab() {
             function handleNewMessage(data) {
                 setChats((prev) =>
                     prev.map((chat) =>
-                        chat.id === data.chatId ? { ...chat, unreadCount: chat.unreadCount + 1 } : chat,
+                        chat.id === data.chatId && chatId !== chat.id
+                            ? { ...chat, unreadCount: chat.unreadCount + 1 }
+                            : chat,
                     ),
                 );
             }
@@ -96,7 +98,9 @@ function ChatTab() {
 
     return (
         <>
-            <ChatContextProvider value={{ chats, unreadMessages, lastReadMessages, setLastReadMessage, addChat }}>
+            <ChatContextProvider
+                value={{ chats, unreadMessages: unreadCount, lastReadMessages, setLastReadMessage, addChat }}
+            >
                 <ChatBar></ChatBar>
                 <div className={styles.messages}>
                     <TopBar chatName={activeChatName} />
