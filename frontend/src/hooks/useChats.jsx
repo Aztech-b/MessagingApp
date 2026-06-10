@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import socket from "../components/socket.js";
+import { useChatContext } from "../components/Context.jsx";
+import useChatSockets from "./useChatSockets.jsx";
 /** @typedef {import("../components/types.js").Chat} */
 
-function useChats() {
+function useChats(activeChatId) {
     /** @type {[Chat[], Function]} */
     const [chats, setChats] = useState([]);
 
@@ -17,6 +19,21 @@ function useChats() {
             return;
         }
         setChats((prev) => prev.map((chat) => (chat.id === chatId ? { ...chat, lastReadMessageId: messageId } : chat)));
+    };
+
+    /**
+     * @typedef {Object} Data
+     * @property {number} chatId
+     * @param {Data} data
+     */
+    const addNewMessage = (data) => {
+        setChats((prev) =>
+            prev.map((chat) =>
+                chat.id === data.chatId && activeChatId !== chat.id
+                    ? { ...chat, unreadCount: chat.unreadCount + 1 }
+                    : chat,
+            ),
+        );
     };
 
     /** @param {{id: number, title: string}} newChatData */
@@ -48,22 +65,7 @@ function useChats() {
         GetAllChats();
     }, []);
 
-    useEffect(function NewMessage() {
-        /** @param {newMessageData} data */
-        function handleNewMessage(data) {
-            setChats((prev) =>
-                prev.map((chat) =>
-                    chat.id === data.chatId && chatId !== chat.id
-                        ? { ...chat, unreadCount: chat.unreadCount + 1 }
-                        : chat,
-                ),
-            );
-        }
-        socket.on("newMessage", handleNewMessage);
-        return () => socket.off("newMessage", handleNewMessage);
-    }, []);
-
-    return { chats, addChat, setLastReadMessage };
+    return { chats, addChat, setLastReadMessage, addNewMessage };
 }
 
 export default useChats;

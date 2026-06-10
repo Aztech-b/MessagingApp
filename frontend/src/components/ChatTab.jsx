@@ -8,6 +8,7 @@ import { ChatContextProvider } from "./Context";
 import socket from "./socket.js";
 import { DatabaseBackup } from "lucide-react";
 import useChats from "../hooks/useChats.jsx";
+import useChatSockets from "../hooks/useChatSockets.jsx";
 
 /**
  * @typedef {import("./types.js").Chat} Chat
@@ -15,12 +16,11 @@ import useChats from "../hooks/useChats.jsx";
  */
 
 function ChatTab() {
-    const [activeChatId, setActiveChatId] = useState();
     const chatId = Number(useParams().id);
-
-    const { chats, addChat, setLastReadMessage } = useChats();
+    const { chats, addChat, setLastReadMessage, addNewMessage } = useChats(chatId);
 
     const [activeChatName, setActiveChatName] = useState("");
+    useChatSockets(chats, addNewMessage);
 
     /**@type {{[id]: number}[]} */
     const unreadCount = chats?.reduce((accumulator, chat) => {
@@ -33,25 +33,6 @@ function ChatTab() {
         accumulator[chat.id] = chat.lastReadMessageId;
         return accumulator;
     }, {});
-
-    useEffect(
-        function JoinSocket() {
-            if (!chats || chats.length === 0) {
-                return;
-            }
-            for (let i = 0; i < chats.length; i++) {
-                const id = chats[i].id;
-                socket.emit("join", { chatId: id });
-            }
-            return () => {
-                for (let i = 0; i < chats.length; i++) {
-                    const id = chats[i].id;
-                    socket.emit("leave", { chatId: id });
-                }
-            };
-        },
-        [chats.length],
-    );
 
     return (
         <>
