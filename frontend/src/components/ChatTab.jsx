@@ -32,7 +32,15 @@ function ChatTab() {
         return accumulator;
     }, {});
     /** @param {number} chatId  @param {number} messageId */
-    const setLastReadMessage = (chatId, messageId) => {
+    const setLastReadMessage = (chatId, messageId, isLastMessageSeen) => {
+        if (isLastMessageSeen) {
+            setChats((prev) =>
+                prev.map((chat) =>
+                    chat.id === chatId ? { ...chat, lastReadMessageId: messageId, unreadCount: 0 } : chat,
+                ),
+            );
+            return;
+        }
         setChats((prev) => prev.map((chat) => (chat.id === chatId ? { ...chat, lastReadMessageId: messageId } : chat)));
     };
 
