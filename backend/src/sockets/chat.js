@@ -12,6 +12,10 @@ function registerChatSockets(io) {
             socket.join(`chat:${Number(data.chatId)}`);
         });
 
+        socket.on("leave", (data) => {
+            socket.leave(`chat:${Number(data.chatId)}`);
+        });
+
         socket.on("readMessage", async (data, callback) => {
             if (callback) {
                 callback();

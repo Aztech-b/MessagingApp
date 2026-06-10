@@ -82,27 +82,30 @@ function ChatTab() {
                 const id = chats[i].id;
                 socket.emit("join", { chatId: id });
             }
+            return () => {
+                for (let i = 0; i < chats.length; i++) {
+                    const id = chats[i].id;
+                    socket.emit("leave", { chatId: id });
+                }
+            };
         },
-        [chats],
+        [chats.length],
     );
 
-    useEffect(
-        function NewMessage() {
-            /** @param {newMessageData} data */
-            function handleNewMessage(data) {
-                setChats((prev) =>
-                    prev.map((chat) =>
-                        chat.id === data.chatId && chatId !== chat.id
-                            ? { ...chat, unreadCount: chat.unreadCount + 1 }
-                            : chat,
-                    ),
-                );
-            }
-            socket.on("newMessage", handleNewMessage);
-            return () => socket.off("newMessage", handleNewMessage);
-        },
-        [chats],
-    );
+    useEffect(function NewMessage() {
+        /** @param {newMessageData} data */
+        function handleNewMessage(data) {
+            setChats((prev) =>
+                prev.map((chat) =>
+                    chat.id === data.chatId && chatId !== chat.id
+                        ? { ...chat, unreadCount: chat.unreadCount + 1 }
+                        : chat,
+                ),
+            );
+        }
+        socket.on("newMessage", handleNewMessage);
+        return () => socket.off("newMessage", handleNewMessage);
+    }, []);
 
     return (
         <>

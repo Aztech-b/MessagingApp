@@ -68,7 +68,6 @@ function Chat() {
                 "readMessage",
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
                 () => {
-                    console.log(messages[messages.length - 1].id);
                     setLastReadMessage(chatId, lastMessageId.current, true);
                 },
             );
