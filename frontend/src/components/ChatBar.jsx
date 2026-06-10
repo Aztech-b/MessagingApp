@@ -6,16 +6,16 @@ import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
-import { useUnreadMessagesContext } from "./ChatTab";
 
 function ChatBar() {
-    const { chats, setChats } = useChatContext();
+    const { chats, addChat } = useChatContext();
     const { user } = useUserContext();
     const [newChatName, setNewChatName] = useState("");
     const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
     const { id } = useParams();
 
+    // debugger;
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -43,7 +43,7 @@ function ChatBar() {
                                 body: JSON.stringify({ title: newChatName, members: chatMembers }),
                             });
                             const data = await response.json();
-                            setChats((prev) => [{ id: data.id, title: data.title }, ...prev]);
+                            addChat({ id: data.id, title: data.title });
                         }}
                     >
                         Create New Chat
@@ -51,7 +51,7 @@ function ChatBar() {
                 </Stack>
             </Modal>
             {chats?.length !== 0
-                ? chats.map((chat) => <ChatBarItem data={chat} key={chat.id} />)
+                ? chats?.map((chat) => <ChatBarItem data={chat} key={chat.id} />)
                 : Array.from({ length: 5 }).map((_, index) => <ChatBarItemSkeleton key={index} />)}
             <ActionIcon
                 style={{
@@ -84,7 +84,7 @@ function ChatBarItemSkeleton() {
 }
 
 function ChatBarItem({ data, icon }) {
-    const unreadMessages = useUnreadMessagesContext();
+    const { unreadMessages } = useChatContext();
 
     return (
         <Indicator

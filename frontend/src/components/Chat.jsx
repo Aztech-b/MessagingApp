@@ -8,12 +8,17 @@ import ChatInput from "./ChatInput";
 import { LoaderCircle, Check, CheckCheck, Type } from "lucide-react";
 import Message from "./Message.jsx";
 import { useStateHistory } from "@mantine/hooks";
+import { useChatContext } from "./Context";
 
-/** @typedef {import("./types.js").newMessageData} newMessageData */
+/**
+ * @typedef {import("./types.js").newMessageData} newMessageData
+ * @typedef {import("./types.js").ChatData} ChatData
+ */
 
 function Chat() {
     const chatId = Number(useParams().id);
     const { user } = useUserContext();
+    const { chats } = useChatContext();
 
     const setActiveChatName = useOutletContext().setActiveChatName;
     const [messages, setMessages] = useState([]);
@@ -28,7 +33,9 @@ function Chat() {
 
     const lastMessageRef = useRef(null);
     const lastMessageId = useRef(0);
-    const lastReadMessageId = useRef(-1);
+    const { lastReadMessages, setLastReadMessage } = useChatContext();
+    const lastReadMessageId = lastReadMessages ? lastReadMessages[chatId] : null;
+    // console.log(lastMessageId);
 
     function IsNearBottom() {
         const container = scrollContainer.current;
@@ -46,7 +53,7 @@ function Chat() {
         if (!isBottom) {
             return;
         }
-        if (lastReadMessageId.current === lastMessageId.current) {
+        if (lastReadMessageId === lastMessageId.current) {
             return;
         }
         if (messages[messages.length - 1]?.author?.username === user?.username) {
@@ -58,7 +65,7 @@ function Chat() {
             { messageId: messages[messages.length - 1].id, chatId, username: user.username },
             () => {
                 console.log(messages[messages.length - 1].id);
-                lastReadMessageId.current = lastMessageId.current;
+                setLastReadMessage(chatId, lastMessageId.current);
             },
         );
     }, [isBottom, messages]);
@@ -120,9 +127,7 @@ function Chat() {
                     credentials: "include",
                 });
 
-                /**
-                 * @type {{messages: {id: number, author: {user: {username: string} } }[], allReadMessageId: number, members: {color: string, user: {username: string}}[]}}
-                 */
+                /** @type {ChatData} */
                 let data = await response.json();
                 const messagesFromDatabase = data.messages.map((message) => {
                     let status = "";
@@ -145,13 +150,13 @@ function Chat() {
                 const { members } = data;
                 setMembers(members);
                 setActiveChatName(data.title);
-                lastReadMessageId.current = data.lastReadMessageId;
+                setLastReadMessage(chatId, data.chatMember.lastReadMessageId);
             } catch (error) {
                 console.error(error);
             }
         }
         GetChatData();
-    }, [chatId, user]);
+    }, [chatId, user, setLastReadMessage]);
 
     return (
         <>

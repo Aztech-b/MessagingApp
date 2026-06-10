@@ -39,7 +39,12 @@ chatRouter.get("/", async (req, res) => {
                 where: { chatId: message.chatId, id: { gt: message.lastReadMessageId } },
             });
 
-            return { id: message.chat.id, title: message.chat.title, unreadCount };
+            return {
+                id: message.chat.id,
+                title: message.chat.title,
+                unreadCount,
+                lastReadMessageId: message.lastReadMessageId,
+            };
         }),
     );
 
@@ -63,7 +68,7 @@ chatRouter.get("/:id", async (req, res) => {
             },
         });
         const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId });
-        res.json({ ...chat, allReadMessageId });
+        res.json({ ...chat, allReadMessageId, chatMember });
         return;
     } catch (error) {
         console.log(error);
