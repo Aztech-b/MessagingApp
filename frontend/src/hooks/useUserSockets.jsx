@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import socket from "../components/socket";
 import { useUserContext } from "../components/Context";
 
-function useUserSockets() {
-    const { user } = useUserContext();
+function useUserSockets(user) {
     useEffect(
         function joinUserSocketRoom() {
             const username = { username: user ? user.username : null };
@@ -13,3 +12,5 @@ function useUserSockets() {
         [user],
     );
 }
+
+export default useUserSockets;

@@ -16,14 +16,6 @@ function ChatBar() {
     const { id } = useParams();
     const form = useForm({ initialValues: { chatMembers: "", title: "" } });
 
-    useEffect(() => {
-        function addNewChat(data) {
-            console.log(data);
-            addChat(data);
-        }
-        socket.on(EVENT.CHAT_CREATED, addNewChat);
-        return () => socket.off(EVENT.CHAT_CREATED, addNewChat);
-    });
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
@@ -89,7 +81,7 @@ function ChatBarItem({ data, icon }) {
     return (
         <Indicator
             showZero={false}
-            label={unreadCount[data.id]}
+            label={unreadCount[data.id] || 0}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"

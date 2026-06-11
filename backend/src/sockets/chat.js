@@ -13,15 +13,19 @@ function registerChatSockets(io) {
             socket.join(`chat:${Number(data.chatId)}`);
         });
 
-        socket.on("joinUser", (data) => {
-            socket.join(`user:${data.username}`);
-        });
-
         socket.on("leave", (data) => {
             socket.leave(`chat:${Number(data.chatId)}`);
         });
 
+        socket.on("joinUser", (data) => {
+            console.log("join");
+            console.log(data.username);
+            socket.join(`user:${data.username}`);
+        });
+
         socket.on("leaveUser", (data) => {
+            console.log("leave");
+            console.log(data.username);
             socket.leave(`user:${data.username}`);
         });
 
@@ -76,6 +80,7 @@ function registerChatSockets(io) {
                 select: { id: true, title: true },
             });
             users.forEach((user) => {
+                console.log(user);
                 io.to(`user:${user.username}`).emit(EVENT.CHAT_CREATED, newChat);
             });
         });

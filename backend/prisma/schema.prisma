@@ -23,8 +23,8 @@ model User {
 model Chat {
     id       Int          @id @default(autoincrement())
     title    String
-    members  ChatMember[]
-    messages Message[]
+    members  ChatMember[] // I thought about making a chat between users and groups 
+    messages Message[] // of users the same thing, but never really implemented group thing
 }
 
 model ChatMember {

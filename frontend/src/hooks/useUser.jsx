@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import useUserSockets from "./useUserSockets";
 
 function useUser() {
     const [user, setUser] = useState();
     const navigate = useNavigate();
+    useUserSockets(user);
 
     useEffect(function GetUserData() {
         async function GetUser() {
