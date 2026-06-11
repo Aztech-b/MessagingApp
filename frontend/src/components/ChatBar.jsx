@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
-import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton, Menu } from "@mantine/core";
+import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton, Menu, BackgroundImage } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
@@ -10,7 +10,7 @@ import { useForm } from "@mantine/form";
 import { EVENT } from "../../../shared/socketEvents";
 
 function ChatBar() {
-    const { chats, addChat } = useChatContext();
+    const { chats } = useChatContext();
     const { user } = useUserContext();
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
     const { id } = useParams();
@@ -23,7 +23,7 @@ function ChatBar() {
                     <form
                         onSubmit={form.onSubmit((values) => {
                             const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
-                            socket.emit(EVENT.CHAT_CREATE, transformed);
+                            socket.emit(EVENT.CHAT.CREATE, transformed);
                         })}
                     >
                         <Stack gap={"xs"}>
@@ -42,7 +42,7 @@ function ChatBar() {
                     </form>
                 </Stack>
             </Modal>
-            {chats?.length !== 0
+            {chats
                 ? chats?.map((chat) => <ChatBarItem data={chat} key={chat.id} />)
                 : Array.from({ length: 5 }).map((_, index) => <ChatBarItemSkeleton key={index} />)}
             <ActionIcon
@@ -102,19 +102,19 @@ function ChatBarItem({ data, icon }) {
                         )}
                         <p className={styles.chatName}>{data.title}</p>
                     </div>
-                    <ContextMenu />
+                    <ContextMenu id={data.id} />
                 </button>
             </Link>
         </Indicator>
     );
 }
 
-function ContextMenu() {
+function ContextMenu({ id }) {
     return (
         <>
-            <Menu>
+            <Menu classNames={{ dropdown: styles.dropdown, item: styles.item }}>
                 <Menu.Target>
-                    <button
+                    <div
                         className={styles.menuButton}
                         onClick={(event) => {
                             event.stopPropagation();
@@ -122,16 +122,28 @@ function ContextMenu() {
                         }}
                     >
                         ...
-                    </button>
+                    </div>
                 </Menu.Target>
 
-                <Menu.Dropdown>
+                <Menu.Dropdown
+                // style={{ backgroundColor: "var(--accent-light)", border: 0, boxShadow: "0 0 8px black" }}
+                // styles={{ dropdown: { backgroundColor: "var(--accent-dark)", border: 0 } }}
+                >
                     <Menu.Item>Edit</Menu.Item>
                     <Menu.Item>Edit</Menu.Item>
                     <Menu.Item>Edit</Menu.Item>
                     <Menu.Item>Edit</Menu.Item>
                     <Menu.Item>Edit</Menu.Item>
-                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item
+                        color="red"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            socket.emit(EVENT.CHAT.DELETE, { chatId: id });
+                        }}
+                    >
+                        Delete
+                    </Menu.Item>
                 </Menu.Dropdown>
             </Menu>
         </>

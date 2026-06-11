@@ -1,7 +1,14 @@
 export const EVENT = {
-    CHAT_CREATE: "chat:create",
-    CHAT_CREATED: "chat:created",
+    CHAT: {
+        CREATE: "chat:create",
+        CREATED: "chat:created",
+        DELETE: "chat:delete",
+        DELETED: "chat:deleted",
+        JOIN: "chat:join",
+        LEAVE: "chat:leave",
+    },
 
-    MESSAGE_SEND: "message:send",
-    MESSAGE_RECEIVEd: "message:received",
+    MESSAGE: { SEND: "message:send", RECEIVEd: "message:received" },
+
+    USER: { JOIN: "user:join", LEAVE: "user:leave" },
 };

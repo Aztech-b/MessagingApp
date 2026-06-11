@@ -9,7 +9,7 @@ import http from "node:http";
 
 import authRouter from "./routes/auth.js";
 import chatRouter from "./routes/chat.js";
-import registerChatSockets from "./sockets/chat.js";
+import registerSockets from "./sockets/index.js";
 
 const corsData = { origin: "http://localhost:5173", credentials: true };
 
@@ -48,7 +48,7 @@ io.use((socket, next) => {
 // Routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
-registerChatSockets(io);
+registerSockets(io);
 
 server.listen(3000, (error) => {
     if (error) {

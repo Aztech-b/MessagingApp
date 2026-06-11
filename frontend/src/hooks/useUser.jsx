@@ -29,7 +29,6 @@ function useUser() {
                 }
                 const data = await response.json();
                 setUser(data);
-                console.log("navigate to chat");
                 navigate("/chat");
             } catch (error) {
                 navigate("/error");

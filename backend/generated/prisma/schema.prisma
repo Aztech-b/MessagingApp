@@ -23,8 +23,8 @@ model User {
 model Chat {
   id       Int          @id @default(autoincrement())
   title    String
-  members  ChatMember[]
-  messages Message[]
+  members  ChatMember[] // I thought about making a chat between users and groups 
+  messages Message[] // of users the same thing, but never really implemented group thing
 }
 
 model ChatMember {
@@ -33,8 +33,8 @@ model ChatMember {
   lastReadMessageId Int    @default(0)
   color             String @default("white")
 
-  chat Chat @relation(fields: [chatId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, chatId])
 }
@@ -45,7 +45,7 @@ model Message {
   authorId Int
   author   User     @relation(fields: [authorId], references: [id])
   chatId   Int
-  chat     Chat     @relation(fields: [chatId], references: [id])
+  chat     Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
   sent     DateTime @default(now())
 }
 

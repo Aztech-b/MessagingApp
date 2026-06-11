@@ -53,6 +53,11 @@ function useChats(activeChatId) {
         setChats((prev) => [{ id: newChatData.id, title: newChatData.title }, ...prev]);
     };
 
+    const deleteChat = (chatData) => {
+        debugger;
+        setChats((prev) => prev.filter((chat) => chat.id !== chatData.chatId));
+    };
+
     useEffect(function FetchData() {
         async function GetAllChats() {
             try {
@@ -70,7 +75,7 @@ function useChats(activeChatId) {
         GetAllChats();
     }, []);
 
-    return { chats, addChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount };
+    return { chats, addChat, deleteChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount };
 }
 
 export default useChats;

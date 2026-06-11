@@ -134,6 +134,7 @@ function Chat() {
             if (!user) {
                 return;
             }
+            console.log("get all messages from chat " + chatId);
             async function GetChatData() {
                 try {
                     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {

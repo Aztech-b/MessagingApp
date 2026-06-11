@@ -77,3 +77,13 @@
 .menuButton:hover {
     font-weight: bold;
 }
+
+.dropdown {
+    background-color: var(--accent-dark);
+    border: 0;
+}
+
+.item:hover {
+    background-color: transparent;
+    font-weight: bold;
+}

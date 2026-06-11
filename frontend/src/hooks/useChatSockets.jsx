@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { EVENT } from "../../../shared/socketEvents.js";
 /** @typedef {import("../components/types.js").newMessageData} */
 
-function useChatSockets(chats, addChat, addNewMessage) {
+function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
     useEffect(
         function JoinChatSocketRooms() {
             if (!chats || chats.length === 0) {
@@ -40,6 +40,13 @@ function useChatSockets(chats, addChat, addNewMessage) {
         socket.on(EVENT.CHAT_CREATED, addNewChat);
         return () => socket.off(EVENT.CHAT_CREATED, addNewChat);
     });
+
+    useEffect(function DeleteChat() {
+        socket.on(EVENT.CHAT.DELETED, deleteChat);
+        return () => {
+            socket.off(EVENT.CHAT.DELETED, deleteChat);
+        };
+    }, []);
 }
 
 export default useChatSockets;
