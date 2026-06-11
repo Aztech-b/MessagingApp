@@ -9,7 +9,7 @@ import http from "node:http";
 
 import authRouter from "./routes/auth.js";
 import chatRouter from "./routes/chat.js";
-import registerSockets from "./sockets/index.js";
+import registerSockets from "./sockets/index.socket.js";
 
 const corsData = { origin: "http://localhost:5173", credentials: true };
 

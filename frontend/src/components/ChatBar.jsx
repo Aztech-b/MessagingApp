@@ -24,6 +24,7 @@ function ChatBar() {
                         onSubmit={form.onSubmit((values) => {
                             const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
                             socket.emit(EVENT.CHAT.CREATE, transformed);
+                            console.log("emit");
                         })}
                     >
                         <Stack gap={"xs"}>
@@ -94,10 +95,7 @@ function ChatBarItem({ data, icon }) {
                     <div className={styles.content}>
                         {icon ?? (
                             <div style={{ height: "100%", width: "auto" }}>
-                                <UsersRound
-                                    height={"calc(var(--chat-height) - 12px)"}
-                                    width={"calc(var(--chat-height) - 12px)"}
-                                />
+                                <UsersRound className={styles.icon} />
                             </div>
                         )}
                         <p className={styles.chatName}>{data.title}</p>

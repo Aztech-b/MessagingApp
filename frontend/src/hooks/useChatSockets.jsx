@@ -32,13 +32,13 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
         return () => socket.off("newMessage", handleNewMessage);
     }, []);
 
-    useEffect(() => {
+    useEffect(function AddNewChat() {
         function addNewChat(data) {
             console.log(data);
             addChat(data);
         }
-        socket.on(EVENT.CHAT_CREATED, addNewChat);
-        return () => socket.off(EVENT.CHAT_CREATED, addNewChat);
+        socket.on(EVENT.CHAT.CREATED, addNewChat);
+        return () => socket.off(EVENT.CHAT.CREATED, addNewChat);
     });
 
     useEffect(function DeleteChat() {

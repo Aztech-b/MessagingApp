@@ -55,7 +55,8 @@
 }
 
 .icon {
-    border-radius: 50%;
+    height: calc(100% - 4px);
+    width: auto;
     object-fit: cover;
     object-position: center;
 }
