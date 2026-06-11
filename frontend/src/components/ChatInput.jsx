@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 import { TextInput, ActionIcon, Textarea } from "@mantine/core";
-import { useUserContext } from "./Context";
 import socket from "./socket.js";
 import { useParams } from "react-router";
+import { useUserContext } from "./Context.jsx";
 
 function ChatInput({ setMessages, shouldScrollRef }) {
     const [typedMessage, setTypedMessage] = useState("");

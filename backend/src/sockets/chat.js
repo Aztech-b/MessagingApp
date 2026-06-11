@@ -69,14 +69,14 @@ function registerChatSockets(io) {
             const { title, chatMembers } = data;
             const users = await prisma.user.findMany({
                 where: { username: { in: chatMembers } },
-                select: { id: true },
+                select: { username: true, id: true },
             });
             const newChat = await prisma.chat.create({
                 data: { title, members: { create: [...users.map((user) => ({ userId: user.id }))] } },
                 select: { id: true, title: true },
             });
             users.forEach((user) => {
-                io.to(`user:${user}`).emit(EVENT.CHAT_CREATED, { newChat });
+                io.to(`user:${user.username}`).emit(EVENT.CHAT_CREATED, newChat);
             });
         });
     });

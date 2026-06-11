@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import errorStyles from "../styles/errorPopover.module.css";
-import { useUserContext } from "./Context";
 import { ServerRouter, useNavigate } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
@@ -47,7 +46,7 @@ function Login() {
                 return;
             }
             data = await response.json();
-            setUser(data);
+            window.location.reload();
             if (data.username) {
                 navigate("/chat");
             }

@@ -1,9 +1,9 @@
 import { useState, useEffect, forwardRef, useRef } from "react";
-import { useUserContext } from "./Context";
 import socket from "./socket";
 import styles from "../styles/chat.module.css";
 import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 import { useParams } from "react-router";
+import { useUserContext } from "./Context";
 
 /**
  *

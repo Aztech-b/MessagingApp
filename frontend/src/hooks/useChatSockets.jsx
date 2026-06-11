@@ -1,10 +1,11 @@
 import socket from "../components/socket";
 import { useEffect } from "react";
+import { EVENT } from "../../../shared/socketEvents.js";
 /** @typedef {import("../components/types.js").newMessageData} */
 
-function useChatSockets(chats, addNewMessage) {
+function useChatSockets(chats, addChat, addNewMessage) {
     useEffect(
-        function JoinSocket() {
+        function JoinChatSocketRooms() {
             if (!chats || chats.length === 0) {
                 return;
             }
@@ -30,6 +31,15 @@ function useChatSockets(chats, addNewMessage) {
         socket.on("newMessage", handleNewMessage);
         return () => socket.off("newMessage", handleNewMessage);
     }, []);
+
+    useEffect(() => {
+        function addNewChat(data) {
+            console.log(data);
+            addChat(data);
+        }
+        socket.on(EVENT.CHAT_CREATED, addNewChat);
+        return () => socket.off(EVENT.CHAT_CREATED, addNewChat);
+    });
 }
 
 export default useChatSockets;

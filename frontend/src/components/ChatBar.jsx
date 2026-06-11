@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { data, Link, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
-import { EVENT } from "../../../shared/socketEvents.js";
 import { useForm } from "@mantine/form";
+import { EVENT } from "../../../shared/socketEvents";
 
 function ChatBar() {
     const { chats, addChat } = useChatContext();
@@ -84,12 +84,12 @@ function ChatBarItemSkeleton() {
 }
 
 function ChatBarItem({ data, icon }) {
-    const { unreadMessages } = useChatContext();
+    const { unreadCount } = useChatContext();
 
     return (
         <Indicator
             showZero={false}
-            label={unreadMessages[data.id]}
+            label={unreadCount[data.id]}
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"

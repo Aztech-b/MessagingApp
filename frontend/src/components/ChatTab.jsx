@@ -17,28 +17,14 @@ import useChatSockets from "../hooks/useChatSockets.jsx";
 
 function ChatTab() {
     const chatId = Number(useParams().id);
-    const { chats, addChat, setLastReadMessage, addNewMessage } = useChats(chatId);
+    const { chats, addChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount } = useChats(chatId);
 
     const [activeChatName, setActiveChatName] = useState("");
-    useChatSockets(chats, addNewMessage);
-
-    /**@type {{[id]: number}[]} */
-    const unreadCount = chats?.reduce((accumulator, chat) => {
-        accumulator[chat.id] = chat.unreadCount;
-        return accumulator;
-    }, {});
-
-    /** @type {{[id]: number}} */
-    const lastReadMessages = chats?.reduce((accumulator, chat) => {
-        accumulator[chat.id] = chat.lastReadMessageId;
-        return accumulator;
-    }, {});
+    useChatSockets(chats, addChat, addNewMessage);
 
     return (
         <>
-            <ChatContextProvider
-                value={{ chats, unreadMessages: unreadCount, lastReadMessages, setLastReadMessage, addChat }}
-            >
+            <ChatContextProvider value={{ chats, unreadCount, lastReadMessages, setLastReadMessage, addChat }}>
                 <ChatBar></ChatBar>
                 <div className={styles.messages}>
                     <TopBar chatName={activeChatName} />

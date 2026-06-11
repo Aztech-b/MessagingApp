@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { useUserContext } from "./Context";
 import styles from "../styles/sidebar.module.css";
 import profileLogo from "../assets/user.svg";
 import { Button, Divider, Tooltip, Dialog } from "@mantine/core";
@@ -87,26 +86,6 @@ function LoginButton() {
                 Login
             </Button>
         </Link>
-    );
-}
-
-function Account({ children }) {
-    const { user } = useUserContext();
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-        <>
-            <div className={styles.item}>
-                <button className={styles.account} popoverTarget="menu">
-                    <img src={profileLogo} />
-                </button>
-                <div className={styles.menu} popover="auto" id="menu">
-                    <div className={styles.info}>
-                        <p>{user ? user.username : <LoginButton />}</p>
-                    </div>
-                </div>
-            </div>
-        </>
     );
 }
 
