@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
-import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton } from "@mantine/core";
+import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton, Menu } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
@@ -91,15 +91,50 @@ function ChatBarItem({ data, icon }) {
         >
             <Link to={`/chat/${data.id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
-                    {icon ?? (
-                        <div style={{ height: "100%", width: "auto" }}>
-                            <UsersRound height={"100%"} width={"100%"} />
-                        </div>
-                    )}
-                    <p className={styles.chatName}>{data.title}</p>
+                    <div className={styles.content}>
+                        {icon ?? (
+                            <div style={{ height: "100%", width: "auto" }}>
+                                <UsersRound
+                                    height={"calc(var(--chat-height) - 12px)"}
+                                    width={"calc(var(--chat-height) - 12px)"}
+                                />
+                            </div>
+                        )}
+                        <p className={styles.chatName}>{data.title}</p>
+                    </div>
+                    <ContextMenu />
                 </button>
             </Link>
         </Indicator>
+    );
+}
+
+function ContextMenu() {
+    return (
+        <>
+            <Menu>
+                <Menu.Target>
+                    <button
+                        className={styles.menuButton}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            event.preventDefault();
+                        }}
+                    >
+                        ...
+                    </button>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item>Edit</Menu.Item>
+                    <Menu.Item>Edit</Menu.Item>
+                </Menu.Dropdown>
+            </Menu>
+        </>
     );
 }
 

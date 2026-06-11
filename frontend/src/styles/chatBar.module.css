@@ -9,21 +9,32 @@
     flex-direction: column;
 }
 
-.chats .chatButton {
-    height: var(--chat-height);
-    min-height: var(--chat-height);
-    max-height: var(--chat-height);
+.chats .chatButton,
+.content {
     min-width: 0;
     overflow-wrap: anywhere;
     background-color: hsl(215, 40%, 19%);
     color: white;
-    padding: 8px;
+    padding: 0;
     box-sizing: border-box;
     display: flex;
     border: 0;
+}
+
+.content {
+    height: 100%;
+}
+
+.chats .chatButton {
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    cursor: pointer;
+    height: var(--chat-height);
+    min-height: var(--chat-height);
+    max-height: var(--chat-height);
+    padding: 8px;
     border-bottom: 1px solid var(--accent-border);
+    cursor: pointer;
 }
 
 .chatLink {
@@ -55,4 +66,14 @@
     box-shadow: 0 4px 4px black;
     border-radius: 8px;
     padding: 16px;
+}
+
+.menuButton {
+    font-size: medium;
+    background-color: transparent;
+    border: 0;
+}
+
+.menuButton:hover {
+    font-weight: bold;
 }
