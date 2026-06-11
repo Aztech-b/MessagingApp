@@ -1,3 +1,5 @@
+import prisma from "../../lib/prisma.js";
+
 function registerMessageSockets(io, socket) {
     socket.on("readMessage", async (data, callback) => {
         if (callback) {
