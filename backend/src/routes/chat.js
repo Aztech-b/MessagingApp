@@ -54,6 +54,7 @@ chatRouter.get("/", async (req, res) => {
 chatRouter.get("/:id", async (req, res) => {
     const userId = Number(req.user.id);
     const chatId = Number(req.params.id);
+    const before = Number(req.query.before);
     try {
         const chatMember = await prisma.chatMember.findUnique({
             where: { userId_chatId: { userId, chatId } },
@@ -66,7 +67,12 @@ chatRouter.get("/:id", async (req, res) => {
         const chat = await prisma.chat.findUnique({
             where: { id: chatId },
             select: {
-                messages: { select: { id: true, content: true, author: { select: { username: true } }, sent: true } },
+                messages: {
+                    // where: {id: {lt: before}},
+                    take: 50,
+                    orderBy: { id: "desc" },
+                    select: { id: true, content: true, author: { select: { username: true } }, sent: true },
+                },
                 title: true,
                 members: { select: { color: true, user: { select: { username: true } } } },
             },
