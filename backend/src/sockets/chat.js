@@ -11,6 +11,7 @@ function registerChatSockets(io, socket) {
     });
 
     socket.on(EVENT.CHAT_CREATE, async (data) => {
+        console.log("start");
         const { title, chatMembers } = data;
         const users = await prisma.user.findMany({
             where: { username: { in: chatMembers } },
@@ -24,6 +25,7 @@ function registerChatSockets(io, socket) {
             console.log(user);
             io.to(`user:${user.username}`).emit(EVENT.CHAT_CREATED, newChat);
         });
+        console.log("finish");
     });
 
     socket.on(EVENT.CHAT.DELETE, async (data) => {

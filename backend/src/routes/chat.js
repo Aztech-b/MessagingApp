@@ -59,6 +59,10 @@ chatRouter.get("/:id", async (req, res) => {
             where: { userId_chatId: { userId, chatId } },
             select: { lastReadMessageId: true, color: true },
         });
+        if (!chatMember) {
+            res.status(404).json({ status: "NOT_FOUND" });
+            return;
+        }
         const chat = await prisma.chat.findUnique({
             where: { id: chatId },
             select: {

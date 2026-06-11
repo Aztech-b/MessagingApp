@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, forwardRef } from "react";
-import { useParams, useOutletContext } from "react-router";
+import { useParams, useOutletContext, useNavigate } from "react-router";
 import styles from "../styles/chat.module.css";
 import { Button, TextInput } from "@mantine/core";
 import { useUserContext } from "./Context";
@@ -35,6 +35,7 @@ function Chat() {
     const lastMessageId = useRef(0);
     const { lastReadMessages, setLastReadMessage } = useChatContext();
     const lastReadMessageId = lastReadMessages ? lastReadMessages[chatId] : null;
+    const navigate = useNavigate();
     // console.log(lastMessageId);
 
     function IsNearBottom() {
@@ -134,13 +135,17 @@ function Chat() {
             if (!user) {
                 return;
             }
-            console.log("get all messages from chat " + chatId);
             async function GetChatData() {
                 try {
                     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
                         method: "GET",
                         credentials: "include",
                     });
+
+                    if (response.status === 404 || response.status === 401) {
+                        navigate("/chat");
+                        return;
+                    }
 
                     /** @type {ChatData} */
                     let data = await response.json();
