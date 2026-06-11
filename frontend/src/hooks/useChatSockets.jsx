@@ -42,9 +42,12 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
     });
 
     useEffect(function DeleteChat() {
-        socket.on(EVENT.CHAT.DELETED, deleteChat);
+        function _deleteChat(data) {
+            deleteChat(data);
+        }
+        socket.on(EVENT.CHAT.DELETED, _deleteChat);
         return () => {
-            socket.off(EVENT.CHAT.DELETED, deleteChat);
+            socket.off(EVENT.CHAT.DELETED, _deleteChat);
         };
     }, []);
 }

@@ -24,7 +24,6 @@ function ChatBar() {
                         onSubmit={form.onSubmit((values) => {
                             const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
                             socket.emit(EVENT.CHAT.CREATE, transformed);
-                            console.log("emit");
                         })}
                     >
                         <Stack gap={"xs"}>

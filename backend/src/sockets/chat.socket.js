@@ -26,8 +26,14 @@ function registerChatSockets(io, socket) {
     });
 
     socket.on(EVENT.CHAT.DELETE, async (data) => {
+        const users = await prisma.chat.findUnique({
+            where: { id: data.chatId },
+            select: { members: { select: { user: { select: { username: true } } } } },
+        });
         await prisma.chat.delete({ where: { id: data.chatId } });
-        socket.emit(EVENT.CHAT.DELETED, data);
+        users.members.forEach((user) => {
+            io.to(`user:${user.user.username}`).emit(EVENT.CHAT.DELETED, data);
+        });
     });
 }
 
