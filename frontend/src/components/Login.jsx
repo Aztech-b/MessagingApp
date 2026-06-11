@@ -45,15 +45,15 @@ function Login() {
                 closeLoading();
                 toggleError();
                 return;
-            } else if (response.ok) {
-                data = await response.json();
             }
+            data = await response.json();
             setUser(data);
             if (data.username) {
                 navigate("/chat");
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            closeLoading();
         }
     };
 

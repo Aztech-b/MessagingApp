@@ -11,8 +11,7 @@ function App() {
     const [unreadMessages, setUnreadMessages] = useState();
     const navigate = useNavigate();
 
-    // User
-    useEffect(() => {
+    useEffect(function GetUserData() {
         async function GetUser() {
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/`, {
@@ -33,7 +32,6 @@ function App() {
                     throw new Error("response is not ok");
                 }
                 const data = await response.json();
-
                 setUser(data);
                 navigate("/chat");
             } catch (error) {
@@ -42,6 +40,15 @@ function App() {
         }
         GetUser();
     }, []);
+
+    useEffect(
+        function joinUserSocketRoom() {
+            const username = { username: user ? user.username : null };
+            socket.emit("joinUser", username);
+            return () => socket.emit("leaveUser", username);
+        },
+        [user],
+    );
 
     return (
         <>

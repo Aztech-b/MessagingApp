@@ -6,48 +6,48 @@ import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
+import { EVENT } from "../../../shared/socketEvents.js";
+import { useForm } from "@mantine/form";
 
 function ChatBar() {
     const { chats, addChat } = useChatContext();
     const { user } = useUserContext();
-    const [newChatName, setNewChatName] = useState("");
-    const [chatMembers, setChatMembers] = useState("");
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
     const { id } = useParams();
+    const form = useForm({ initialValues: { chatMembers: "", title: "" } });
 
-    // debugger;
+    useEffect(() => {
+        function addNewChat(data) {
+            console.log(data);
+            addChat(data);
+        }
+        socket.on(EVENT.CHAT_CREATED, addNewChat);
+        return () => socket.off(EVENT.CHAT_CREATED, addNewChat);
+    });
     return (
         <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
                 <Stack gap={"xl"}>
-                    <Stack gap={"xs"}>
-                        <TextInput
-                            label="member username: "
-                            onChange={(e) => {
-                                setChatMembers([e.target.value]);
-                            }}
-                        ></TextInput>
-                        <TextInput
-                            label="Chat Name: "
-                            onChange={(e) => {
-                                setNewChatName(e.target.value);
-                            }}
-                        ></TextInput>
-                    </Stack>
-                    <Button
-                        onClick={async (e) => {
-                            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
-                                method: "POST",
-                                credentials: "include",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ title: newChatName, members: chatMembers }),
-                            });
-                            const data = await response.json();
-                            addChat({ id: data.id, title: data.title });
-                        }}
+                    <form
+                        onSubmit={form.onSubmit((values) => {
+                            const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
+                            socket.emit(EVENT.CHAT_CREATE, transformed);
+                        })}
                     >
-                        Create New Chat
-                    </Button>
+                        <Stack gap={"xs"}>
+                            <TextInput
+                                label="member username: "
+                                {...form.getInputProps("chatMembers")}
+                                key={form.key("chatMembers")}
+                            ></TextInput>
+                            <TextInput
+                                {...form.getInputProps("title")}
+                                key={form.key("title")}
+                                label="Chat Name: "
+                            ></TextInput>
+                        </Stack>
+                        <Button type="submit">Create New Chat</Button>
+                    </form>
                 </Stack>
             </Modal>
             {chats?.length !== 0

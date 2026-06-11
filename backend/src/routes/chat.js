@@ -5,7 +5,7 @@ import { GetLatestAllReadMessageId } from "../controllers/chat.controller.js";
 const chatRouter = Router();
 
 chatRouter.post("/", async (req, res) => {
-    const { title, members } = req.body;
+    const { title, chatMember } = req.body;
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
