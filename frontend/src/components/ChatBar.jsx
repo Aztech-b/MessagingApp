@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useNavigate } from "react-router";
 import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton, Menu, BackgroundImage } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
@@ -107,6 +107,8 @@ function ChatBarItem({ data, icon }) {
 }
 
 function ContextMenu({ id }) {
+    const navigate = useNavigate();
+
     return (
         <>
             <Menu classNames={{ dropdown: styles.dropdown, item: styles.item }}>
@@ -137,6 +139,7 @@ function ContextMenu({ id }) {
                             event.preventDefault();
                             event.stopPropagation();
                             socket.emit(EVENT.CHAT.DELETE, { chatId: id });
+                            navigate("/chat");
                         }}
                     >
                         Delete
