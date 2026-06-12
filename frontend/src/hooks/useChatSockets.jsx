@@ -1,9 +1,11 @@
 import socket from "../components/socket";
 import { useEffect } from "react";
 import { EVENT } from "../../../shared/socketEvents.js";
+import { useNavigate } from "react-router";
 /** @typedef {import("../components/types.js").newMessageData} */
 
 function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
+    const navigate = useNavigate();
     useEffect(
         function JoinChatSocketRooms() {
             if (!chats || chats.length === 0) {
@@ -44,6 +46,7 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
     useEffect(function DeleteChat() {
         function _deleteChat(data) {
             deleteChat(data);
+            navigate("/chat");
         }
         socket.on(EVENT.CHAT.DELETED, _deleteChat);
         return () => {

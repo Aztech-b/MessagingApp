@@ -139,7 +139,6 @@ function ContextMenu({ id }) {
                             event.preventDefault();
                             event.stopPropagation();
                             socket.emit(EVENT.CHAT.DELETE, { chatId: id });
-                            navigate("/chat");
                         }}
                     >
                         Delete
