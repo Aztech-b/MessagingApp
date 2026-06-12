@@ -3,8 +3,9 @@ import { useUserContext, useChatContext } from "../components/Context";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router";
 import socket from "../components/socket";
+import { EVENT } from "../../../shared/socketEvents";
 
-function useCurrentMessages(chatId) {
+function useCurrentMessages(chatId, user) {
     /**
      * @type {[{ color: string, user: { username: string } }[]]}
      */
@@ -18,8 +19,6 @@ function useCurrentMessages(chatId) {
 
     const lastMessageId = useRef(0);
     const scrollContainer = useRef();
-
-    const { user } = useUserContext();
     const navigate = useNavigate();
 
     function IsNearBottom() {
@@ -28,60 +27,48 @@ function useCurrentMessages(chatId) {
         return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
     }
 
-    // useEffect(
-    //     function SetLastMessageId() {
-    //         if (messages.length > 0) {
-    //             lastMessageId.current = messages[messages.length - 1].id;
-    //         }
-    //     },
-    //     [messages],
-    // );
+    useEffect(
+        function OnClientReadMessage() {
+            if (!isBottom) {
+                return;
+            }
+            if (messages[messages.length - 1]?.author?.username === user?.username) {
+                return;
+            }
 
-    // useEffect(
-    //     function OnClientReadMessage() {
-    //         if (!isBottom) {
-    //             return;
-    //         }
-    //         if (lastReadMessageId === lastMessageId.current) {
-    //             return;
-    //         }
-    //         if (messages[messages.length - 1]?.author?.username === user?.username) {
-    //             return;
-    //         }
+            socket.emit(
+                EVENT.MESSAGE.READ,
+                { messageId: messages[messages.length - 1].id, chatId, username: user.username },
+                () => {
+                    setLastReadMessage(chatId, lastMessageId.current, true);
+                },
+            );
+        },
+        [isBottom, messages],
+    );
 
-    //         socket.emit(
-    //             "readMessage",
-    //             { messageId: messages[messages.length - 1].id, chatId, username: user.username },
-    //             () => {
-    //                 setLastReadMessage(chatId, lastMessageId.current, true);
-    //             },
-    //         );
-    //     },
-    //     [isBottom, messages],
-    // );
+    useEffect(
+        function OnOurMessageIsRead() {
+            if (!socket || !user) {
+                return;
+            }
+            function handleRead(data) {
+                setMessages((prev) => {
+                    return prev.map((message) => {
+                        return message.id <= data.messageId && message.author.username === user.username
+                            ? { ...message, status: "read" }
+                            : message;
+                    });
+                });
+            }
 
-    // useEffect(
-    //     function OnOurMessageIsRead() {
-    //         if (!socket || !user) {
-    //             return;
-    //         }
-    //         function handleRead(data) {
-    //             setMessages((prev) => {
-    //                 return prev.map((message) => {
-    //                     return message.id <= data.messageId && message.author.username === user.username
-    //                         ? { ...message, status: "read" }
-    //                         : message;
-    //                 });
-    //             });
-    //         }
-
-    //         socket.on("everyoneReadMessage", handleRead);
-    //         return () => {
-    //             socket.off("everyoneReadMessage", handleRead);
-    //         };
-    //     },
-    //     [socket, user],
-    // );
+            socket.on(EVENT.MESSAGE.EVERYONE_READ, handleRead);
+            return () => {
+                socket.off(EVENT.MESSAGE.EVERYONE_READ, handleRead);
+            };
+        },
+        [socket, user],
+    );
 
     useEffect(
         function FetchData() {
@@ -133,7 +120,7 @@ function useCurrentMessages(chatId) {
         [chatId, user],
     );
 
-    return { messages, setMessages, members, lastReadMessages };
+    return { messages, setMessages, members, lastReadMessages, setIsBottom };
 }
 
 export default useCurrentMessages;

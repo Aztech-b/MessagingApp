@@ -2,7 +2,7 @@ import { EVENT } from "../../../shared/socketEvents.js";
 import prisma from "../../lib/prisma.js";
 
 function registerMessageSockets(io, socket) {
-    socket.on("readMessage", async (data, callback) => {
+    socket.on(EVENT.MESSAGE.READ, async (data, callback) => {
         if (callback) {
             callback();
         }
@@ -18,7 +18,7 @@ function registerMessageSockets(io, socket) {
         });
         lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
         if (lastReadMessages[0].lastReadMessageId >= data.messageId) {
-            socket.to(`chat:${Number(data.chatId)}`).emit("everyoneReadMessage", { messageId: data.messageId });
+            socket.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.EVERYONE_READ, { messageId: data.messageId });
         }
     });
 

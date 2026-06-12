@@ -19,8 +19,7 @@ import useCurrentMessagesSockets from "../hooks/useCurrentMessagesSockets.jsx";
 function Chat() {
     const chatId = Number(useParams().id);
     const { user } = useUserContext();
-    const { messages, members, setMessages } = useCurrentMessages(chatId);
-    const [isBottom, setIsBottom] = useState(true);
+    const { messages, members, setMessages, isBottom, setIsBottom } = useCurrentMessages(chatId, user);
     const { shouldAutoScroll, autoScroll, scrollContainer } = useScroll();
     useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContainer, setMessages);
 

@@ -4,6 +4,7 @@ import styles from "../styles/chat.module.css";
 import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 import { useParams } from "react-router";
 import { useUserContext } from "./Context";
+import { EVENT } from "../../../shared/socketEvents";
 
 /**
  *
@@ -31,13 +32,14 @@ function Message({ data, colors, extended, ref }) {
     }, [status]);
 
     useEffect(() => {
-        socket.on("readMessage", (data) => {
+        function setRead(data) {
             if (data.messageId <= data.id) {
                 setStatus("read");
             }
-        });
+        }
+        socket.on(EVENT.MESSAGE.READ, setRead);
         return () => {
-            socket.off("readMessage");
+            socket.off(EVENT.MESSAGE.READ, setRead);
         };
     }, []);
     let authorStyle;

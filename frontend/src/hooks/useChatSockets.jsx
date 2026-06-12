@@ -35,7 +35,6 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
 
     useEffect(function AddNewChat() {
         function addNewChat(data) {
-            console.log(data);
             addChat(data);
         }
         socket.on(EVENT.CHAT.CREATED, addNewChat);

@@ -21,11 +21,10 @@ function ChatInput({ setMessages, shouldAutoScroll }) {
         const content = typedMessage;
         const tempId = crypto.randomUUID();
         socket.emit(EVENT.MESSAGE.SEND, { content, chatId }, (data) => {
-            console.log("new message sent");
             setMessages((prev) =>
                 prev.map((message, index) => {
                     if (message.id === tempId) {
-                        socket.emit("readMessage", { username: user.username, chatId, messageId: data.id });
+                        socket.emit(EVENT.MESSAGE.READ, { username: user.username, chatId, messageId: data.id });
 
                         return { ...message, status: "sent", id: data.id };
                     }

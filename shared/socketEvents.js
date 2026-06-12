@@ -8,7 +8,12 @@ export const EVENT = {
         LEAVE: "chat:leave",
     },
 
-    MESSAGE: { SEND: "message:send", RECEIVED: "message:received" },
+    MESSAGE: {
+        SEND: "message:send",
+        RECEIVED: "message:received",
+        READ: "message:read",
+        EVERYONE_READ: "message:everyoneRead",
+    },
 
     USER: { JOIN: "user:join", LEAVE: "user:leave" },
 };
