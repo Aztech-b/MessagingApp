@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, forwardRef } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import styles from "../styles/chat.module.css";
 import { Button, TextInput } from "@mantine/core";
 import socket from "./socket.js";
@@ -26,7 +26,6 @@ function Chat() {
 
     const { handleScroll } = useMessageOptimization(scrollContainer, messages, setMessages, chatId);
     const lastMessageRef = useRef(null);
-    const navigate = useNavigate();
 
     return (
         <>

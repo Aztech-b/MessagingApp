@@ -14,7 +14,7 @@ function Home() {
             <div className={styles.main}>
                 <SideBar></SideBar>
                 <div className={styles.home}>
-                    <ChatTab></ChatTab>
+                    <Outlet></Outlet>
                 </div>
             </div>
         );

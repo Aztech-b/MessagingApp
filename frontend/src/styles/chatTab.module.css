@@ -32,3 +32,11 @@
     margin-right: 12px;
     color: var(--text-description);
 }
+
+.container {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    height: 100vh;
+    background-color: var(--accent-bg);
+    border-collapse: collapse;
+}

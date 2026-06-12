@@ -29,7 +29,7 @@ function useUser() {
                 }
                 const data = await response.json();
                 setUser(data);
-                navigate("/chat");
+                navigate("/app/chat");
             } catch (error) {
                 navigate("/error");
             }

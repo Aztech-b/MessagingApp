@@ -1,5 +1,5 @@
 import Register from "./components/Register";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import socket from "./components/socket.js";
 import { ReceiptPoundSterlingIcon } from "lucide-react";
@@ -10,7 +10,6 @@ function App() {
     const { user } = useUser();
 
     const [unreadMessages, setUnreadMessages] = useState();
-    const navigate = useNavigate();
 
     return (
         <>

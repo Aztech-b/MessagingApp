@@ -15,12 +15,12 @@ function Sidebar() {
                 <Icon size={52} color={iconColor}></Icon>
             </div>
             <Divider w={"80%"} size={"xs"} my={"md"} color="gray"></Divider>
-            <Tab href={"/chat"} title={"Chats"}>
+            <Tab href={"/app/chat"} title={"Chats"}>
                 <MessageCircle size={24} color="white" />
             </Tab>
-            <NotReadyTab href={"/profile"} title={"Profile"}>
+            <Tab href={"/app/profile"} title={"Profile"}>
                 <CircleUserRound size={24} color="white" />
-            </NotReadyTab>
+            </Tab>
             <NotReadyTab title={"Starred"} href={"/starred"}>
                 <Star color="#ffffff" />
             </NotReadyTab>

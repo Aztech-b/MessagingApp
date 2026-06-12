@@ -40,7 +40,7 @@ function Register() {
             data = await response.json();
             if (response.status === 200) {
                 window.location.reload();
-                navigate("/chat");
+                navigate("/app/chat");
             }
         } catch (error) {}
     };

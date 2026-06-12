@@ -29,10 +29,12 @@ function ChatTab() {
             <ChatContextProvider
                 value={{ deleteChat, chats, unreadCount, lastReadMessages, setLastReadMessage, addChat, setUsernames }}
             >
-                <ChatBar></ChatBar>
-                <div className={styles.messages}>
-                    <TopBar chatName={activeChatName} usernames={usernames} />
-                    <Outlet context={{ setActiveChatName }}></Outlet>
+                <div className={styles.container}>
+                    <ChatBar></ChatBar>
+                    <div className={styles.messages}>
+                        <TopBar chatName={activeChatName} usernames={usernames} />
+                        <Outlet context={{ setActiveChatName }}></Outlet>
+                    </div>
                 </div>
             </ChatContextProvider>
         </>
@@ -40,7 +42,6 @@ function ChatTab() {
 }
 
 function TopBar({ chatName, usernames }) {
-    debugger;
     return (
         <div className={styles.topBar}>
             <p className={styles.chatName}>{chatName}</p>

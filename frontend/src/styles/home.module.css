@@ -1,8 +1,6 @@
 @import "./variables.css";
 
 .home {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
     border-collapse: collapse;
     background-color: var(--accent-bg);
     height: 100vh;

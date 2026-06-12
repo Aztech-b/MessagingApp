@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router";
+import { Link, useParams } from "react-router";
 import {
     Button,
     TextInput,
@@ -179,7 +179,7 @@ function ChatBarItem({ data, icon }) {
             size={24}
             style={{ fontWeight: "bold" }}
         >
-            <Link to={`/chat/${data.id}`} className={styles.chatLink}>
+            <Link to={`/app/chat/${data.id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
                     <div className={styles.content}>
                         {icon ?? (
@@ -197,8 +197,6 @@ function ChatBarItem({ data, icon }) {
 }
 
 function ContextMenu({ id }) {
-    const navigate = useNavigate();
-
     return (
         <>
             <Menu classNames={{ dropdown: styles.dropdown, item: styles.item }}>

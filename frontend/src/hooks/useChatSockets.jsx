@@ -6,7 +6,7 @@ import { useChatContext } from "../components/Context.jsx";
 
 /** @typedef {import("../components/types.js").newMessageData} */
 
-function useChatSockets(chats, addChat, deleteChat, addNewMessage, setMembers) {
+function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
     const navigate = useNavigate();
 
     useEffect(
@@ -39,10 +39,7 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage, setMembers) {
 
     useEffect(function AddNewChat() {
         function addNewChat(data) {
-            debugger;
-            console.log("test");
             addChat(data);
-            setMembers(data.members);
         }
         socket.on(EVENT.CHAT.CREATED, addNewChat);
         return () => socket.off(EVENT.CHAT.CREATED, addNewChat);
@@ -51,7 +48,7 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage, setMembers) {
     useEffect(function DeleteChat() {
         function _deleteChat(data) {
             deleteChat(data);
-            navigate("/chat");
+            navigate("/app/chat");
         }
         socket.on(EVENT.CHAT.DELETED, _deleteChat);
         return () => {

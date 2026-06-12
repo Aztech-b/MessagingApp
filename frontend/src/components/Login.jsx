@@ -48,7 +48,7 @@ function Login() {
             data = await response.json();
             window.location.reload();
             if (data.username) {
-                navigate("/chat");
+                navigate("/app/chat");
             }
         } catch (error) {
             console.error(error);

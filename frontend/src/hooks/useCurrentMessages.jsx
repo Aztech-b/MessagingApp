@@ -85,7 +85,7 @@ function useCurrentMessages(chatId, user) {
                     });
 
                     if (response.status === 404 || response.status === 401) {
-                        navigate("/chat");
+                        navigate("/app/chat");
                         return;
                     }
 
