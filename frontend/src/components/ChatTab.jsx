@@ -18,20 +18,20 @@ import useActiveChat from "../hooks/useActiveChat.jsx";
 
 function ChatTab() {
     const chatId = Number(useParams().id);
-    const { deleteChat, chats, addChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount } =
+    const { chats, deleteChat, addChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount } =
         useChats(chatId);
-    const { activeChatName, setActiveChatName } = useActiveChat();
+    const { activeChatName, setActiveChatName, usernames, setUsernames } = useActiveChat();
     const location = useLocation();
     useChatSockets(chats, addChat, deleteChat, addNewMessage);
 
     return (
         <>
             <ChatContextProvider
-                value={{ deleteChat, chats, unreadCount, lastReadMessages, setLastReadMessage, addChat }}
+                value={{ deleteChat, chats, unreadCount, lastReadMessages, setLastReadMessage, addChat, setUsernames }}
             >
                 <ChatBar></ChatBar>
                 <div className={styles.messages}>
-                    <TopBar chatName={activeChatName} />
+                    <TopBar chatName={activeChatName} usernames={usernames} />
                     <Outlet context={{ setActiveChatName }}></Outlet>
                 </div>
             </ChatContextProvider>
@@ -39,10 +39,16 @@ function ChatTab() {
     );
 }
 
-function TopBar({ chatName }) {
+function TopBar({ chatName, usernames }) {
+    debugger;
     return (
         <div className={styles.topBar}>
-            <p className="chatName">{chatName}</p>
+            <p className={styles.chatName}>{chatName}</p>
+            <div className={styles.usernamesContainer}>
+                {usernames?.map((username) => (
+                    <p key={username}>{username}</p>
+                ))}
+            </div>
         </div>
     );
 }

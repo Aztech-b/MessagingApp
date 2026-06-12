@@ -23,7 +23,7 @@ chatRouter.post("/", async (req, res) => {
         res.json({ status: "NO_SUCH_USER" });
         return;
     }
-    res.json(newChat);
+    res.json({ ...newChat, members: users });
 });
 
 chatRouter.get("/", async (req, res) => {

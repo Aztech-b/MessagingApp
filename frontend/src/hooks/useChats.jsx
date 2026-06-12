@@ -54,7 +54,6 @@ function useChats(activeChatId) {
     };
 
     const deleteChat = (chatData) => {
-        debugger;
         setChats((prev) => prev.filter((chat) => chat.id !== chatData.chatId));
     };
 

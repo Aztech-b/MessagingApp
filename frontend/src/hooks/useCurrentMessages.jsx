@@ -5,6 +5,8 @@ import { useOutletContext } from "react-router";
 import socket from "../components/socket";
 import { EVENT } from "../../../shared/socketEvents";
 
+/** @typedef {import("../components/types.js").ChatData} ChatData */
+
 function useCurrentMessages(chatId, user) {
     /**
      * @type {[{ color: string, user: { username: string } }[]]}
@@ -14,7 +16,7 @@ function useCurrentMessages(chatId, user) {
     const isBottom = useRef(false);
     const shouldAutoScroll = useRef(true);
 
-    const { lastReadMessages, setLastReadMessage } = useChatContext();
+    const { setUsernames, lastReadMessages, setLastReadMessage } = useChatContext();
     const setActiveChatName = useOutletContext().setActiveChatName;
 
     const lastMessageId = useRef(0);
@@ -23,7 +25,6 @@ function useCurrentMessages(chatId, user) {
 
     function IsNearBottom() {
         const container = scrollContainer.current;
-
         return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
     }
 
@@ -37,7 +38,6 @@ function useCurrentMessages(chatId, user) {
             }
 
             console.log(messages);
-            debugger;
             socket.emit(
                 EVENT.MESSAGE.READ,
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
@@ -55,8 +55,6 @@ function useCurrentMessages(chatId, user) {
                 return;
             }
             function handleRead(data) {
-                console.log("every");
-                console.log(data);
                 setMessages((prev) => {
                     return prev.map((message) => {
                         return message.id <= data.messageId && message.author.username === user.username
@@ -93,6 +91,8 @@ function useCurrentMessages(chatId, user) {
 
                     /** @type {ChatData} */
                     let data = await response.json();
+                    console.log(data);
+                    setUsernames(data.members.map((member) => member.user.username));
                     const messagesFromDatabase = data.messages.map((message) => {
                         let status = "";
                         if (message.author.username === user?.username) {
@@ -103,7 +103,6 @@ function useCurrentMessages(chatId, user) {
                     if (!response.ok) {
                         throw new Error("response is not ok");
                     }
-                    debugger;
                     setMessages(
                         messagesFromDatabase.map((message) => {
                             if (data.allReadMessageId >= message.id && message.author.username === user.username) {
