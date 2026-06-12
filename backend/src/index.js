@@ -35,17 +35,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-io.use((socket, next) => {
-    sessionMiddleware(socket.request, {}, next);
-});
-io.use((socket, next) => {
-    passport.initialize()(socket.request, {}, () => {
-        passport.session()(socket.request, {}, () => {
-            next();
-        });
-    });
-});
-
 // Routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);

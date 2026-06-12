@@ -7,11 +7,6 @@ import registerMessageSockets from "./message.socket.js";
 // TODO: validate if user is in chat and can send messages
 function registerSockets(io) {
     io.on("connection", (socket) => {
-        if (!socket.request.user) {
-            socket.disconnect(true);
-            return;
-        }
-
         registerUserSockets(io, socket);
         registerChatSockets(io, socket);
         registerMessageSockets(io, socket);

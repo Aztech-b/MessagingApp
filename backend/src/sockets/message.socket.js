@@ -11,20 +11,20 @@ function registerMessageSockets(io, socket) {
             where: { userId_chatId: { userId: userId.id, chatId: data.chatId } },
             data: { lastReadMessageId: data.messageId },
         });
-
         const lastReadMessages = await prisma.chatMember.findMany({
             where: { chatId: data.chatId },
             select: { lastReadMessageId: true },
         });
         lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
         if (lastReadMessages[0].lastReadMessageId >= data.messageId) {
+            console.log(data);
             socket.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.EVERYONE_READ, { messageId: data.messageId });
         }
     });
 
     socket.on(EVENT.MESSAGE.SEND, async (data, callback) => {
-        const { content, chatId } = data;
-        const userId = socket.request.user.id;
+        const { content, chatId, username } = data;
+        const { id: userId } = await prisma.user.findUnique({ where: { username }, select: { id: true } });
         const newMessage = await prisma.message.create({
             data: { content, author: { connect: { id: userId } }, chat: { connect: { id: Number(chatId) } } },
             omit: { authorId: true },
@@ -37,7 +37,7 @@ function registerMessageSockets(io, socket) {
         /**
          * @type {{id: number, content: string, chatId: number, sent: string, author: {username: string}}}
          */
-        const sendData = { ...newMessage, author: { username: socket.request.user.username } };
+        const sendData = { ...newMessage, author: { username } };
         io.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.RECEIVED, sendData);
         callback(sendData);
     });

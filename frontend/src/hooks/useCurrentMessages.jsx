@@ -11,7 +11,7 @@ function useCurrentMessages(chatId, user) {
      */
     const [members, setMembers] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [isBottom, setIsBottom] = useState(false);
+    const isBottom = useRef(false);
     const shouldAutoScroll = useRef(true);
 
     const { lastReadMessages, setLastReadMessage } = useChatContext();
@@ -32,11 +32,12 @@ function useCurrentMessages(chatId, user) {
             if (!isBottom) {
                 return;
             }
-            if (messages[messages.length - 1]?.author?.username === user?.username) {
+            if (messages.length === 0 || messages[messages.length - 1]?.author?.username === user?.username) {
                 return;
             }
 
             console.log(messages);
+            debugger;
             socket.emit(
                 EVENT.MESSAGE.READ,
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
@@ -45,7 +46,7 @@ function useCurrentMessages(chatId, user) {
                 },
             );
         },
-        [isBottom, messages],
+        [isBottom.current, messages],
     );
 
     useEffect(
@@ -54,6 +55,8 @@ function useCurrentMessages(chatId, user) {
                 return;
             }
             function handleRead(data) {
+                console.log("every");
+                console.log(data);
                 setMessages((prev) => {
                     return prev.map((message) => {
                         return message.id <= data.messageId && message.author.username === user.username
@@ -90,7 +93,6 @@ function useCurrentMessages(chatId, user) {
 
                     /** @type {ChatData} */
                     let data = await response.json();
-                    console.log(data);
                     const messagesFromDatabase = data.messages.map((message) => {
                         let status = "";
                         if (message.author.username === user?.username) {
@@ -101,6 +103,7 @@ function useCurrentMessages(chatId, user) {
                     if (!response.ok) {
                         throw new Error("response is not ok");
                     }
+                    debugger;
                     setMessages(
                         messagesFromDatabase.map((message) => {
                             if (data.allReadMessageId >= message.id && message.author.username === user.username) {
@@ -122,7 +125,7 @@ function useCurrentMessages(chatId, user) {
         [chatId, user],
     );
 
-    return { messages, setMessages, members, lastReadMessages, setIsBottom };
+    return { messages, setMessages, members, lastReadMessages, isBottom };
 }
 
 export default useCurrentMessages;

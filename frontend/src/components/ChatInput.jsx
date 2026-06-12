@@ -20,7 +20,7 @@ function ChatInput({ setMessages, shouldAutoScroll }) {
         shouldAutoScroll.current = true;
         const content = typedMessage;
         const tempId = crypto.randomUUID();
-        socket.emit(EVENT.MESSAGE.SEND, { content, chatId }, (data) => {
+        socket.emit(EVENT.MESSAGE.SEND, { content, chatId, username: user.username }, (data) => {
             setMessages((prev) =>
                 prev.map((message, index) => {
                     if (message.id === tempId) {

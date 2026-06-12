@@ -20,7 +20,7 @@ import useMessageOptimization from "../hooks/useMessageOptimization.jsx";
 function Chat() {
     const chatId = Number(useParams().id);
     const { user } = useUserContext();
-    const { messages, members, setMessages, isBottom, setIsBottom } = useCurrentMessages(chatId, user);
+    const { messages, members, setMessages, isBottom } = useCurrentMessages(chatId, user);
     const { shouldAutoScroll, autoScroll, scrollContainer } = useScroll();
     useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContainer, setMessages);
 
@@ -36,10 +36,10 @@ function Chat() {
                 onScroll={() => {
                     handleScroll();
                     if (!lastMessageRef.current) return;
-                    setIsBottom(
+                    isBottom.current =
                         lastMessageRef.current.getBoundingClientRect().top <=
-                            scrollContainer.current.getBoundingClientRect().bottom,
-                    );
+                        scrollContainer.current.getBoundingClientRect().bottom;
+                    // did not want to write something like setIsBottom(that if condition) as isBottom gets rerendered every scroll(seems like a bit expensive)
                 }}
             >
                 <div className={styles.chat}>
