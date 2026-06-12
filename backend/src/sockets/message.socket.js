@@ -1,3 +1,4 @@
+import { EVENT } from "../../../shared/socketEvents.js";
 import prisma from "../../lib/prisma.js";
 
 function registerMessageSockets(io, socket) {
@@ -21,7 +22,7 @@ function registerMessageSockets(io, socket) {
         }
     });
 
-    socket.on("message", async (data, callback) => {
+    socket.on(EVENT.MESSAGE.SEND, async (data, callback) => {
         const { content, chatId } = data;
         const userId = socket.request.user.id;
         const newMessage = await prisma.message.create({
@@ -37,7 +38,7 @@ function registerMessageSockets(io, socket) {
          * @type {{id: number, content: string, chatId: number, sent: string, author: {username: string}}}
          */
         const sendData = { ...newMessage, author: { username: socket.request.user.username } };
-        io.to(`chat:${Number(data.chatId)}`).emit("newMessage", sendData);
+        io.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.RECEIVED, sendData);
         callback(sendData);
     });
 }

@@ -26,10 +26,11 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
     useEffect(function NewMessage() {
         /** @param {newMessageData} data */
         function handleNewMessage(data) {
+            debugger;
             addNewMessage(data);
         }
-        socket.on("newMessage", handleNewMessage);
-        return () => socket.off("newMessage", handleNewMessage);
+        socket.on(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+        return () => socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
     }, []);
 
     useEffect(function AddNewChat() {

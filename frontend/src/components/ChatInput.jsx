@@ -4,8 +4,9 @@ import { TextInput, ActionIcon, Textarea } from "@mantine/core";
 import socket from "./socket.js";
 import { useParams } from "react-router";
 import { useUserContext } from "./Context.jsx";
+import { EVENT } from "../../../shared/socketEvents.js";
 
-function ChatInput({ setMessages, shouldScrollRef }) {
+function ChatInput({ setMessages, shouldAutoScroll }) {
     const [typedMessage, setTypedMessage] = useState("");
     const { user } = useUserContext();
     const [canSend, setCanSend] = useState(false);
@@ -16,10 +17,11 @@ function ChatInput({ setMessages, shouldScrollRef }) {
             return;
         }
         setTypedMessage("");
-        shouldScrollRef.current = true;
+        shouldAutoScroll.current = true;
         const content = typedMessage;
         const tempId = crypto.randomUUID();
-        socket.emit("message", { content, chatId }, (data) => {
+        socket.emit(EVENT.MESSAGE.SEND, { content, chatId }, (data) => {
+            console.log("new message sent");
             setMessages((prev) =>
                 prev.map((message, index) => {
                     if (message.id === tempId) {

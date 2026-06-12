@@ -77,6 +77,7 @@ chatRouter.get("/:id", async (req, res) => {
                 members: { select: { color: true, user: { select: { username: true } } } },
             },
         });
+        chat.messages.reverse();
         const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId });
         res.json({ ...chat, allReadMessageId, chatMember });
         return;
