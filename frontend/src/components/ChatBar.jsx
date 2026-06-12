@@ -71,7 +71,10 @@ function ChatBar() {
                 <Stack gap={"xl"}>
                     <form
                         onSubmit={form.onSubmit((values) => {
-                            const transformed = { ...values, chatMember: [values.chatMember, ...user.username] };
+                            const transformed = {
+                                title: values.title,
+                                chatMembers: [values.chatMember, user.username],
+                            };
                             socket.emit(EVENT.CHAT.CREATE, transformed);
                         })}
                     >
@@ -84,8 +87,8 @@ function ChatBar() {
                             <Combobox
                                 store={combobox}
                                 onOptionSubmit={(value) => {
-                                    setQuery(value);
                                     form.setFieldValue("chatMember", value);
+                                    setQuery(value);
                                     console.log(value);
 
                                     combobox.closeDropdown();
