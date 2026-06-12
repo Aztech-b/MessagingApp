@@ -15,6 +15,7 @@ function useUserSearch(query) {
             });
 
             const data = await response.json();
+
             setResults(data);
         }, 250);
 

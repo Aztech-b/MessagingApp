@@ -16,10 +16,17 @@ function registerChatSockets(io, socket) {
             where: { username: { in: chatMembers } },
             select: { username: true, id: true },
         });
+        console.log(users);
+        if (users.length === 1) {
+            // 1 is the client that emitted the event, the other one is someone that the emitter wants to chat with
+            socket.emit(EVENT.CHAT.ERROR, { status: "USER_NOT_FOUND" }); // users.length must not be other than 2
+            return;
+        }
         const newChat = await prisma.chat.create({
             data: { title, members: { create: [...users.map((user) => ({ userId: user.id }))] } },
             select: { id: true, title: true },
         });
+        console.log("new chat to all users");
         users.forEach((user) => {
             io.to(`user:${user.username}`).emit(EVENT.CHAT.CREATED, newChat);
         });

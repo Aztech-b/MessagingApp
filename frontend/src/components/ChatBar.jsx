@@ -11,6 +11,7 @@ import {
     Menu,
     Combobox,
     useCombobox,
+    Alert,
 } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
@@ -20,18 +21,21 @@ import socket from "./socket";
 import { useForm } from "@mantine/form";
 import { EVENT } from "../../../shared/socketEvents";
 import useUserSearch from "../hooks/useUserSearch";
+import { CircleX } from "lucide-react";
 
 function ChatBar() {
     const { chats } = useChatContext();
     const { user } = useUserContext();
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
     const { id } = useParams();
-    const form = useForm({ initialValues: { chatMembers: "", title: "" } });
+    const form = useForm({ initialValues: { chatMember: "", title: "" } });
 
     const combobox = useCombobox({ onDropdownClose: () => combobox.resetSelectedOption() });
     const [searchLoading, { open: openLoading, close: closeLoading }] = useDisclosure();
     const [query, setQuery] = useState("");
-    const { results } = useUserSearch(query);
+    const [isError, { open: openError, close: closeError }] = useDisclosure();
+    const [error, setError] = useState(null);
+    const { results } = useUserSearch(query, setError, openError);
 
     const shouldFilterOptions = !results.some((item) => item === query);
     const filteredOptions = shouldFilterOptions
@@ -43,9 +47,23 @@ function ChatBar() {
             {result}
         </Combobox.Option>
     ));
+
     useEffect(() => {
         combobox.updateSelectedOptionIndex();
     }, [options]);
+
+    useEffect(() => {
+        socket.on(EVENT.CHAT.ERROR, (data) => {
+            setError(data.status);
+            openError();
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.on(EVENT.CHAT.CREATED, (data) => {
+            close();
+        });
+    });
 
     return (
         <div className={styles.chats}>
@@ -53,9 +71,8 @@ function ChatBar() {
                 <Stack gap={"xl"}>
                     <form
                         onSubmit={form.onSubmit((values) => {
-                            const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
+                            const transformed = { ...values, chatMember: [values.chatMember, ...user.username] };
                             socket.emit(EVENT.CHAT.CREATE, transformed);
-                            close();
                         })}
                     >
                         <Stack gap={"xs"} mb={"lg"}>
@@ -68,6 +85,9 @@ function ChatBar() {
                                 store={combobox}
                                 onOptionSubmit={(value) => {
                                     setQuery(value);
+                                    form.setFieldValue("chatMember", value);
+                                    console.log(value);
+
                                     combobox.closeDropdown();
                                 }}
                             >
@@ -96,6 +116,19 @@ function ChatBar() {
                             </Combobox>
                         </Stack>
                         <Button type="submit">Create New Chat</Button>
+                        {error && (
+                            <Alert
+                                onClose={() => {
+                                    setError(null);
+                                }}
+                                withCloseButton={true}
+                                color="red"
+                                icon={<CircleX />}
+                                title="ERROR"
+                            >
+                                {error}
+                            </Alert>
+                        )}
                     </form>
                 </Stack>
             </Modal>

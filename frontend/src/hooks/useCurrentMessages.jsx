@@ -36,6 +36,7 @@ function useCurrentMessages(chatId, user) {
                 return;
             }
 
+            console.log(messages);
             socket.emit(
                 EVENT.MESSAGE.READ,
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
@@ -89,6 +90,7 @@ function useCurrentMessages(chatId, user) {
 
                     /** @type {ChatData} */
                     let data = await response.json();
+                    console.log(data);
                     const messagesFromDatabase = data.messages.map((message) => {
                         let status = "";
                         if (message.author.username === user?.username) {

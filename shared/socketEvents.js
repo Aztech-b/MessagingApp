@@ -6,6 +6,7 @@ export const EVENT = {
         DELETED: "chat:deleted",
         JOIN: "chat:join",
         LEAVE: "chat:leave",
+        ERROR: "chat:error",
     },
 
     MESSAGE: {

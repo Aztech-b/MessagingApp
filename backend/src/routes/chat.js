@@ -19,6 +19,10 @@ chatRouter.post("/", async (req, res) => {
             },
         },
     });
+    if (users.length === 0) {
+        res.json({ status: "NO_SUCH_USER" });
+        return;
+    }
     res.json(newChat);
 });
 
@@ -80,10 +84,6 @@ chatRouter.get("/:id", async (req, res) => {
         });
         chat.messages.reverse();
         const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId });
-        if (chat.messages.length === 0) {
-            res.json({ status: "NO_MORE_MESSAGES" });
-            return;
-        }
         res.json({ ...chat, allReadMessageId, chatMember });
         return;
     } catch (error) {
