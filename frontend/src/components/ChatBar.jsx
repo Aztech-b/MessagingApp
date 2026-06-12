@@ -114,7 +114,11 @@ function ChatBar() {
                                     />
                                 </Combobox.Target>
                                 <Combobox.Dropdown>
-                                    <Combobox.Options>{options}</Combobox.Options>
+                                    {options.length === 0 ? (
+                                        <Combobox.Empty>Search the username</Combobox.Empty>
+                                    ) : (
+                                        <Combobox.Options>{options}</Combobox.Options>
+                                    )}
                                 </Combobox.Dropdown>
                             </Combobox>
                         </Stack>
