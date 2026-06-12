@@ -55,6 +55,7 @@ chatRouter.get("/:id", async (req, res) => {
     const userId = Number(req.user.id);
     const chatId = Number(req.params.id);
     const before = Number(req.query.before);
+    const messageWhere = before ? { id: { lt: before } } : {};
     try {
         const chatMember = await prisma.chatMember.findUnique({
             where: { userId_chatId: { userId, chatId } },
@@ -68,7 +69,7 @@ chatRouter.get("/:id", async (req, res) => {
             where: { id: chatId },
             select: {
                 messages: {
-                    // where: {id: {lt: before}},
+                    where: messageWhere,
                     take: 50,
                     orderBy: { id: "desc" },
                     select: { id: true, content: true, author: { select: { username: true } }, sent: true },
@@ -79,6 +80,10 @@ chatRouter.get("/:id", async (req, res) => {
         });
         chat.messages.reverse();
         const allReadMessageId = await GetLatestAllReadMessageId({ username: req.user.username, chatId });
+        if (chat.messages.length === 0) {
+            res.json({ status: "NO_MORE_MESSAGES" });
+            return;
+        }
         res.json({ ...chat, allReadMessageId, chatMember });
         return;
     } catch (error) {
@@ -88,7 +93,7 @@ chatRouter.get("/:id", async (req, res) => {
     }
 });
 
-// I guess this route is no longer needed as writing to database is handeled by sockets
+// I guess this route is no longer needed as writing to database is handled by sockets
 chatRouter.post("/:id/message", async (req, res, next) => {
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });

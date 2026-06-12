@@ -11,6 +11,7 @@ import useCurrentMessages from "../hooks/useCurrentMessages.jsx";
 import useScroll from "../hooks/useScroll.jsx";
 import { useUserContext } from "./Context.jsx";
 import useCurrentMessagesSockets from "../hooks/useCurrentMessagesSockets.jsx";
+import useMessageOptimization from "../hooks/useMessageOptimization.jsx";
 
 /**
  * @typedef {import("./types.js").ChatData} ChatData
@@ -23,6 +24,7 @@ function Chat() {
     const { shouldAutoScroll, autoScroll, scrollContainer } = useScroll();
     useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContainer, setMessages);
 
+    const { handleScroll } = useMessageOptimization(scrollContainer, messages, setMessages, chatId);
     const lastMessageRef = useRef(null);
     const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ function Chat() {
                 className={styles.messagesContainer}
                 ref={scrollContainer}
                 onScroll={() => {
+                    handleScroll();
                     if (!lastMessageRef.current) return;
                     setIsBottom(
                         lastMessageRef.current.getBoundingClientRect().top <=
