@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router";
-import { Button, TextInput, ActionIcon, Modal, Stack, Indicator, Skeleton, Menu, BackgroundImage } from "@mantine/core";
+import {
+    Button,
+    TextInput,
+    ActionIcon,
+    Modal,
+    Stack,
+    Indicator,
+    Skeleton,
+    Menu,
+    Combobox,
+    useCombobox,
+} from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
 import { UsersRound, Plus } from "lucide-react";
@@ -8,6 +19,7 @@ import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
 import { useForm } from "@mantine/form";
 import { EVENT } from "../../../shared/socketEvents";
+import useUserSearch from "../hooks/useUserSearch";
 
 function ChatBar() {
     const { chats } = useChatContext();
@@ -15,6 +27,25 @@ function ChatBar() {
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
     const { id } = useParams();
     const form = useForm({ initialValues: { chatMembers: "", title: "" } });
+
+    const combobox = useCombobox({ onDropdownClose: () => combobox.resetSelectedOption() });
+    const [searchLoading, { open: openLoading, close: closeLoading }] = useDisclosure();
+    const [query, setQuery] = useState("");
+    const { results } = useUserSearch(query);
+
+    const shouldFilterOptions = !results.some((item) => item === query);
+    const filteredOptions = shouldFilterOptions
+        ? results.filter((item) => item.toLowerCase().includes(query.toLowerCase().trim()))
+        : results;
+
+    const options = results.map((result) => (
+        <Combobox.Option value={result} key={result}>
+            {result}
+        </Combobox.Option>
+    ));
+    useEffect(() => {
+        combobox.updateSelectedOptionIndex();
+    }, [options]);
 
     return (
         <div className={styles.chats}>
@@ -24,19 +55,45 @@ function ChatBar() {
                         onSubmit={form.onSubmit((values) => {
                             const transformed = { ...values, chatMembers: [values.chatMembers, ...[user.username]] };
                             socket.emit(EVENT.CHAT.CREATE, transformed);
+                            close();
                         })}
                     >
-                        <Stack gap={"xs"}>
-                            <TextInput
-                                label="member username: "
-                                {...form.getInputProps("chatMembers")}
-                                key={form.key("chatMembers")}
-                            ></TextInput>
+                        <Stack gap={"xs"} mb={"lg"}>
                             <TextInput
                                 {...form.getInputProps("title")}
                                 key={form.key("title")}
                                 label="Chat Name: "
                             ></TextInput>
+                            <Combobox
+                                store={combobox}
+                                onOptionSubmit={(value) => {
+                                    setQuery(value);
+                                    combobox.closeDropdown();
+                                }}
+                            >
+                                <Combobox.Target>
+                                    <TextInput
+                                        label="User to chat with: "
+                                        placeholder="Type username..."
+                                        value={query}
+                                        onChange={(event) => {
+                                            setQuery(event.target.value);
+                                        }}
+                                        onClick={() => {
+                                            combobox.openDropdown();
+                                        }}
+                                        onFocus={() => {
+                                            combobox.openDropdown();
+                                        }}
+                                        onBlur={() => {
+                                            combobox.closeDropdown();
+                                        }}
+                                    />
+                                </Combobox.Target>
+                                <Combobox.Dropdown>
+                                    <Combobox.Options>{options}</Combobox.Options>
+                                </Combobox.Dropdown>
+                            </Combobox>
                         </Stack>
                         <Button type="submit">Create New Chat</Button>
                     </form>
