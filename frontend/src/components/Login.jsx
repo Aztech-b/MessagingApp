@@ -9,6 +9,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { CircleX } from "lucide-react";
+import { useUserContext } from "./Context";
 
 function Login() {
     const { setUser } = useUserContext();
