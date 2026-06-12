@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 function useScroll() {
-    const shouldAutoScroll = useRef(false);
+    const shouldAutoScroll = useRef(true);
     const autoScrollDummy = useRef(null);
     const scrollContainer = useRef(null);
 
