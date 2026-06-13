@@ -6,13 +6,7 @@ import { EVENT } from "../../../shared/socketEvents.js";
  * @typedef {import("./types.js").newMessageData} newMessageData
  */
 
-function useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContainer, setMessages) {
-    function IsNearBottom() {
-        const container = scrollContainer.current;
-
-        return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
-    }
-
+function useCurrentMessagesSockets(user, chatId, scrollContainer, setMessages) {
     useEffect(
         function OnReceiveNewMessage() {
             /** @param {newMessageData} data */
@@ -20,8 +14,6 @@ function useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContain
                 if (data.chatId !== chatId || data.author.username === user.username) {
                     return;
                 }
-                const shouldScroll = IsNearBottom();
-                shouldAutoScroll.current = shouldScroll;
                 setMessages((prev) => [...prev, { ...data, status: "other" }]);
             }
 
@@ -30,7 +22,7 @@ function useCurrentMessagesSockets(shouldAutoScroll, user, chatId, scrollContain
                 socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
             };
         },
-        [chatId],
+        [chatId, scrollContainer, setMessages, user],
     );
 }
 

@@ -4,28 +4,6 @@ import { GetLatestAllReadMessageId } from "../controllers/chat.controller.js";
 
 const chatRouter = Router();
 
-chatRouter.post("/", async (req, res) => {
-    const { title, chatMember } = req.body;
-    if (!req.isAuthenticated()) {
-        res.status(401).json({ status: "NOT_AUTHENTICATED" });
-        return;
-    }
-    const users = await prisma.user.findMany({ where: { username: { in: members } }, select: { id: true } });
-    const newChat = await prisma.chat.create({
-        data: {
-            title,
-            members: {
-                create: [{ userId: req.user.id, lastReadMessageId: 0 }, ...users.map((user) => ({ userId: user.id }))],
-            },
-        },
-    });
-    if (users.length === 0) {
-        res.json({ status: "NO_SUCH_USER" });
-        return;
-    }
-    res.json({ ...newChat, members: users });
-});
-
 chatRouter.get("/", async (req, res) => {
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
@@ -94,7 +72,7 @@ chatRouter.get("/:id", async (req, res) => {
 });
 
 // I guess this route is no longer needed as writing to database is handled by sockets
-chatRouter.post("/:id/message", async (req, res, next) => {
+chatRouter.post("/:id/message", async (req, res) => {
     if (!req.isAuthenticated()) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;

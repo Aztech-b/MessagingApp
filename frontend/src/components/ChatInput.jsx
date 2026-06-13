@@ -1,41 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SendHorizontal } from "lucide-react";
-import { TextInput, ActionIcon, Textarea } from "@mantine/core";
-import socket from "./socket.js";
-import { useParams } from "react-router";
-import { useUserContext } from "./Context.jsx";
-import { EVENT } from "../../../shared/socketEvents.js";
+import { ActionIcon, Textarea } from "@mantine/core";
 
-function ChatInput({ setMessages, shouldAutoScroll }) {
+function ChatInput({ sendMessage }) {
     const [typedMessage, setTypedMessage] = useState("");
-    const { user } = useUserContext();
     const [canSend, setCanSend] = useState(false);
-    const chatId = Number(useParams().id);
 
     async function SendMessage() {
-        if (typedMessage === "") {
-            return;
-        }
+        sendMessage(typedMessage);
         setTypedMessage("");
-        shouldAutoScroll.current = true;
-        const content = typedMessage;
-        const tempId = crypto.randomUUID();
-        socket.emit(EVENT.MESSAGE.SEND, { content, chatId, username: user.username }, (data) => {
-            setMessages((prev) =>
-                prev.map((message, index) => {
-                    if (message.id === tempId) {
-                        socket.emit(EVENT.MESSAGE.READ, { username: user.username, chatId, messageId: data.id });
-
-                        return { ...message, status: "sent", id: data.id };
-                    }
-                    return message;
-                }),
-            );
-        });
-        setMessages((prev) => [
-            ...prev,
-            { content, author: { username: user.username }, id: tempId, status: "sending", sent: Date.now() },
-        ]);
         setCanSend(false);
     }
 
@@ -52,7 +25,7 @@ function ChatInput({ setMessages, shouldAutoScroll }) {
             rightSection={
                 <SendButton
                     isActive={canSend}
-                    onClick={(e) => {
+                    onClick={() => {
                         SendMessage();
                     }}
                 />

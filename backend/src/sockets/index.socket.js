@@ -1,5 +1,3 @@
-import { EVENT } from "../../../shared/socketEvents.js";
-import prisma from "../../lib/prisma.js";
 import registerUserSockets from "./user.socket.js";
 import registerChatSockets from "./chat.socket.js";
 import registerMessageSockets from "./message.socket.js";

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import {
     Button,
     TextInput,
@@ -27,20 +27,12 @@ function ChatBar() {
     const { chats } = useChatContext();
     const { user } = useUserContext();
     const [newChatModalOpened, { open, close }] = useDisclosure(false);
-    const { id } = useParams();
     const form = useForm({ initialValues: { chatMember: "", title: "" } });
 
     const combobox = useCombobox({ onDropdownClose: () => combobox.resetSelectedOption() });
-    const [searchLoading, { open: openLoading, close: closeLoading }] = useDisclosure();
     const [query, setQuery] = useState("");
-    const [isError, { open: openError, close: closeError }] = useDisclosure();
     const [error, setError] = useState(null);
-    const { results } = useUserSearch(query, setError, openError);
-
-    const shouldFilterOptions = !results.some((item) => item === query);
-    const filteredOptions = shouldFilterOptions
-        ? results.filter((item) => item.toLowerCase().includes(query.toLowerCase().trim()))
-        : results;
+    const { results } = useUserSearch(query);
 
     const options = results.map((result) => (
         <Combobox.Option value={result} key={result}>
@@ -50,17 +42,16 @@ function ChatBar() {
 
     useEffect(() => {
         combobox.updateSelectedOptionIndex();
-    }, [options]);
+    }, [combobox, options]);
 
     useEffect(() => {
         socket.on(EVENT.CHAT.ERROR, (data) => {
             setError(data.status);
-            openError();
         });
     }, []);
 
     useEffect(() => {
-        socket.on(EVENT.CHAT.CREATED, (data) => {
+        socket.on(EVENT.CHAT.CREATED, () => {
             close();
         });
     });

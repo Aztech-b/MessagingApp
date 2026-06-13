@@ -1,20 +1,16 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import errorStyles from "../styles/errorPopover.module.css";
-import { ServerRouter, useNavigate } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { Link } from "react-router";
 import styles from "../styles/login.module.css";
 import { Icon } from "./global";
 import { TextInput, PasswordInput, Button, Alert } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { CircleX } from "lucide-react";
-import { useUserContext } from "./Context";
 
 function Login() {
-    const { setUser } = useUserContext();
     const navigate = useNavigate();
-    const [isLoading, { close: closeLoading, open: openLoading }] = useDisclosure(false);
+    const [isLoading, { close: closeLoading, open: openLoading, toggle: toggleError }] = useDisclosure(false);
     const [error, setError] = useState(null);
     const form = useForm({
         initialValues: { username: "", password: "" },

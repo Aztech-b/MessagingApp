@@ -3,7 +3,6 @@ import prisma from "../../lib/prisma.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcryptjs from "bcryptjs";
-import { z } from "zod";
 import { loginSchema } from "../../lib/zod.js";
 
 const authRouter = Router();
@@ -41,7 +40,7 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-authRouter.post("/register", async (req, res, next) => {
+authRouter.post("/register", async (req, res) => {
     try {
         const parsed = loginSchema.safeParse(req.body);
         if (!parsed.success) {
@@ -77,11 +76,11 @@ authRouter.post("/login", (req, res, next) => {
         res.json({ message: parsed.error.issues[0].message });
         return;
     }
-    const { username, password } = parsed.data;
 
     passport.authenticate("local", (error, user, info) => {
         if (user) {
-            req.logIn(user, (error) => {
+            req.logIn(user, () => {
+                // eslint-disable-next-line no-unused-vars
                 const { id, password, ...safeUser } = user;
                 res.json(safeUser);
                 return;
@@ -92,11 +91,12 @@ authRouter.post("/login", (req, res, next) => {
     })(req, res, next);
 });
 
-authRouter.get("/", (req, res, next) => {
+authRouter.get("/", (req, res) => {
     if (!req.user) {
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
+    // eslint-disable-next-line no-unused-vars
     const { id, password, ...user } = req.user;
     res.json(user);
 });

@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 function useScroll() {
-    const shouldAutoScroll = useRef(true);
     const autoScrollDummy = useRef(null);
     const scrollContainer = useRef(null);
 
@@ -12,17 +11,7 @@ function useScroll() {
         scrollContainer.current.scrollTo({ top: scrollContainer.current.scrollHeight, behavior: "auto" });
     };
 
-    useEffect(
-        function ScrollRightNow() {
-            if (!shouldAutoScroll) {
-                return;
-            }
-            scrollToBottom();
-            shouldAutoScroll.current = false;
-        },
-        [shouldAutoScroll.current],
-    );
-    return { shouldAutoScroll, autoScrollDummy, scrollContainer };
+    return { autoScrollDummy, scrollContainer, scrollToBottom };
 }
 
 export default useScroll;

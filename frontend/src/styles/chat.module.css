@@ -45,10 +45,14 @@
 .chat {
     display: flex;
     gap: 4px;
-    height: auto;
+    height: min-content;
     flex-direction: column;
     padding: 8px;
     padding-bottom: 20px;
+    width: 100%;
+
+    justify-content: flex-end; /* 👈 THIS is the key */
+    min-height: 100%;
 }
 
 .messages {

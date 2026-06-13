@@ -1,12 +1,7 @@
-import { useState, useEffect, createContext, useContext } from "react";
-import { useUserContext } from "./Context";
-import Sidebar from "./Sidebar";
 import ChatBar from "./ChatBar";
-import { Outlet, useLocation, useParams } from "react-router";
+import { Outlet, useParams } from "react-router";
 import styles from "../styles/chatTab.module.css";
 import { ChatContextProvider } from "./Context";
-import socket from "./socket.js";
-import { DatabaseBackup } from "lucide-react";
 import useChats from "../hooks/useChats.jsx";
 import useChatSockets from "../hooks/useChatSockets.jsx";
 import useActiveChat from "../hooks/useActiveChat.jsx";
@@ -21,7 +16,6 @@ function ChatTab() {
     const { chats, deleteChat, addChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount } =
         useChats(chatId);
     const { activeChatName, setActiveChatName, usernames, setUsernames } = useActiveChat();
-    const location = useLocation();
     useChatSockets(chats, addChat, deleteChat, addNewMessage);
 
     return (
