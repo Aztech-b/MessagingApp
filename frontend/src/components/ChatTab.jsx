@@ -38,12 +38,16 @@ function ChatTab() {
 function TopBar({ chatName, usernames }) {
     return (
         <div className={styles.topBar}>
-            <p className={styles.chatName}>{chatName}</p>
-            <div className={styles.usernamesContainer}>
-                {usernames?.map((username) => (
-                    <p key={username}>{username}</p>
-                ))}
-            </div>
+            {chatName ? (
+                <>
+                    <p className={styles.chatName}>{chatName}</p>
+                    <div className={styles.usernamesContainer}>
+                        {usernames?.map((username) => (
+                            <p key={username}>{username}</p>
+                        ))}
+                    </div>
+                </>
+            ) : null}
         </div>
     );
 }
