@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext } from "react";
 
 const UserContext = createContext({});
 const ChatContext = createContext(null);

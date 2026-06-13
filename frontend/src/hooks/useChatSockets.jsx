@@ -2,7 +2,6 @@ import socket from "../components/socket";
 import { useEffect } from "react";
 import { EVENT } from "../../../shared/socketEvents.js";
 import { useNavigate } from "react-router";
-import { useChatContext } from "../components/Context.jsx";
 
 /** @typedef {import("../components/types.js").newMessageData} */
 
@@ -14,28 +13,29 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
             if (!chats || chats.length === 0) {
                 return;
             }
-            for (let i = 0; i < chats.length; i++) {
-                const id = chats[i].id;
-                socket.emit("join", { chatId: id });
-            }
+            chats.forEach((chat) => {
+                socket.emit("join", { chatId: chat.id });
+            });
             return () => {
-                for (let i = 0; i < chats.length; i++) {
-                    const id = chats[i].id;
-                    socket.emit("leave", { chatId: id });
-                }
+                chats.forEach((chat) => {
+                    socket.emit("leave", { chatId: chat.id });
+                });
             };
         },
-        [chats.length],
+        [chats],
     );
 
-    useEffect(function NewMessage() {
-        /** @param {newMessageData} data */
-        function handleNewMessage(data) {
-            addNewMessage(data);
-        }
-        socket.on(EVENT.MESSAGE.RECEIVED, handleNewMessage);
-        return () => socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
-    }, []);
+    useEffect(
+        function NewMessage() {
+            /** @param {newMessageData} data */
+            function handleNewMessage(data) {
+                addNewMessage(data);
+            }
+            socket.on(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+            return () => socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+        },
+        [addNewMessage],
+    );
 
     useEffect(function AddNewChat() {
         function addNewChat(data) {
@@ -43,6 +43,7 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
         }
         socket.on(EVENT.CHAT.CREATED, addNewChat);
         return () => socket.off(EVENT.CHAT.CREATED, addNewChat);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(function DeleteChat() {
@@ -54,6 +55,7 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
         return () => {
             socket.off(EVENT.CHAT.DELETED, _deleteChat);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 }
 

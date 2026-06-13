@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import socket from "../components/socket.js";
-import useChatSockets from "./useChatSockets.jsx";
-import { EVENT } from "../../../shared/socketEvents.js";
 /** @typedef {import("../components/types.js").Chat} */
 
 function useChats(activeChatId) {
@@ -69,7 +66,9 @@ function useChats(activeChatId) {
                 }
                 const data = await response.json();
                 setChats(data);
-            } catch (error) {}
+            } catch (error) {
+                console.trace(error);
+            }
         }
         GetAllChats();
     }, []);

@@ -1,4 +1,4 @@
-import { createTheme, Modal, TextInput } from "@mantine/core";
+import { createTheme } from "@mantine/core";
 
 const theme = createTheme({
     colors: {

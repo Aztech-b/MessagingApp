@@ -1,8 +1,7 @@
-import { useState, useEffect, forwardRef, useRef } from "react";
+import { useState, useEffect } from "react";
 import socket from "./socket";
 import styles from "../styles/chat.module.css";
 import { LoaderCircle, Check, CheckCheck } from "lucide-react";
-import { useParams } from "react-router";
 import { useUserContext } from "./Context";
 import { EVENT } from "../../../shared/socketEvents";
 
@@ -14,10 +13,8 @@ import { EVENT } from "../../../shared/socketEvents";
 function Message({ data, colors, extended, ref }) {
     let [icon, setIcon] = useState(null);
     const { content } = data;
-    const id = useRef(data.id);
     const username = data.author.username;
     const status = data.status;
-    const chatId = useParams();
     const member = colors.find((member) => member.user.username === username);
     const color = member.color;
 
@@ -44,7 +41,6 @@ function Message({ data, colors, extended, ref }) {
     }, []);
     let authorStyle;
     const { user } = useUserContext();
-    let otherUsernameColor = null;
     if (user && user.username && username === user.username) {
         authorStyle = styles.clientMessage;
         extended = false;

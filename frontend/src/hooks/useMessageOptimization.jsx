@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 function useMessageOptimization(scrollContainer, messages, setMessages, chatId) {
     const scrollPos = useRef({ top: 0, height: 0 });

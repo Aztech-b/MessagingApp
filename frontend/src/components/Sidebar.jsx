@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import styles from "../styles/sidebar.module.css";
-import profileLogo from "../assets/user.svg";
-import { Button, Divider, Tooltip, Dialog } from "@mantine/core";
+import { Divider, Tooltip, Dialog } from "@mantine/core";
 import { MessageCircle, Star, Archive, Ban, CircleUserRound } from "lucide-react";
 import { Icon, iconColor } from "./global";
 import { useDisclosure } from "@mantine/hooks";
@@ -35,7 +33,7 @@ function Sidebar() {
 }
 
 function NotReadyTab({ title, children }) {
-    const [opened, { toggle, close }] = useDisclosure(false);
+    const [opened, { close }] = useDisclosure(false);
     return (
         <>
             <Tooltip label={title} position="right" offset={-10}>
@@ -76,16 +74,6 @@ function Tab({ title, href, children }) {
                 {/* </abbr> */}
             </Link>
         </Tooltip>
-    );
-}
-
-function LoginButton() {
-    return (
-        <Link to="/login">
-            <Button variant="filled" color="accent.3">
-                Login
-            </Button>
-        </Link>
     );
 }
 

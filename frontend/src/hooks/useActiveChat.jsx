@@ -6,7 +6,8 @@ function useActiveChat() {
     const [usernames, setUsernames] = useState([]);
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === "/chat") {
+        if (location.pathname === "/app/chat") {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setActiveChatName("");
         }
     }, [location.pathname]);

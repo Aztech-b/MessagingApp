@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Button, TextInput, PasswordInput, Alert } from "@mantine/core";
 import styles from "../styles/login.module.css";
@@ -34,7 +34,6 @@ function Register() {
                 console.log(data);
                 setError(data.message);
                 closeLoading();
-                toggleError();
                 return;
             }
             data = await response.json();
@@ -42,7 +41,9 @@ function Register() {
                 window.location.reload();
                 navigate("/app/chat");
             }
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

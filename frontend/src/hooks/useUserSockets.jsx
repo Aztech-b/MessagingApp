@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import socket from "../components/socket";
-import { useUserContext } from "../components/Context";
 
 function useUserSockets(user) {
     useEffect(
