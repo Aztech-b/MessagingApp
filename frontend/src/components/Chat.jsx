@@ -16,9 +16,13 @@ import useMessageOptimization from "../hooks/useMessageOptimization.jsx";
 function Chat() {
     const chatId = Number(useParams().id);
     const { user } = useUserContext();
-    const { messages, members, setMessages, setIsBottom, sendMessage } = useCurrentMessages(chatId, user);
-    const { autoScrollDummy, scrollContainer } = useScroll();
-    useCurrentMessagesSockets(user, chatId, scrollContainer, setMessages);
+    const { autoScrollDummy, scrollContainer, setShouldScroll } = useScroll();
+    const { messages, members, setMessages, setIsBottom, sendMessage, addMessage } = useCurrentMessages(
+        chatId,
+        user,
+        setShouldScroll,
+    );
+    useCurrentMessagesSockets(user, chatId, scrollContainer, addMessage);
 
     const { handleScroll } = useMessageOptimization(scrollContainer, messages, setMessages, chatId);
     const lastMessageRef = useRef(null);

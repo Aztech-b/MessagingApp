@@ -6,8 +6,9 @@ import socket from "../components/socket";
 import { EVENT } from "../../../shared/socketEvents";
 
 /** @typedef {import("../components/types.js").ChatData} ChatData */
+/** @typedef {import("../components/types.js").newMessageData} MessageData */
 
-function useCurrentMessages(chatId, user) {
+function useCurrentMessages(chatId, user, setShouldScroll) {
     /**
      * @type {[{ color: string, user: { username: string } }[]]}
      */
@@ -21,17 +22,19 @@ function useCurrentMessages(chatId, user) {
     const lastMessageId = useRef(0);
     const navigate = useNavigate();
 
-    const sendMessage = (typedMessage) => {
-        if (typedMessage === "") {
+    /** @param {MessageData} messageData */
+    const sendMessage = (messageData) => {
+        if (messageData.content === "") {
             return;
         }
-        const content = typedMessage;
+        const content = messageData.content;
         const tempId = crypto.randomUUID();
-        socket.emit(EVENT.MESSAGE.SEND, { content, chatId, username: user.username }, (data) => {
+        const username = user.username;
+        socket.emit(EVENT.MESSAGE.SEND, { content, chatId, username }, (data) => {
             setMessages((prev) =>
                 prev.map((message) => {
                     if (message.id === tempId) {
-                        socket.emit(EVENT.MESSAGE.READ, { username: user.username, chatId, messageId: data.id });
+                        socket.emit(EVENT.MESSAGE.READ, { username, chatId, messageId: data.id });
 
                         return { ...message, status: "sent", id: data.id };
                     }
@@ -43,6 +46,15 @@ function useCurrentMessages(chatId, user) {
             ...prev,
             { content, author: { username: user.username }, id: tempId, status: "sending", sent: Date.now() },
         ]);
+        setShouldScroll(true);
+    };
+
+    /** @param {MessageData} messageData */
+    const addMessage = (messageData) => {
+        if (messageData.chatId !== chatId || messageData.author.username === user.username) {
+            return;
+        }
+        setMessages((prev) => [...prev, { ...messageData, status: "other" }]);
     };
 
     useEffect(
@@ -54,7 +66,6 @@ function useCurrentMessages(chatId, user) {
                 return;
             }
 
-            console.log(messages);
             socket.emit(
                 EVENT.MESSAGE.READ,
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
@@ -62,8 +73,11 @@ function useCurrentMessages(chatId, user) {
                     setLastReadMessage(chatId, lastMessageId.current, true);
                 },
             );
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsBottom(false);
         },
-        [isBottom, messages, chatId, user, setLastReadMessage],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [isBottom, messages, chatId, user],
     );
 
     useEffect(
@@ -138,7 +152,7 @@ function useCurrentMessages(chatId, user) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatId, user]);
 
-    return { messages, setMessages, members, lastReadMessages, setIsBottom, sendMessage };
+    return { messages, setMessages, members, lastReadMessages, setIsBottom, sendMessage, addMessage };
 }
 
 export default useCurrentMessages;

@@ -6,23 +6,16 @@ import { EVENT } from "../../../shared/socketEvents.js";
  * @typedef {import("./types.js").newMessageData} newMessageData
  */
 
-function useCurrentMessagesSockets(user, chatId, scrollContainer, setMessages) {
+function useCurrentMessagesSockets(user, chatId, scrollContainer, addMessage) {
     useEffect(
         function OnReceiveNewMessage() {
-            /** @param {newMessageData} data */
-            function handleNewMessage(data) {
-                if (data.chatId !== chatId || data.author.username === user.username) {
-                    return;
-                }
-                setMessages((prev) => [...prev, { ...data, status: "other" }]);
-            }
-
-            socket.on(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+            socket.on(EVENT.MESSAGE.RECEIVED, addMessage);
             return () => {
-                socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+                socket.off(EVENT.MESSAGE.RECEIVED, addMessage);
             };
         },
-        [chatId, scrollContainer, setMessages, user],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [chatId, user],
     );
 }
 

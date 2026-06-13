@@ -7,7 +7,7 @@ function ChatInput({ sendMessage }) {
     const [canSend, setCanSend] = useState(false);
 
     async function SendMessage() {
-        sendMessage(typedMessage);
+        sendMessage({ content: typedMessage });
         setTypedMessage("");
         setCanSend(false);
     }

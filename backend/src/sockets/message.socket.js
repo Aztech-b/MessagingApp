@@ -17,7 +17,6 @@ function registerMessageSockets(io, socket) {
         });
         lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
         if (lastReadMessages[0].lastReadMessageId >= data.messageId) {
-            console.log(data);
             socket.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.EVERYONE_READ, { messageId: data.messageId });
         }
     });
