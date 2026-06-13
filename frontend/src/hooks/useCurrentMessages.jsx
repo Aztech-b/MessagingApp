@@ -55,6 +55,7 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
             return;
         }
         setMessages((prev) => [...prev, { ...messageData, status: "other" }]);
+        setShouldScroll(true);
     };
 
     useEffect(
@@ -140,6 +141,7 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
                         return message;
                     }),
                 );
+                setShouldScroll(true);
                 const { members } = data;
                 setMembers(members);
                 setActiveChatName(data.title);
