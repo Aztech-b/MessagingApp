@@ -35,6 +35,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res) => {
+    try {
+        if (new URL(req.query.url).host !== process.env.FRONTEND_URL) {
+            return res.status(400).end(`Unsupported redirect to host: ${req.query.url}`);
+        }
+    } catch {
+        return res.status(400).end(`Invalid url: ${req.query.url}`);
+    }
+    res.redirect(req.query.url);
+});
+
 // Routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
