@@ -107,7 +107,6 @@ function useCurrentMessages(chatId, user) {
 
                 /** @type {ChatData} */
                 let data = await response.json();
-                console.log([chatId, navigate, setActiveChatName, setLastReadMessage, setUsernames, user]);
                 setUsernames(data.members.map((member) => member.user.username));
                 const messagesFromDatabase = data.messages.map((message) => {
                     let status = "";
