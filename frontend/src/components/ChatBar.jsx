@@ -22,7 +22,6 @@ import { useForm } from "@mantine/form";
 import { EVENT } from "../../../shared/socketEvents";
 import useUserSearch from "../hooks/useUserSearch";
 import { CircleX } from "lucide-react";
-import { motion } from "motion/react";
 
 function ChatBar() {
     const { chats } = useChatContext();
@@ -58,11 +57,7 @@ function ChatBar() {
     });
 
     return (
-        <motion.div
-            transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 35 }}
-            layout
-            className={styles.chats}
-        >
+        <div className={styles.chats}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
                 <Stack gap={"xl"}>
                     <form
@@ -155,7 +150,7 @@ function ChatBar() {
             >
                 <Plus size={40} strokeWidth={3} />{" "}
             </ActionIcon>
-        </motion.div>
+        </div>
     );
 }
 

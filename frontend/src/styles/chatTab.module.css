@@ -14,7 +14,11 @@
 }
 
 .messages {
+    background-color: var(--accent-bg);
     display: flex;
+    /* position: absolute;
+    left: 0;
+    top: 0; */
     height: 100vh;
     flex-direction: column;
 }
@@ -47,27 +51,8 @@
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
     height: 100vh;
     background-color: var(--accent-bg);
     border-collapse: collapse;
-}
-
-.chatBarClose {
-    grid-template-columns: 2fr 3fr;
-}
-
-.chatBarOpen {
-    grid-template-columns: 2fr 3fr;
-}
-
-@media screen and (max-width: 1200px) {
-    .chatBarClose {
-        grid-template-columns: 0 1fr;
-    }
-
-    .chatBarOpen {
-        grid-template-columns: 1fr 0;
-    }
+    /* position: relative; */
 }
