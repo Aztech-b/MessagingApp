@@ -6,6 +6,7 @@ import useChats from "../hooks/useChats.jsx";
 import useChatSockets from "../hooks/useChatSockets.jsx";
 import useActiveChat from "../hooks/useActiveChat.jsx";
 import { MoveLeft } from "lucide-react";
+import { motion } from "motion/react";
 
 /**
  * @typedef {import("./types.js").Chat} Chat
@@ -18,19 +19,24 @@ function ChatTab() {
         useChats(chatId);
     const { activeChatName, setActiveChatName, usernames, setUsernames } = useActiveChat();
     useChatSockets(chats, addChat, deleteChat, addNewMessage);
+    const { id } = useParams();
 
     return (
         <>
             <ChatContextProvider
                 value={{ deleteChat, chats, unreadCount, lastReadMessages, setLastReadMessage, addChat, setUsernames }}
             >
-                <div className={styles.container}>
+                <motion.div layout className={`${styles.container} ${id ? styles.chatBarClose : styles.chatBarOpen}`}>
                     <ChatBar></ChatBar>
-                    <div className={styles.messages}>
+                    <motion.div
+                        transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 35 }}
+                        layout
+                        className={styles.messages}
+                    >
                         <TopBar chatName={activeChatName} usernames={usernames} />
                         <Outlet context={{ setActiveChatName }}></Outlet>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             </ChatContextProvider>
         </>
     );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 import {
     Button,
     TextInput,
@@ -22,6 +22,7 @@ import { useForm } from "@mantine/form";
 import { EVENT } from "../../../shared/socketEvents";
 import useUserSearch from "../hooks/useUserSearch";
 import { CircleX } from "lucide-react";
+import { motion } from "motion/react";
 
 function ChatBar() {
     const { chats } = useChatContext();
@@ -33,8 +34,6 @@ function ChatBar() {
     const [query, setQuery] = useState("");
     const [error, setError] = useState(null);
     const { results } = useUserSearch(query);
-
-    const location = useLocation();
 
     const options = results.map((result) => (
         <Combobox.Option value={result} key={result}>
@@ -53,13 +52,17 @@ function ChatBar() {
     }, []);
 
     useEffect(() => {
-        socket.on(EVENT.CHAT.CREATED, () => {
-            close();
-        });
+        const handler = () => close();
+        socket.on(EVENT.CHAT.CREATED, handler);
+        socket.off(EVENT.CHAT.CREATED, handler);
     });
 
     return (
-        <div className={`${styles.chats} ${location.pathname === "/app/chat" ? styles.chatsResponsive : null}`}>
+        <motion.div
+            transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 35 }}
+            layout
+            className={styles.chats}
+        >
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
                 <Stack gap={"xl"}>
                     <form
@@ -152,7 +155,7 @@ function ChatBar() {
             >
                 <Plus size={40} strokeWidth={3} />{" "}
             </ActionIcon>
-        </div>
+        </motion.div>
     );
 }
 

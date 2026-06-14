@@ -54,8 +54,20 @@
     border-collapse: collapse;
 }
 
+.chatBarClose {
+    grid-template-columns: 2fr 3fr;
+}
+
+.chatBarOpen {
+    grid-template-columns: 2fr 3fr;
+}
+
 @media screen and (max-width: 1200px) {
-    .container {
-        display: block;
+    .chatBarClose {
+        grid-template-columns: 0 1fr;
+    }
+
+    .chatBarOpen {
+        grid-template-columns: 1fr 0;
     }
 }
