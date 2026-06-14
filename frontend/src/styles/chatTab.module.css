@@ -7,15 +7,28 @@
     box-sizing: border-box;
     padding: 4px 16px;
     display: flex;
-    flex-direction: column;
     color: white;
     border-bottom: 1px solid var(--accent-border);
+    align-items: center;
+    gap: 16px;
 }
 
 .messages {
     display: flex;
     height: 100vh;
     flex-direction: column;
+}
+
+.back {
+    cursor: pointer;
+    padding: 8px;
+    display: none;
+}
+
+@media screen and (max-width: 1200px) {
+    .back {
+        display: block;
+    }
 }
 
 .messages * {
@@ -39,4 +52,10 @@
     height: 100vh;
     background-color: var(--accent-bg);
     border-collapse: collapse;
+}
+
+@media screen and (max-width: 1200px) {
+    .container {
+        display: block;
+    }
 }

@@ -21,6 +21,16 @@
     border: 0;
 }
 
+@media screen and (max-width: 1200px) {
+    .chats {
+        display: none;
+    }
+}
+
+.chatsResponsive {
+    display: block;
+}
+
 .content {
     height: 100%;
 }
