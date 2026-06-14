@@ -29,9 +29,8 @@ function useUser() {
                 }
                 const data = await response.json();
                 setUser(data);
-                navigate("/app/chat");
-            } catch {
-                navigate("/error");
+            } catch (error) {
+                console.error(error);
             }
         }
         GetUser();
