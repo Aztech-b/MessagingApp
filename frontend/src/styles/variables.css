@@ -45,8 +45,8 @@
 
         --accent-saturated: hsl(215, 80%, 60%);
 
-        --accent: hsl(215, 40%, 19%);
-        --accent-light: hsl(210, 47%, 32%);
+        --accent: hsl(215, 40%, 19%); /* #1d2d44 */
+        --accent-light: hsl(210, 47%, 32%); /* #2b5278 */
         --accent-light-l: hsl(210, 47%, 40%);
         --accent-light-xl: hsl(210, 47%, 50%);
         --accent-light-2xl: hsl(210, 47%, 60%);
@@ -66,8 +66,8 @@
 
         --border: #2e303a;
 
-        --accent-bg: hsl(215, 40%, 9%);
-        --accent-bg-light: hsl(215, 40%, 15%);
+        --accent-bg: hsl(215, 40%, 9%); /* #0e1520 */
+        --accent-bg-light: hsl(215, 40%, 15%); /* #172436 */
         --accent-border: hsl(215, 30%, 7%);
 
         --bg-dark: hsl(231, 13.73%, 5%);

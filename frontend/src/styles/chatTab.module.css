@@ -19,7 +19,17 @@
     height: 100vh;
     flex-direction: column;
     position: relative;
-    background-color: var(--accent-bg);
+    /* background-color: var(--accent-bg); */
+}
+
+.messages::before {
+    background-image: url(../assets/bg.svg);
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    content: "";
+    filter: brightness(0.4);
 }
 
 .back {
