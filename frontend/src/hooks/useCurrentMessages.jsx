@@ -56,6 +56,7 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
         }
         setMessages((prev) => [...prev, { ...messageData, status: "other" }]);
         setShouldScroll(true);
+        setIsBottom(true);
     };
 
     useEffect(

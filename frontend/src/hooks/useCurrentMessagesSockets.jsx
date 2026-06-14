@@ -5,7 +5,6 @@ import { EVENT } from "../../../shared/socketEvents.js";
 /**
  * @typedef {import("./types.js").newMessageData} newMessageData
  */
-
 function useCurrentMessagesSockets(user, chatId, scrollContainer, addMessage) {
     useEffect(
         function OnReceiveNewMessage() {
