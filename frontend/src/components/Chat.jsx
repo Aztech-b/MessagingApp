@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import styles from "../styles/chat.module.css";
 import ChatInput from "./ChatInput";
@@ -27,6 +27,23 @@ function Chat() {
     const { handleScroll } = useMessageOptimization(scrollContainer, messages, setMessages, chatId);
     const lastMessageRef = useRef(null);
 
+    const isNearBottom = () => {
+        if (!lastMessageRef) {
+            return false;
+        }
+        if (!lastMessageRef?.current || !scrollContainer?.current) {
+            return false;
+        }
+        return (
+            lastMessageRef.current.getBoundingClientRect().top <= scrollContainer.current.getBoundingClientRect().bottom
+        );
+    };
+
+    useEffect(() => {
+        setIsBottom(isNearBottom());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isNearBottom, lastMessageRef && scrollContainer]);
+
     return (
         <>
             <div
@@ -35,10 +52,7 @@ function Chat() {
                 onScroll={() => {
                     handleScroll();
                     if (!lastMessageRef.current) return;
-                    setIsBottom(
-                        lastMessageRef.current.getBoundingClientRect().top <=
-                            scrollContainer.current.getBoundingClientRect().bottom,
-                    );
+                    setIsBottom(isNearBottom());
                 }}
             >
                 <div className={styles.chat}>

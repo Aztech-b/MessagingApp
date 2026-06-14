@@ -20,6 +20,7 @@ function Message({ data, colors, extended, ref }) {
 
     useEffect(() => {
         if (status === "sending") {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIcon(<LoaderCircle color="var(--accent-light-2xl)" size={16} />);
         } else if (status === "sent") {
             setIcon(<Check color="var(--accent-light-2xl)" size={16} />);
@@ -31,6 +32,7 @@ function Message({ data, colors, extended, ref }) {
     useEffect(() => {
         function setRead(data) {
             if (data.messageId <= data.id) {
+                // eslint-disable-next-line no-undef
                 setStatus("read");
             }
         }
