@@ -179,7 +179,7 @@ function ChatBarItem({ data, icon }) {
             size={24}
             style={{ fontWeight: "bold" }}
         >
-            <Link to={`/app/chat/${data.id}`} className={styles.chatLink}>
+            <Link viewTransition to={`/app/chat/${data.id}`} className={styles.chatLink}>
                 <button className={styles.chatButton}>
                     <div className={styles.content}>
                         {icon ?? (

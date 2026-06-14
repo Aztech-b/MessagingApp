@@ -11,12 +11,15 @@
     border-bottom: 1px solid var(--accent-border);
     align-items: center;
     gap: 16px;
+    z-index: 4;
 }
 
 .messages {
     display: flex;
     height: 100vh;
     flex-direction: column;
+    position: relative;
+    background-color: var(--accent-bg);
 }
 
 .back {
@@ -52,6 +55,7 @@
     height: 100vh;
     background-color: var(--accent-bg);
     border-collapse: collapse;
+    position: relative;
 }
 
 @media screen and (max-width: 1200px) {
