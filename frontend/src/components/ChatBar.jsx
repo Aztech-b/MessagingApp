@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useChatContext, useUserContext } from "./Context";
 import styles from "../styles/chatBar.module.css";
-import { UsersRound, Plus } from "lucide-react";
+import { UsersRound, Plus, Ellipsis } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import socket from "./socket";
 import { useForm } from "@mantine/form";
@@ -173,7 +173,7 @@ function ChatBarItem({ data, icon }) {
             color="var(--accent-saturated)"
             autoContrast
             position="middle-end"
-            offset={{ x: 20 }}
+            offset={{ x: 52 }}
             size={24}
             style={{ fontWeight: "bold" }}
         >
@@ -206,7 +206,7 @@ function ContextMenu({ id }) {
                             event.preventDefault();
                         }}
                     >
-                        ...
+                        <Ellipsis style={{ display: "flex", alignItems: "center" }} />
                     </div>
                 </Menu.Target>
 
