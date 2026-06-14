@@ -27,7 +27,7 @@ function ChatTab() {
             >
                 <div className={styles.container}>
                     <ChatBar></ChatBar>
-                    <AnimatePresence>
+                    <AnimatePresence mode="wait">
                         {animatedOutlet && cloneElement(animatedOutlet, { key: location.pathname })}
                     </AnimatePresence>
                 </div>
