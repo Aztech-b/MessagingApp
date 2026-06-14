@@ -14,7 +14,7 @@ import router from "./components/routes.jsx";
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <MantineProvider defaultColorScheme="auto" theme={theme}>
-            <Notifications></Notifications>
+            <Notifications style={{ maxWidth: "90vh" }} />
             <RouterProvider router={router} />
         </MantineProvider>
     </StrictMode>,

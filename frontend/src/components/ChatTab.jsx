@@ -1,5 +1,5 @@
 import ChatBar from "./ChatBar";
-import { Outlet, useParams } from "react-router";
+import { Outlet, useParams, Link } from "react-router";
 import styles from "../styles/chatTab.module.css";
 import { ChatContextProvider } from "./Context";
 import useChats from "../hooks/useChats.jsx";
@@ -40,7 +40,9 @@ function TopBar({ chatName, usernames }) {
     return (
         <div className={styles.topBar}>
             <div className={styles.back}>
-                <MoveLeft style={{ display: "flex", alignItems: "center" }} size={32} />
+                <Link to={"/app/chat"}>
+                    <MoveLeft style={{ display: "flex", alignItems: "center" }} size={32} />
+                </Link>
             </div>
             {chatName ? (
                 <div className={styles.info}>

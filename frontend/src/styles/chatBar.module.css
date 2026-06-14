@@ -28,7 +28,7 @@
 }
 
 .chatsResponsive {
-    display: block;
+    display: flex;
 }
 
 .content {
