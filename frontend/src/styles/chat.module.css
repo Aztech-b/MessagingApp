@@ -4,6 +4,7 @@
     flex: 1;
     overflow-y: auto;
     min-height: 0;
+    z-index: 1;
 }
 
 .clientMessage {
@@ -53,6 +54,7 @@
 
     justify-content: flex-end; /* 👈 THIS is the key */
     min-height: 100%;
+    z-index: 1;
 }
 
 .messages {

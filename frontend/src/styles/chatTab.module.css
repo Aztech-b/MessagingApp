@@ -19,17 +19,16 @@
     height: 100vh;
     flex-direction: column;
     position: relative;
-    /* background-color: var(--accent-bg); */
 }
 
 .messages::before {
     background-image: url(../assets/bg.svg);
-    z-index: -1;
+    z-index: 0;
     width: 100%;
     height: 100%;
     position: absolute;
     content: "";
-    filter: brightness(0.4);
+    filter: brightness(0.2);
 }
 
 .back {
@@ -63,7 +62,6 @@
     display: grid;
     grid-template-columns: 2fr 3fr;
     height: 100vh;
-    background-color: var(--accent-bg);
     border-collapse: collapse;
     position: relative;
 }

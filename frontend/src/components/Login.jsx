@@ -43,7 +43,6 @@ function Login() {
                 return;
             }
             data = await response.json();
-            window.location.reload();
             if (data.username) {
                 navigate("/app/chat");
             }
