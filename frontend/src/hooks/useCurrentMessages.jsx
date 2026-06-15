@@ -106,14 +106,16 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
     );
 
     useEffect(() => {
+        if (!user) {
+            return;
+        }
+        const controller = new AbortController();
         async function FetchData() {
-            if (!user) {
-                return;
-            }
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat/${chatId}`, {
                     method: "GET",
                     credentials: "include",
+                    signal: controller.signal,
                 });
 
                 if (response.status === 404 || response.status === 401) {
@@ -148,10 +150,16 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
                 setActiveChatName(data.title);
                 setLastReadMessage(chatId, data.chatMember.lastReadMessageId);
             } catch (error) {
+                if (error.name === "AbortError") {
+                    return;
+                }
                 console.error(error);
             }
         }
         FetchData();
+        return () => {
+            controller.abort();
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatId, user]);
 
