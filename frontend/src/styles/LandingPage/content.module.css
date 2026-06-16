@@ -42,4 +42,5 @@
     grid-template-columns: 1fr 1fr 1fr;
     width: 80%;
     gap: 12px;
+    margin-bottom: 40px;
 }

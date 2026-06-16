@@ -1,0 +1,29 @@
+:root {
+    --padding-x: 40px;
+}
+
+.footer {
+    padding-top: var(--padding-x);
+    padding-bottom: var(--padding-x);
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.contentContainer {
+    border-top: 1px solid var(--border);
+    width: 100%;
+    background: var(--accent-bg);
+}
+
+.icon {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
