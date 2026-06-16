@@ -7,7 +7,21 @@ function AuthButtons() {
     const { status } = useServerStatusContext();
     return (
         <>
-            {status === "up" ? (
+            {status === "down" ? (
+                <Alert
+                    color="red"
+                    title="Backend is down"
+                    pos={"absolute"}
+                    top={8}
+                    w={"30%"}
+                    left={"50%"}
+                    styles={{ root: { transform: "translateX(-50%)" } }}
+                >
+                    Server is down because of either the developer turned it off, or there are some limitations of PaaS
+                    provider. In second case, just wait until the server turns on (usually max 60 seconds). The
+                    developer turned off all navigation things that point to login/register routes.
+                </Alert>
+            ) : (
                 <ul className={`${styles.authLinks} ${styles.links}`}>
                     <li>
                         <Link to={"/register"}>
@@ -22,20 +36,6 @@ function AuthButtons() {
                         </Link>
                     </li>
                 </ul>
-            ) : (
-                <Alert
-                    color="red"
-                    title="Backend is down"
-                    pos={"absolute"}
-                    top={8}
-                    w={"30%"}
-                    left={"50%"}
-                    styles={{ root: { transform: "translateX(-50%)" } }}
-                >
-                    Server is down because of either the developer turned it off, or there are some limitations of PaaS
-                    provider. In second case, just wait until the server turns on (usually max 60 seconds). The
-                    developer turned off all navigation things that point to login/register routes.
-                </Alert>
             )}
         </>
     );

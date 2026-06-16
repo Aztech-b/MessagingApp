@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { Button, TextInput, PasswordInput, Alert } from "@mantine/core";
-import styles from "../styles/login.module.css";
+import { Alert, Button, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Icon } from "./global";
 import { useDisclosure } from "@mantine/hooks";
 import { CircleX } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import styles from "../styles/login.module.css";
+import { Icon } from "./global";
 
 function Register() {
     const [isLoading, { open: openLoading, close: closeLoading }] = useDisclosure(false);

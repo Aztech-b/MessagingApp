@@ -5,10 +5,11 @@ import useCheckServer from "./hooks/useCheckServer.jsx";
 import useUser from "./hooks/useUser.jsx";
 
 function App() {
-    const { status } = useCheckServer();
     const { user } = useUser();
     const navigate = useNavigate();
     const location = useLocation();
+    const { status } = useCheckServer();
+
     useEffect(() => {
         if (location.pathname === "/") {
             navigate("/landing-page");

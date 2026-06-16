@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 function useCheckServer() {
     const [status, setStatus] = useState();
+    const navigate = useNavigate();
     useEffect(() => {
         async function FetchHealth() {
             try {
@@ -18,6 +20,11 @@ function useCheckServer() {
         }
         FetchHealth();
     });
+    useEffect(() => {
+        if (status === "down") {
+            navigate("/landing-page");
+        }
+    }, [status]);
     return { status };
 }
 

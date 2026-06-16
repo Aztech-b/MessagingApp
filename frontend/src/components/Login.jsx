@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { Link } from "react-router";
-import styles from "../styles/login.module.css";
-import { Icon } from "./global";
-import { TextInput, PasswordInput, Button, Alert } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Alert, Button, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { CircleX } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import styles from "../styles/login.module.css";
+import { useServerStatusContext } from "./Context";
+import { Icon } from "./global";
 
 function Login() {
+    const { status } = useServerStatusContext();
     const navigate = useNavigate();
     const [isLoading, { close: closeLoading, open: openLoading, toggle: toggleError }] = useDisclosure(false);
     const [error, setError] = useState(null);

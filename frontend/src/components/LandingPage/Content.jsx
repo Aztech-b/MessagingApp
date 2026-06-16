@@ -18,7 +18,7 @@ function Content({ topElement }) {
                     </div>
                     <h1>Messaging that stays simple.</h1>
                     <p>Chat with friends, and stay connected without the clutter.</p>
-                    {status === "up" ? (
+                    {status === "down" ? null : (
                         <div className={styles.links}>
                             <Link to={"/register"}>
                                 <Button color="transparent" style={{ border: "1px solid var(--border)" }}>
@@ -29,7 +29,7 @@ function Content({ topElement }) {
                                 <Button>Login</Button>
                             </Link>
                         </div>
-                    ) : null}
+                    )}
                     <Divider label="features" labelPosition="center" style={{ width: "100vw" }} my={40}></Divider>
                     <div className={styles.cards}>
                         <MyCard
