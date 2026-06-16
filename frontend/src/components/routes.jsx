@@ -8,12 +8,14 @@ import ServerOverload from "./ServerOverload.jsx";
 import ChatTab from "./ChatTab.jsx";
 import PageWrapper from "./PageWrapper.jsx";
 import ChatContainer from "./ChatContainer.jsx";
+import LandingPage from "./LandingPage/LandingPage.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         children: [
+            { path: "/landing-page", element: <LandingPage /> },
             { path: "/register", element: <Register /> },
             { path: "/login", element: <Login /> },
             {
