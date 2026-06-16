@@ -22,6 +22,7 @@
 .main p,
 .main h1 {
     font-family: "Playwrite GB J", cursive, "Bebas Neue", sans-serif, "Playfair Display", serif;
+    text-align: center;
 }
 .main h1 {
     margin-bottom: 4px;
@@ -38,9 +39,18 @@
 }
 
 .cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
     width: 80%;
     gap: 12px;
     margin-bottom: 40px;
+}
+
+.cards > * {
+    flex: 1;
+}
+
+@media screen and (max-width: 1200px) {
+    .cards {
+        flex-wrap: wrap;
+    }
 }
