@@ -6,8 +6,10 @@
     padding-top: var(--padding-x);
     padding-bottom: var(--padding-x);
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     width: 80%;
+    row-gap: 12px;
 }
 
 .contentContainer {
