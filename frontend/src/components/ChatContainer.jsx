@@ -1,17 +1,29 @@
-import styles from "../styles/chatTab.module.css";
 import { Link, useOutletContext } from "react-router";
+import styles from "../styles/chatTab.module.css";
 import { MoveLeft } from "lucide-react";
-import Chat from "./Chat";
+import { motion } from "motion/react";
+import Chat from "./Chat.jsx";
+
+/**
+ * @typedef {import("./types.js").Chat} Chat
+ * @typedef {import("./types.js").newMessageData} newMessageData
+ */
 
 function ChatContainer() {
     const { activeChatName, usernames } = useOutletContext();
     return (
-        <>
-            <div className={styles.messages}>
-                <TopBar chatName={activeChatName} usernames={usernames} />
-                <Chat></Chat>
-            </div>
-        </>
+        <motion.div
+            className={styles.messages}
+            key={location.pathname}
+            initial={{ y: "-100%", x: "100%" }}
+            transition={{ duration: 0.2 }}
+            exit={{ y: "-100%", x: "100%" }}
+            animate={{ x: "0%" }}
+            style={{ zIndex: 100 }}
+        >
+            <TopBar chatName={activeChatName} usernames={usernames} />
+            <Chat />
+        </motion.div>
     );
 }
 

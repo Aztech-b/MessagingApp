@@ -15,7 +15,11 @@
 }
 
 .messages {
+    background-color: var(--accent-bg);
     display: flex;
+    /* position: absolute;
+    left: 0;
+    top: 0; */
     height: 100vh;
     flex-direction: column;
     position: relative;
@@ -59,8 +63,6 @@
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
     height: 100vh;
     border-collapse: collapse;
     position: relative;
