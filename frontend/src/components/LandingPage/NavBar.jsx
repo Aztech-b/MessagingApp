@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router";
 import styles from "../../styles/LandingPage/navBar.module.css";
 import { Icon } from "../global";
+import AuthButtons from "./AuthButtons";
 
 function NavBar({ isTop }) {
     return (
@@ -36,20 +37,7 @@ function NavBar({ isTop }) {
                         </Link>
                     </li>
                 </ul>
-                <ul className={`${styles.authLinks} ${styles.links}`}>
-                    <li>
-                        <Link to={"/register"}>
-                            <Button color="transparent" style={{ border: "1px solid var(--border)" }}>
-                                Register
-                            </Button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={"/login"}>
-                            <Button>Login</Button>
-                        </Link>
-                    </li>
-                </ul>
+                <AuthButtons></AuthButtons>
             </nav>
         </motion.div>
     );

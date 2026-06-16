@@ -1,11 +1,13 @@
+import { Button, Divider } from "@mantine/core";
 import { LockKeyhole, Smartphone, Zap } from "lucide-react";
+import { Link } from "react-router";
 import mockup from "../../assets/mockup.png";
 import styles from "../../styles/LandingPage/content.module.css";
-import { Button, Divider } from "@mantine/core";
-import { Link } from "react-router";
+import { useServerStatusContext } from "../Context";
 import MyCard from "./MyCard";
 
 function Content({ topElement }) {
+    const { status } = useServerStatusContext();
     return (
         <>
             <div ref={topElement} />
@@ -16,16 +18,18 @@ function Content({ topElement }) {
                     </div>
                     <h1>Messaging that stays simple.</h1>
                     <p>Chat with friends, and stay connected without the clutter.</p>
-                    <div className={styles.links}>
-                        <Link to={"/register"}>
-                            <Button color="transparent" style={{ border: "1px solid var(--border)" }}>
-                                Register
-                            </Button>
-                        </Link>
-                        <Link to={"/login"}>
-                            <Button>Login</Button>
-                        </Link>
-                    </div>
+                    {status === "up" ? (
+                        <div className={styles.links}>
+                            <Link to={"/register"}>
+                                <Button color="transparent" style={{ border: "1px solid var(--border)" }}>
+                                    Register
+                                </Button>
+                            </Link>
+                            <Link to={"/login"}>
+                                <Button>Login</Button>
+                            </Link>
+                        </div>
+                    ) : null}
                     <Divider label="features" labelPosition="center" style={{ width: "100vw" }} my={40}></Divider>
                     <div className={styles.cards}>
                         <MyCard

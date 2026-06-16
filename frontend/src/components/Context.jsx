@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 
 const UserContext = createContext({});
 const ChatContext = createContext(null);
+const ServerStatus = createContext("");
 
 // USER INFO
 export function useUserContext() {
@@ -19,4 +20,12 @@ export function useChatContext() {
 
 export function ChatContextProvider({ value, children }) {
     return <ChatContext value={value}>{children}</ChatContext>;
+}
+
+export function useServerStatusContext() {
+    return useContext(ServerStatus);
+}
+
+export function ServerStatusProvider({ value, children }) {
+    return <ServerStatus value={value}>{children}</ServerStatus>;
 }

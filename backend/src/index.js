@@ -1,16 +1,16 @@
+import postgreSession from "connect-pg-simple";
+import cors from "cors";
 import express from "express";
 import session from "express-session";
+import http from "node:http";
 import passport from "passport";
-import cors from "cors";
-import postgreSession from "connect-pg-simple";
 import { Pool } from "pg";
 import { Server } from "socket.io";
-import http from "node:http";
 
 import authRouter from "./routes/auth.js";
 import chatRouter from "./routes/chat.js";
-import registerSockets from "./sockets/index.socket.js";
 import userRouter from "./routes/user.js";
+import registerSockets from "./sockets/index.socket.js";
 
 const corsData = { origin: "http://localhost:5173", credentials: true };
 
@@ -34,6 +34,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 // Routes
 app.use("/auth", authRouter);
