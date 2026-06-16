@@ -1,6 +1,7 @@
 import { Icon, iconColor } from "../global";
 import styles from "../../styles/LandingPage/footer.module.css";
 import { Link } from "react-router";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 function Footer() {
     return (
@@ -11,9 +12,17 @@ function Footer() {
                     <p>© MessagingApp</p>
                 </div>
                 <div className={styles.links}>
-                    <Link to="#">Privacy Policy</Link>
-                    <Link to="#">Terms Of Service</Link>
-                    <Link to="#">Contact</Link>
+                    <div className={styles.about}>
+                        <Link to="#">Privacy Policy</Link>
+                        <Link to="#">Terms Of Service</Link>
+                        <Link to="#">Contact</Link>
+                    </div>
+                    <div className={styles.social}>
+                        <a href="https://github.com/Aztech-b/MessagingApp">
+                            <p>GitHub</p>
+                            <SiGithub size={18}></SiGithub>
+                        </a>
+                    </div>
                 </div>
             </footer>
         </div>
