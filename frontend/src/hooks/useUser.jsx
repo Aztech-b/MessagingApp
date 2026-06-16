@@ -16,7 +16,6 @@ function useUser() {
                 });
 
                 if (response.status === 401) {
-                    navigate("/login");
                     return;
                 }
 

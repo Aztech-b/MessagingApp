@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&display=swap");
+
+.mockup {
+    width: 80%;
+    height: auto;
+    mask: linear-gradient(var(--bg-dark), var(--bg-dark), transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.mockup img {
+    width: 100%;
+    height: auto;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main p,
+.main h1 {
+    font-family: "Playwrite GB J", cursive, "Bebas Neue", sans-serif, "Playfair Display", serif;
+}
+.main h1 {
+    margin-bottom: 4px;
+}
+
+.main .links {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+}
+
+.contentContainer {
+    margin-top: calc(var(--navBar-height) + 52px);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 80%;
+    gap: 12px;
+}

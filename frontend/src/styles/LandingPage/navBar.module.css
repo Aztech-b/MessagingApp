@@ -1,0 +1,36 @@
+@import "../variables.css";
+
+:root {
+    --navBar-height: 76px;
+}
+
+.nav {
+    width: var(--max-content-width);
+    height: var(--navBar-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.contentContainer {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    border-bottom: 1px solid var(--border);
+    height: var(--navBar-height);
+    box-sizing: border-box;
+    background-color: var(--bg-dark);
+}
+
+.links {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+}
+
+.links a {
+    text-decoration: none;
+    color: var(--description);
+}
