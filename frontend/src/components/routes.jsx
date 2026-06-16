@@ -9,11 +9,13 @@ import ChatTab from "./ChatTab.jsx";
 import PageWrapper from "./PageWrapper.jsx";
 import ChatContainer from "./ChatContainer.jsx";
 import LandingPage from "./LandingPage/LandingPage.jsx";
+import Error404 from "./Error404.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        errorElement: <Error404 />,
         children: [
             { path: "/landing-page", element: <LandingPage /> },
             { path: "/register", element: <Register /> },

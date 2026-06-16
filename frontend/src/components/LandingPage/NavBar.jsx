@@ -1,8 +1,8 @@
-import { Icon } from "../global";
-import styles from "../../styles/LandingPage/navBar.module.css";
-import { Link } from "react-router";
 import { alpha, Button } from "@mantine/core";
 import { motion } from "motion/react";
+import { Link } from "react-router";
+import styles from "../../styles/LandingPage/navBar.module.css";
+import { Icon } from "../global";
 
 function NavBar({ isTop }) {
     return (
@@ -21,18 +21,18 @@ function NavBar({ isTop }) {
                 </div>
                 <ul className={styles.links}>
                     <li>
-                        <Link to={"/home"}>
-                            <Button color="transparent">Home</Button>
+                        <Link to={"#"}>
+                            <Button color="transparent">Some</Button>
                         </Link>
                     </li>
                     <li>
-                        <Link to={"/home"}>
-                            <Button color="transparent">Home</Button>
+                        <Link to={"#"}>
+                            <Button color="transparent">Navigation</Button>
                         </Link>
                     </li>
                     <li>
-                        <Link to={"/home"}>
-                            <Button color="transparent">Home</Button>
+                        <Link to={"#"}>
+                            <Button color="transparent">Links</Button>
                         </Link>
                     </li>
                 </ul>
