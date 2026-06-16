@@ -6,7 +6,7 @@
 
 .nav {
     width: var(--max-content-width);
-    height: var(--navBar-height);
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;

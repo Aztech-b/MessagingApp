@@ -1,11 +1,20 @@
 import { Icon } from "../global";
 import styles from "../../styles/LandingPage/navBar.module.css";
 import { Link } from "react-router";
-import { Button } from "@mantine/core";
+import { alpha, Button } from "@mantine/core";
+import { motion } from "motion/react";
 
-function NavBar() {
+function NavBar({ isTop }) {
     return (
-        <div className={`contentContainer ${styles.contentContainer}`}>
+        <motion.div
+            animate={{
+                backdropFilter: "blur(8px)",
+                backgroundColor: alpha("var(--bg-dark)", 0.8),
+                height: isTop ? "var(--navBar-height)" : "calc(var(--navBar-height) - 8px)",
+            }}
+            transition={{ duration: 0.5 }}
+            className={`contentContainer ${styles.contentContainer}`}
+        >
             <nav className={styles.nav}>
                 <div className={styles.icon}>
                     <Icon size={60}></Icon>
@@ -42,7 +51,7 @@ function NavBar() {
                     </li>
                 </ul>
             </nav>
-        </div>
+        </motion.div>
     );
 }
 
