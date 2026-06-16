@@ -7,7 +7,6 @@
     border-right: 1px solid var(--accent-border);
     display: flex;
     flex-direction: column;
-    will-change: transform, opacity;
 }
 
 .chats .chatButton,
@@ -20,6 +19,16 @@
     box-sizing: border-box;
     display: flex;
     border: 0;
+}
+
+@media screen and (max-width: 1200px) {
+    .chats {
+        display: none;
+    }
+}
+
+.chatsResponsive {
+    display: flex;
 }
 
 .content {

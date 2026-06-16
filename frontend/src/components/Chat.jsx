@@ -8,6 +8,7 @@ import useScroll from "../hooks/useScroll.jsx";
 import { useUserContext } from "./Context.jsx";
 import useCurrentMessagesSockets from "../hooks/useCurrentMessagesSockets.jsx";
 import useMessageOptimization from "../hooks/useMessageOptimization.jsx";
+
 /**
  * @typedef {import("./types.js").ChatData} ChatData
  */

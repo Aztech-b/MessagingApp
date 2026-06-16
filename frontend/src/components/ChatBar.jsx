@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import {
     Button,
     TextInput,
@@ -34,6 +34,8 @@ function ChatBar() {
     const [error, setError] = useState(null);
     const { results } = useUserSearch(query);
 
+    const location = useLocation();
+
     const options = results.map((result) => (
         <Combobox.Option value={result} key={result}>
             {result}
@@ -51,13 +53,13 @@ function ChatBar() {
     }, []);
 
     useEffect(() => {
-        const handler = () => close();
-        socket.on(EVENT.CHAT.CREATED, handler);
-        socket.off(EVENT.CHAT.CREATED, handler);
+        socket.on(EVENT.CHAT.CREATED, () => {
+            close();
+        });
     });
 
     return (
-        <div className={styles.chats}>
+        <div className={`${styles.chats} ${location.pathname === "/app/chat" ? styles.chatsResponsive : null}`}>
             <Modal opened={newChatModalOpened} onClose={close} title="Create New Chat" centered>
                 <Stack gap={"xl"}>
                     <form
