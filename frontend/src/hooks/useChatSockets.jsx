@@ -1,7 +1,6 @@
-import socket from "../components/socket";
 import { useEffect } from "react";
-import { EVENT } from "../../../shared/socketEvents.js";
 import { useNavigate } from "react-router";
+import socket from "../components/socket";
 
 /** @typedef {import("../components/types.js").newMessageData} */
 
@@ -31,8 +30,8 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
             function handleNewMessage(data) {
                 addNewMessage(data);
             }
-            socket.on(EVENT.MESSAGE.RECEIVED, handleNewMessage);
-            return () => socket.off(EVENT.MESSAGE.RECEIVED, handleNewMessage);
+            socket.on("message:received", handleNewMessage);
+            return () => socket.off("message:received", handleNewMessage);
         },
         [addNewMessage],
     );
@@ -41,8 +40,8 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
         function addNewChat(data) {
             addChat(data);
         }
-        socket.on(EVENT.CHAT.CREATED, addNewChat);
-        return () => socket.off(EVENT.CHAT.CREATED, addNewChat);
+        socket.on("chat:created", addNewChat);
+        return () => socket.off("chat:created", addNewChat);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -51,9 +50,9 @@ function useChatSockets(chats, addChat, deleteChat, addNewMessage) {
             deleteChat(data);
             navigate("/app/chat");
         }
-        socket.on(EVENT.CHAT.DELETED, _deleteChat);
+        socket.on("chat:deleted", _deleteChat);
         return () => {
-            socket.off(EVENT.CHAT.DELETED, _deleteChat);
+            socket.off("chat:deleted", _deleteChat);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

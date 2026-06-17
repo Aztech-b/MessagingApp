@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 /** @typedef {import("../components/types.js").Chat} */
 
 function useChats(activeChatId) {

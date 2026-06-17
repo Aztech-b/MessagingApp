@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useOutletContext } from "react-router";
 import { useChatContext } from "../components/Context";
-import { useNavigate } from "react-router";
-import { useOutletContext } from "react-router";
 import socket from "../components/socket";
-import { EVENT } from "../../../shared/socketEvents";
 
 /** @typedef {import("../components/types.js").ChatData} ChatData */
 /** @typedef {import("../components/types.js").newMessageData} MessageData */
@@ -30,11 +28,11 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
         const content = messageData.content;
         const tempId = crypto.randomUUID();
         const username = user.username;
-        socket.emit(EVENT.MESSAGE.SEND, { content, chatId, username }, (data) => {
+        socket.emit("message:send", { content, chatId, username }, (data) => {
             setMessages((prev) =>
                 prev.map((message) => {
                     if (message.id === tempId) {
-                        socket.emit(EVENT.MESSAGE.READ, { username, chatId, messageId: data.id });
+                        socket.emit("message:read", { username, chatId, messageId: data.id });
 
                         return { ...message, status: "sent", id: data.id };
                     }
@@ -69,7 +67,7 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
             }
 
             socket.emit(
-                EVENT.MESSAGE.READ,
+                "message:read",
                 { messageId: messages[messages.length - 1].id, chatId, username: user.username },
                 () => {
                     setLastReadMessage(chatId, lastMessageId.current, true);
@@ -97,9 +95,9 @@ function useCurrentMessages(chatId, user, setShouldScroll) {
                 });
             }
 
-            socket.on(EVENT.MESSAGE.EVERYONE_READ, handleRead);
+            socket.on("message:everyoneRead", handleRead);
             return () => {
-                socket.off(EVENT.MESSAGE.EVERYONE_READ, handleRead);
+                socket.off("message:everyoneRead", handleRead);
             };
         },
         [user],

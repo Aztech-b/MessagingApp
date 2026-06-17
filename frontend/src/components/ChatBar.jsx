@@ -1,27 +1,25 @@
+import {
+    ActionIcon,
+    Alert,
+    Button,
+    Combobox,
+    Indicator,
+    Menu,
+    Modal,
+    Skeleton,
+    Stack,
+    TextInput,
+    useCombobox,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { CircleX, Ellipsis, Plus, UsersRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
-import {
-    Button,
-    TextInput,
-    ActionIcon,
-    Modal,
-    Stack,
-    Indicator,
-    Skeleton,
-    Menu,
-    Combobox,
-    useCombobox,
-    Alert,
-} from "@mantine/core";
-import { useChatContext, useUserContext } from "./Context";
-import styles from "../styles/chatBar.module.css";
-import { UsersRound, Plus, Ellipsis } from "lucide-react";
-import { useDisclosure } from "@mantine/hooks";
-import socket from "./socket";
-import { useForm } from "@mantine/form";
-import { EVENT } from "../../../shared/socketEvents";
 import useUserSearch from "../hooks/useUserSearch";
-import { CircleX } from "lucide-react";
+import styles from "../styles/chatBar.module.css";
+import { useChatContext, useUserContext } from "./Context";
+import socket from "./socket";
 
 function ChatBar() {
     const { chats } = useChatContext();
@@ -47,13 +45,13 @@ function ChatBar() {
     }, [combobox, options]);
 
     useEffect(() => {
-        socket.on(EVENT.CHAT.ERROR, (data) => {
+        socket.on("chat:error", (data) => {
             setError(data.status);
         });
     }, []);
 
     useEffect(() => {
-        socket.on(EVENT.CHAT.CREATED, () => {
+        socket.on("chat:created", () => {
             close();
         });
     });
@@ -68,7 +66,7 @@ function ChatBar() {
                                 title: values.title,
                                 chatMembers: [values.chatMember, user.username],
                             };
-                            socket.emit(EVENT.CHAT.CREATE, transformed);
+                            socket.emit("chat:create", transformed);
                         })}
                     >
                         <Stack gap={"xs"} mb={"lg"}>
@@ -226,7 +224,7 @@ function ContextMenu({ id }) {
                         onClick={(event) => {
                             event.preventDefault();
                             event.stopPropagation();
-                            socket.emit(EVENT.CHAT.DELETE, { chatId: id });
+                            socket.emit("chat:delete", { chatId: id });
                         }}
                     >
                         Delete

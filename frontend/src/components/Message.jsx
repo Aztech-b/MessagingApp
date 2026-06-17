@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
-import socket from "./socket";
+import { Check, CheckCheck, LoaderCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import styles from "../styles/chat.module.css";
-import { LoaderCircle, Check, CheckCheck } from "lucide-react";
 import { useUserContext } from "./Context";
-import { EVENT } from "../../../shared/socketEvents";
+import socket from "./socket";
 
 /**
  *
@@ -36,9 +35,9 @@ function Message({ data, colors, extended, ref }) {
                 setStatus("read");
             }
         }
-        socket.on(EVENT.MESSAGE.READ, setRead);
+        socket.on("message:read", setRead);
         return () => {
-            socket.off(EVENT.MESSAGE.READ, setRead);
+            socket.off("message:read", setRead);
         };
     }, []);
     let authorStyle;

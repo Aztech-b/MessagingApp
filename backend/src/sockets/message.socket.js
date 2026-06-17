@@ -1,8 +1,7 @@
-import { EVENT } from "../../../shared/socketEvents.js";
 import prisma from "../../lib/prisma.js";
 
 function registerMessageSockets(io, socket) {
-    socket.on(EVENT.MESSAGE.READ, async (data, callback) => {
+    socket.on("message:read", async (data, callback) => {
         if (callback) {
             callback();
         }
@@ -17,11 +16,11 @@ function registerMessageSockets(io, socket) {
         });
         lastReadMessages.sort((a, b) => a.lastReadMessageId - b.lastReadMessageId);
         if (lastReadMessages[0].lastReadMessageId >= data.messageId) {
-            socket.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.EVERYONE_READ, { messageId: data.messageId });
+            socket.to(`chat:${Number(data.chatId)}`).emit("message:everyoneRead", { messageId: data.messageId });
         }
     });
 
-    socket.on(EVENT.MESSAGE.SEND, async (data, callback) => {
+    socket.on("message:send", async (data, callback) => {
         const { content, chatId, username } = data;
         const { id: userId } = await prisma.user.findUnique({ where: { username }, select: { id: true } });
         const newMessage = await prisma.message.create({
@@ -37,7 +36,7 @@ function registerMessageSockets(io, socket) {
          * @type {{id: number, content: string, chatId: number, sent: string, author: {username: string}}}
          */
         const sendData = { ...newMessage, author: { username } };
-        io.to(`chat:${Number(data.chatId)}`).emit(EVENT.MESSAGE.RECEIVED, sendData);
+        io.to(`chat:${Number(data.chatId)}`).emit("message:received", sendData);
         callback(sendData);
     });
 }

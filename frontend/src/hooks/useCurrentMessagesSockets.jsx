@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import socket from "../components/socket";
-import { EVENT } from "../../../shared/socketEvents.js";
 
 /**
  * @typedef {import("./types.js").newMessageData} newMessageData
@@ -8,9 +7,9 @@ import { EVENT } from "../../../shared/socketEvents.js";
 function useCurrentMessagesSockets(user, chatId, scrollContainer, addMessage) {
     useEffect(
         function OnReceiveNewMessage() {
-            socket.on(EVENT.MESSAGE.RECEIVED, addMessage);
+            socket.on("message:received", addMessage);
             return () => {
-                socket.off(EVENT.MESSAGE.RECEIVED, addMessage);
+                socket.off("message:received", addMessage);
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
