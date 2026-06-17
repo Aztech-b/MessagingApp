@@ -1,15 +1,15 @@
 import { createBrowserRouter } from "react-router";
-import Login from "./Login.jsx";
-import Register from "./Register.jsx";
-import Home from "./Home.jsx";
 import App from "../App.jsx";
-import ProfilePage from "./ProfilePage.jsx";
-import ServerOverload from "./ServerOverload.jsx";
-import ChatTab from "./ChatTab.jsx";
-import PageWrapper from "./PageWrapper.jsx";
 import ChatContainer from "./ChatContainer.jsx";
-import LandingPage from "./LandingPage/LandingPage.jsx";
+import ChatTab from "./ChatTab.jsx";
 import Error404 from "./Error404.jsx";
+import Home from "./Home.jsx";
+import LandingPage from "./LandingPage/LandingPage.jsx";
+import Login from "./Login.jsx";
+import PageWrapper from "./PageWrapper.jsx";
+import ProfilePage from "./ProfilePage.jsx";
+import Register from "./Register.jsx";
+import ServerOverload from "./ServerOverload.jsx";
 
 const router = createBrowserRouter([
     {
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         element: <App />,
         errorElement: <Error404 />,
         children: [
-            { path: "/landing-page", element: <LandingPage /> },
+            { index: true, element: <LandingPage /> },
             { path: "/register", element: <Register /> },
             { path: "/login", element: <Login /> },
             {
