@@ -22,7 +22,7 @@ function useCheckServer() {
     });
     useEffect(() => {
         if (status === "down") {
-            navigate("/landing-page");
+            navigate("/");
         }
     }, [status]);
     return { status };
