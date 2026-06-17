@@ -12,7 +12,7 @@ import chatRouter from "./routes/chat.js";
 import userRouter from "./routes/user.js";
 import registerSockets from "./sockets/index.socket.js";
 
-const corsData = { origin: "http://localhost:5173", credentials: true };
+const corsData = { origin: process.env.FRONTEND_URL, credentials: true };
 
 const app = express();
 const server = http.createServer(app);
