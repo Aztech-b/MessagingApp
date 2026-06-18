@@ -13,6 +13,7 @@ userRouter.get("/search", async (req, res) => {
     });
 
     const result = foundUsers.map((user) => user.username);
+    console.log(`foundUsers ${result}`);
 
     res.json(result);
 });

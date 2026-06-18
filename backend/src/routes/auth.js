@@ -93,7 +93,7 @@ authRouter.post("/login", (req, res, next) => {
 
 authRouter.get("/", (req, res) => {
     if (!req.user) {
-        console.log(req.user);
+        console.log(`req.user ${req.user}`);
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
