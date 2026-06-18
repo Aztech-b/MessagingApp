@@ -35,17 +35,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get("/health", (req, res) => {
-    res.status(200).json({ status: "ok" });
-});
-
-// Routes
-app.use("/auth", authRouter);
-app.use("/chat", chatRouter);
-app.use("/user", userRouter);
-registerSockets(io);
-
 app.use((req, res) => {
     try {
         if (new URL(req.query.url).host !== process.env.FRONTEND_URL) {
@@ -58,6 +47,16 @@ app.use((req, res) => {
     }
     res.redirect(req.query.url);
 });
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
+
+// Routes
+app.use("/auth", authRouter);
+app.use("/chat", chatRouter);
+app.use("/user", userRouter);
+registerSockets(io);
 
 server.listen(3000, (error) => {
     if (error) {

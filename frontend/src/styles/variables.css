@@ -1,23 +1,10 @@
 :root {
-    --text: #6b6375;
-    --text-h: #08060d;
-    --bg: #fff;
-    --border: #e5e4e7;
-    --code-bg: #f4f3ec;
-    --accent: #aa3bff;
-    --accent-bg: rgba(170, 59, 255, 0.1);
-    --accent-border: rgba(170, 59, 255, 0.5);
-    --social-bg: rgba(244, 243, 236, 0.5);
-    --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
     --sans: system-ui, "Segoe UI", Roboto, sans-serif;
     --heading: system-ui, "Segoe UI", Roboto, sans-serif;
     --mono: ui-monospace, Consolas, monospace;
 
-    font: 18px/145% var(--sans);
     color-scheme: light dark;
     color: var(--text);
-    background: var(--bg);
 
     --sidebar-width: 76px;
 
@@ -32,53 +19,49 @@
     --message-major-corner-shape: squircle;
     --message-minor-corner-shape: circle;
 
+    font: 18px/145% var(--sans);
+    --text: white;
+    --text-h: #f3f4f6;
+    --text-description: grey;
+
+    --accent-saturated: hsl(215, 80%, 60%);
+
+    --accent: hsl(215, 40%, 19%); /* #1d2d44 */
+    --accent-light: hsl(210, 47%, 32%); /* #2b5278 */
+    --accent-light-l: hsl(210, 47%, 40%);
+    --accent-light-xl: hsl(210, 47%, 50%);
+    --accent-light-2xl: hsl(210, 47%, 60%);
+    --accent-dark: hsl(215, 40%, 15%);
+    --accent-dark-l: hsl(215, 40%, 10%);
+    --accent-dark-xl: hsl(215, 40%, 8%);
+    --accent-dark-2xl: hsl(215, 40%, 7%);
+
+    /* Main page backgrounds */
+    --bg: hsl(220, 18%, 12%);
+    --bg-light: hsl(220, 18%, 15%);
+    --bg-lighter: hsl(220, 18%, 18%);
+
+    /* Elevated surfaces */
+    --surface: hsl(220, 16%, 20%);
+    --surface-light: hsl(220, 16%, 24%);
+
+    --border: #2e303a;
+
+    --accent-bg: hsl(215, 40%, 9%); /* #0e1520 */
+    --accent-bg-light: hsl(215, 40%, 15%); /* #172436 */
+    --accent-border: hsl(215, 30%, 7%);
+
+    --bg-dark: hsl(231, 13.73%, 5%);
+    --bg: hsl(231.43, 13.73%, 10%);
+    --bg-light: hsl(231, 13.73%, 12%);
+
+    --code-bg: #1f2028;
+
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+    --max-content-width: 1200px;
     @media (max-width: 1024px) {
         font-size: 16px;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text: white;
-        --text-h: #f3f4f6;
-        --text-description: grey;
-
-        --accent-saturated: hsl(215, 80%, 60%);
-
-        --accent: hsl(215, 40%, 19%); /* #1d2d44 */
-        --accent-light: hsl(210, 47%, 32%); /* #2b5278 */
-        --accent-light-l: hsl(210, 47%, 40%);
-        --accent-light-xl: hsl(210, 47%, 50%);
-        --accent-light-2xl: hsl(210, 47%, 60%);
-        --accent-dark: hsl(215, 40%, 15%);
-        --accent-dark-l: hsl(215, 40%, 10%);
-        --accent-dark-xl: hsl(215, 40%, 8%);
-        --accent-dark-2xl: hsl(215, 40%, 7%);
-
-        /* Main page backgrounds */
-        --bg: hsl(220, 18%, 12%);
-        --bg-light: hsl(220, 18%, 15%);
-        --bg-lighter: hsl(220, 18%, 18%);
-
-        /* Elevated surfaces */
-        --surface: hsl(220, 16%, 20%);
-        --surface-light: hsl(220, 16%, 24%);
-
-        --border: #2e303a;
-
-        --accent-bg: hsl(215, 40%, 9%); /* #0e1520 */
-        --accent-bg-light: hsl(215, 40%, 15%); /* #172436 */
-        --accent-border: hsl(215, 30%, 7%);
-
-        --bg-dark: hsl(231, 13.73%, 5%);
-        --bg: hsl(231.43, 13.73%, 10%);
-        --bg-light: hsl(231, 13.73%, 12%);
-
-        --code-bg: #1f2028;
-
-        --social-bg: rgba(47, 48, 58, 0.5);
-        --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-
-        --max-content-width: 1200px;
     }
 }

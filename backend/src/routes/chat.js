@@ -6,6 +6,7 @@ const chatRouter = Router();
 
 chatRouter.get("/", async (req, res) => {
     if (!req.isAuthenticated()) {
+        console.log("not authenticated");
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }

@@ -28,19 +28,22 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+    console.log("ser");
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
+    console.log("des");
     try {
         const user = await prisma.user.findUnique({ where: { id } });
         done(null, user);
     } catch (err) {
+        console.error(err);
         done(err);
     }
 });
 
-authRouter.post("/register", async (req, res) => {
+authRouter.post("/register", async (req, res, next) => {
     try {
         const parsed = loginSchema.safeParse(req.body);
         if (!parsed.success) {
@@ -58,13 +61,20 @@ authRouter.post("/register", async (req, res) => {
         const hashedPassword = await bcryptjs.hash(password, Number(process.env.SALT_LENGTH));
         const user = await prisma.user.create({
             data: { username, password: hashedPassword },
-            select: { username: true },
+            select: { username: true, id: true },
         });
         if (!user) {
             throw new Error("USER_CREATION_ERROR");
         }
 
-        res.status(200).json(user);
+        req.logIn(user, (error) => {
+            if (error) {
+                console.log(error);
+                return next(error);
+            }
+            console.log("login");
+            return res.json(user);
+        });
     } catch (error) {
         res.json(error);
     }
@@ -80,6 +90,10 @@ authRouter.post("/login", (req, res, next) => {
     passport.authenticate("local", (error, user, info) => {
         if (user) {
             req.logIn(user, () => {
+                if (error) {
+                    console.log(error);
+                    return next(error);
+                }
                 // eslint-disable-next-line no-unused-vars
                 const { id, password, ...safeUser } = user;
                 res.json(safeUser);
@@ -88,12 +102,13 @@ authRouter.post("/login", (req, res, next) => {
             return;
         }
         res.status(401).json(info);
+        return;
     })(req, res, next);
 });
 
 authRouter.get("/", (req, res) => {
     if (!req.user) {
-        console.log(`req.user ${req.user}`);
+        console.log(`req.isAuthenticated ${req.isAuthenticated()}`);
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }

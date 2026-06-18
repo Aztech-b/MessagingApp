@@ -10,7 +10,7 @@ function useUser() {
 
     async function GetUser() {
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth`, {
                 method: "GET",
                 credentials: "include",
             });

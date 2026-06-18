@@ -80,7 +80,6 @@ function ChatBar() {
                                 onOptionSubmit={(value) => {
                                     form.setFieldValue("chatMember", value);
                                     setQuery(value);
-                                    console.log(value);
 
                                     combobox.closeDropdown();
                                 }}

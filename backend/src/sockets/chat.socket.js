@@ -24,7 +24,6 @@ function registerChatSockets(io, socket) {
             data: { title, members: { create: [...users.map((user) => ({ userId: user.id }))] } },
             select: { id: true, title: true },
         });
-        console.log("new chat to all users");
         users.forEach((user) => {
             io.to(`user:${user.username}`).emit("chat:created", {
                 ...newChat,
