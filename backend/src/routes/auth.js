@@ -1,8 +1,8 @@
+import bcryptjs from "bcryptjs";
 import { Router } from "express";
-import prisma from "../../lib/prisma.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import bcryptjs from "bcryptjs";
+import prisma from "../../lib/prisma.js";
 import { loginSchema } from "../../lib/zod.js";
 
 const authRouter = Router();
@@ -93,12 +93,13 @@ authRouter.post("/login", (req, res, next) => {
 
 authRouter.get("/", (req, res) => {
     if (!req.user) {
+        console.log(req.user);
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }
     // eslint-disable-next-line no-unused-vars
     const { id, password, ...user } = req.user;
-    res.json(user);
+    res.status(200).json(user);
 });
 
 export default authRouter;

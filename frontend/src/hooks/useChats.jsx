@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useUserContext } from "../components/Context.jsx";
 /** @typedef {import("../components/types.js").Chat} */
 
 function useChats(activeChatId) {
     /** @type {[Chat[], Function]} */
     const [chats, setChats] = useState([]);
+
+    const { user } = useUserContext();
 
     /**@type {{[id]: number}[]} */
     const unreadCount = chats?.reduce((accumulator, chat) => {
@@ -54,24 +57,27 @@ function useChats(activeChatId) {
         setChats((prev) => prev.filter((chat) => chat.id !== chatData.chatId));
     };
 
-    useEffect(function FetchData() {
-        async function GetAllChats() {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-                if (!response.ok) {
-                    throw new Error("response is not ok");
+    useEffect(
+        function FetchData() {
+            async function GetAllChats() {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
+                        method: "GET",
+                        credentials: "include",
+                    });
+                    if (!response.ok) {
+                        throw new Error("response is not ok");
+                    }
+                    const data = await response.json();
+                    setChats(data);
+                } catch (error) {
+                    console.trace(error);
                 }
-                const data = await response.json();
-                setChats(data);
-            } catch (error) {
-                console.trace(error);
             }
-        }
-        GetAllChats();
-    }, []);
+            GetAllChats();
+        },
+        [user],
+    );
 
     return { chats, addChat, deleteChat, lastReadMessages, setLastReadMessage, addNewMessage, unreadCount };
 }

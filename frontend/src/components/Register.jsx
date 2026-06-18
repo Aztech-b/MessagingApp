@@ -29,6 +29,7 @@ function Register() {
                 body: JSON.stringify(values),
             });
             let data;
+            console.log(response);
             if (response.status === 401) {
                 data = await response.json();
                 console.log(data);
@@ -38,7 +39,6 @@ function Register() {
             }
             data = await response.json();
             if (response.status === 200) {
-                window.location.reload();
                 navigate("/app/chat");
             }
         } catch (error) {
