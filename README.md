@@ -1,10 +1,10 @@
-
 # Simple Real-Time Messaging App
 
-A simple real-time messaging app as a homework from Odin Project. the app is built with React(Vite), Node.js, Express, PostgreSQL, Socket.IO and Prisma ORM. 
+A simple real-time messaging app as a homework from Odin Project. the app is built with React(Vite), Node.js, Express, PostgreSQL, Socket.IO and Prisma ORM.
+
 ## Frameworks used
 
-- Frontend: 
+- Frontend:
     - React
     - React Router
     - Mantine Components
@@ -15,12 +15,17 @@ A simple real-time messaging app as a homework from Odin Project. the app is bui
     - Passport for auth with sessions
     - Socket.io
     - Prisma ORM
+
 # Features
+
 ## Auth
+
 - User registration and login
 - Session-based authentication
 - Persistent login sessions
-## Messaging 
+
+## Messaging
+
 - Real-time messaging with Socket.IO
 - Message delivery status
     - Sent
@@ -28,19 +33,26 @@ A simple real-time messaging app as a homework from Odin Project. the app is bui
     - Read receipts
 - Unread message counters
 - Chat creation and deletion
+
 ## Chats
+
 - ONLY One-to-one chats
 - User search with autocomplete
 - Live chat updates
 - Automatic chat synchronization between connected users
+
 # Tech Stack
-## Frontend
+
+## Frontend (Deployed on Vercel)
+
 - React
 - React Router
 - Mantine UI
 - Socket.IO Client
 - Vite
-## Backend
+
+## Backend (Deployed on Railway)
+
 - Express
 - Socket.IO
 - Prisma ORM
@@ -50,4 +62,5 @@ A simple real-time messaging app as a homework from Odin Project. the app is bui
 ---
 
 # Bugs
-There are a lot of bugs. I just did not want to continue it for some time. Some basic feathures are not implemented yet: viewing your own profile and profiles of others', uploading account logo, deleting messages, editing messages etc. 
+
+There are a lot of bugs. I just did not want to continue it for some time. Some basic features are not implemented yet: viewing your own profile and profiles of others', uploading account logo, deleting messages, editing messages etc.
