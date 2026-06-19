@@ -1,7 +1,7 @@
 import { Button, Divider } from "@mantine/core";
 import { LockKeyhole, Smartphone, Zap } from "lucide-react";
 import { Link } from "react-router";
-import mockup from "../../assets/mockup.png";
+import mockup from "../../assets/mockup.webp";
 import styles from "../../styles/LandingPage/content.module.css";
 import { useServerStatusContext } from "../Context";
 import MyCard from "./MyCard";
