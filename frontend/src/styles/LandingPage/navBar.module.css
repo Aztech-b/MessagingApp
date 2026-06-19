@@ -5,7 +5,8 @@
 }
 
 .nav {
-    width: var(--max-content-width);
+    max-width: var(--max-content-width);
+    width: 80%;
     height: 100%;
     display: flex;
     justify-content: space-between;
@@ -33,4 +34,10 @@
 .links a {
     text-decoration: none;
     color: var(--description);
+}
+
+@media screen and (max-width: 700px) {
+    .links:not(.authLinks) {
+        display: none;
+    }
 }
