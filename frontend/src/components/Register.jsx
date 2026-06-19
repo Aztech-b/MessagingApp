@@ -31,7 +31,7 @@ function Register() {
             let data;
             if (response.status === 401) {
                 data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setError(data.message);
                 closeLoading();
                 return;

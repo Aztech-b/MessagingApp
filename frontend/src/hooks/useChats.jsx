@@ -65,6 +65,7 @@ function useChats(activeChatId) {
                         method: "GET",
                         credentials: "include",
                     });
+                    // console.log(response);
                     if (response.status === 401) {
                         console.log("no user");
                     }

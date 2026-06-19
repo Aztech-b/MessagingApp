@@ -28,17 +28,14 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-    console.log("ser");
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-    console.log("des");
     try {
         const user = await prisma.user.findUnique({ where: { id } });
         done(null, user);
     } catch (err) {
-        console.error(err);
         done(err);
     }
 });
@@ -69,10 +66,8 @@ authRouter.post("/register", async (req, res, next) => {
 
         req.logIn(user, (error) => {
             if (error) {
-                console.log(error);
                 return next(error);
             }
-            console.log("login");
             return res.json(user);
         });
     } catch (error) {
@@ -83,32 +78,29 @@ authRouter.post("/register", async (req, res, next) => {
 authRouter.post("/login", (req, res, next) => {
     const parsed = loginSchema.safeParse(req.body);
     if (!parsed.success) {
-        res.json({ message: parsed.error.issues[0].message });
-        return;
+        return res.json({ message: parsed.error.issues[0].message });
     }
 
     passport.authenticate("local", (error, user, info) => {
+        if (!user) {
+            return res.status(401).json(info);
+        }
         if (user) {
-            req.logIn(user, () => {
+            req.logIn(user, (error) => {
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                     return next(error);
                 }
                 // eslint-disable-next-line no-unused-vars
                 const { id, password, ...safeUser } = user;
-                res.json(safeUser);
-                return;
+                return res.json(safeUser);
             });
-            return;
         }
-        res.status(401).json(info);
-        return;
     })(req, res, next);
 });
 
 authRouter.get("/", (req, res) => {
     if (!req.user) {
-        console.log(`req.isAuthenticated ${req.isAuthenticated()}`);
         res.status(401).json({ status: "NOT_AUTHENTICATED" });
         return;
     }

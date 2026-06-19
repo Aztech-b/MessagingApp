@@ -35,7 +35,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res) => {
+app.use((req, res, next) => {
+    if (!req.query.url) {
+        return next();
+    }
     try {
         if (new URL(req.query.url).host !== process.env.FRONTEND_URL) {
             console.log("t");
